@@ -138,9 +138,16 @@
 ;; Set the new <leader> and other keys
 (evil-leader/set-leader "<SPC>")
 (evil-leader/set-key
-  "e" 'find-file
-  "b" 'switch-to-buffer
-  "k" 'kill-buffer)
+  "w" 'save-buffer
+  "bn" 'next-buffer
+  "bd" 'kill-buffer
+  "bo" 'kill-other-buffers)
+
+;;;; Moving to different windows
+(define-key evil-normal-state-map (kbd "C-h") 'evil-window-left)
+(define-key evil-normal-state-map (kbd "C-j") 'evil-window-down)
+(define-key evil-normal-state-map (kbd "C-k") 'evil-window-up)
+(define-key evil-normal-state-map (kbd "C-l") 'evil-window-right)
 
 ;;; Revert
 (global-auto-revert-mode 1)
@@ -195,3 +202,10 @@
 (load "powerline-evil.el")
 (powerline-evil-vim-color-theme)
 
+
+;; Function to kill other buffers
+(defun kill-other-buffers ()
+"Kill all other buffers"
+(interactive)
+(mapc 'kill-buffer (delq (current-buffer) (buffer-list)))
+(message "Killed all other buffers"))
