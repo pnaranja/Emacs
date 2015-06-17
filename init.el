@@ -36,7 +36,7 @@
   '(
     ;;EVIL MODE!
     ;;git clone https://gitorious.org/evil/evil.git
-    ;;evil - install manually
+    evil
 
     ;; To Change the <leader>
     evil-leader
@@ -127,28 +127,6 @@
 ;; a .yml file
 (add-to-list 'load-path "~/.emacs.d/vendor")
 
-;;For Evil leader mode
-(global-evil-leader-mode)
-
-;; For Evil mode
-(add-to-list 'load-path "~/.emacs.d/evil")
-(require 'evil)
-(evil-mode 1)
-
-;; Set the new <leader> and other keys
-(evil-leader/set-leader "<SPC>")
-(evil-leader/set-key
-  "w" 'save-buffer
-  "bn" 'next-buffer
-  "bd" 'kill-buffer
-  "bo" 'kill-other-buffers)
-
-;;;; Moving to different windows
-(define-key evil-normal-state-map (kbd "C-h") 'evil-window-left)
-(define-key evil-normal-state-map (kbd "C-j") 'evil-window-down)
-(define-key evil-normal-state-map (kbd "C-k") 'evil-window-up)
-(define-key evil-normal-state-map (kbd "C-l") 'evil-window-right)
-
 ;;; Revert
 (global-auto-revert-mode 1)
 (global-set-key (kbd "<f5>") 'revert-buffer)
@@ -158,6 +136,22 @@
 
 ;; F2 for NeoTree
 (global-set-key [f2] 'neotree-toggle)
+
+;; For Evil mode
+(require 'evil)
+(evil-mode 1)
+
+;;For Evil leader mode
+(global-evil-leader-mode)
+
+;;Hide Toolbar
+(tool-bar-mode -1)
+
+;;Better word wrapping
+(visual-line-mode 1)
+
+
+
 
 ;;;;
 ;; Customization
@@ -202,6 +196,9 @@
 (load "powerline-evil.el")
 (powerline-evil-vim-color-theme)
 
+;; Setup Evil customizations
+(load "evil.el")
+
 
 ;; Function to kill other buffers
 (defun kill-other-buffers ()
@@ -209,3 +206,10 @@
 (interactive)
 (mapc 'kill-buffer (delq (current-buffer) (buffer-list)))
 (message "Killed all other buffers"))
+
+
+;; Function to show current directory in mode-line
+(defun add-mode-line-dirtrack ()
+(add-to-list 'mode-line-buffer-identification
+             '(:propertize (" " default-directory " ") face dired-directory)))
+(add-hook 'shell-mode-hook 'add-mode-line-dirtrack)
