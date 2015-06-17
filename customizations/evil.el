@@ -1,3 +1,7 @@
+;; Set default evil mode as normal
+(setq evil-motion-state-modes (append evil-emacs-state-modes evil-motion-state-modes))
+(setq evil-default-state 'normal)
+
 ;; Set the new <leader> and other keys
 (evil-leader/set-leader "<SPC>")
 (evil-leader/set-key
