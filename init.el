@@ -91,6 +91,10 @@
     ;; Web dev interaction
     skewer-mode
 
+    ;; ElDoc for editing css
+    el-get
+    css-eldoc
+
     ;; Vim's NerdTree for EMACS
     neotree
 
@@ -109,10 +113,12 @@
 (if (eq system-type 'darwin)
     (add-to-list 'my-packages 'exec-path-from-shell))
 
+;; Install/update packages
 (dolist (p my-packages)
   (when (not (package-installed-p p))
     (package-install p)))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Place downloaded elisp files in ~/.emacs.d/vendor. You'll then be able
 ;; to load them.
@@ -129,6 +135,7 @@
 
 ;;; Revert
 (global-auto-revert-mode 1)
+(setq auto-revert-verbose nil)
 (global-set-key (kbd "<f5>") 'revert-buffer)
 
 ;; Allow Case Conversion Commands
@@ -150,11 +157,12 @@
 ;;Better word wrapping
 (visual-line-mode 1)
 
-
+;; Turn on CSS ELDoc
+(css-eldoc-enable)
 
 
 ;;;;
-;; Customization
+;; Customization files
 ;;;;
 
 ;; Add a directory to our load path so that when you `load` things
