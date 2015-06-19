@@ -136,7 +136,8 @@
 ;;; Revert
 (global-auto-revert-mode 1)
 (setq auto-revert-verbose nil)
-(global-set-key (kbd "<f5>") 'revert-buffer)
+;(global-set-key (kbd "<f5>") (make-interactive (apply-partially 'revert-buffer nil t)))
+(global-set-key (kbd "<f5>") (lambda () (interactive) (revert-buffer nil t) (end-of-buffer)))
 
 ;; Allow Case Conversion Commands
 (put 'upcase-region 'disabled nil)
@@ -208,16 +209,11 @@
 (load "evil.el")
 
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Function to kill other buffers
 (defun kill-other-buffers ()
 "Kill all other buffers"
 (interactive)
 (mapc 'kill-buffer (delq (current-buffer) (buffer-list)))
 (message "Killed all other buffers"))
-
-
-;; Function to show current directory in mode-line
-(defun add-mode-line-dirtrack ()
-(add-to-list 'mode-line-buffer-identification
-             '(:propertize (" " default-directory " ") face dired-directory)))
-(add-hook 'shell-mode-hook 'add-mode-line-dirtrack)
