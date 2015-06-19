@@ -133,10 +133,9 @@
 ;; a .yml file
 (add-to-list 'load-path "~/.emacs.d/vendor")
 
-;;; Revert
+;;; Revert buffer. No need for user confirmation and automatically go to the end of the buffer
 (global-auto-revert-mode 1)
 (setq auto-revert-verbose nil)
-;(global-set-key (kbd "<f5>") (make-interactive (apply-partially 'revert-buffer nil t)))
 (global-set-key (kbd "<f5>") (lambda () (interactive) (revert-buffer nil t) (end-of-buffer)))
 
 ;; Allow Case Conversion Commands
@@ -151,6 +150,7 @@
 
 ;;For Evil leader mode
 (global-evil-leader-mode)
+
 
 ;;Hide Toolbar
 (tool-bar-mode -1)

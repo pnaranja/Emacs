@@ -5,7 +5,10 @@
 ;; Set the new <leader> and other keys
 (evil-leader/set-leader "<SPC>")
 (evil-leader/set-key
+  "f" 'ido-find-file
   "w" 'save-buffer
+  "c" 'clipboard-kill-ring-save
+  "p" 'clipboard-yank
   "bn" 'next-buffer
   "bd" 'kill-buffer
   "l" 'buffer-menu
@@ -16,3 +19,4 @@
 (define-key evil-normal-state-map (kbd "C-j") 'evil-window-down)
 (define-key evil-normal-state-map (kbd "C-k") 'evil-window-up)
 (define-key evil-normal-state-map (kbd "C-l") 'evil-window-right)
+
