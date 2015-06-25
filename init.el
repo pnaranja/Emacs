@@ -7,10 +7,10 @@
 
 (add-to-list 'package-archives
              '("melpa-stable" . "http://melpa.org/packages/") t)
-(add-to-list 'package-archives
-             '("marmalade" . "http://marmalade-repo.org/packages/") t)
-(add-to-list 'package-archives
-             '("tromey" . "http://tromey.com/elpa/") t)
+;(add-to-list 'package-archives
+;             '("marmalade" . "http://marmalade-repo.org/packages/") t)
+;(add-to-list 'package-archives
+;             '("tromey" . "http://tromey.com/elpa/") t)
 
 ;; (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")^
 ;;                          ("marmalade" . "http://marmalade-repo.org/packages/")
@@ -79,14 +79,14 @@
     ;; colorful parenthesis matching
     rainbow-delimiters
 
-    ;; edit html tags like sexps
-    tagedit
-
     ;; git integration
     magit
 
     ;; Auto-Scroll
     smooth-scrolling
+
+    ;; edit html tags like sexps
+    web-mode
 
     ;; Web dev interaction
     skewer-mode
@@ -97,9 +97,6 @@
 
     ;; Vim's NerdTree for EMACS
     neotree
-
-    ;;Rust Mode
-    rust-mode
 ))
 
 ;; On OS X, an Emacs instance started from the graphical user
