@@ -59,6 +59,10 @@
     ;; extra syntax highlighting for clojure
     clojure-mode-extra-font-locking
 
+    ;; JavaScript mode with autocompletion
+    js2-mode
+    ac-js2
+
     ;; integration with a Clojure REPL
     ;; https://github.com/clojure-emacs/cider
     cider
@@ -94,6 +98,10 @@
     ;; ElDoc for editing css
     el-get
     css-eldoc
+
+    ;; Auto-Complete
+    auto-complete
+    fuzzy
 
     ;; Vim's NerdTree for EMACS
     neotree
@@ -158,6 +166,12 @@
 ;; Turn on CSS ELDoc
 (css-eldoc-enable)
 
+;; Turn on AutoComplete
+(add-to-list 'load-path "~/.emacs.d/auto-complete-20150618.1949/dict")
+(require 'auto-complete-config)
+(add-to-list 'ac-dictionary-directories "~/.emacs.d/dict")
+(ac-config-default)
+
 
 ;;;;
 ;; Customization files
@@ -214,3 +228,19 @@
 (interactive)
 (mapc 'kill-buffer (delq (current-buffer) (buffer-list)))
 (message "Killed all other buffers"))
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(coffee-tab-width 2)
+ '(custom-safe-themes
+   (quote
+    ("030bed79e98026124afd4ef8038ba7fe064314baf18b58759a5c92b91ec872fb" "23cf1bbd82721df1785aa1a10f742e555d6ea41921b65fab0345947bdd56c3f8" default)))
+ '(frame-background-mode nil))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
