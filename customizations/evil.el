@@ -9,10 +9,7 @@
   "w" 'save-buffer
   "c" 'clipboard-kill-ring-save
   "p" 'clipboard-yank
-  "bn" 'next-buffer
-  "bd" 'kill-buffer
-  "l" 'buffer-menu
-  "bo" 'kill-other-buffers)
+  "l" 'buffer-menu)
 
 ;;;; Moving to different windows
 (define-key evil-normal-state-map (kbd "C-h") 'evil-window-left)

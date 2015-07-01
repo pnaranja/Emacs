@@ -105,6 +105,9 @@
 
     ;; Vim's NerdTree for EMACS
     neotree
+
+    ;; key-chord for mapping commands to pair of letters
+    key-chord
 ))
 
 ;; On OS X, an Emacs instance started from the graphical user
@@ -173,6 +176,11 @@
 (ac-config-default)
 
 
+;; Turn on Key-Chords
+(require 'key-chord)
+(key-chord-mode 1)
+
+
 ;;;;
 ;; Customization files
 ;;;;
@@ -215,6 +223,9 @@
 ;; For PowerLine Evil theme
 (load "powerline-evil.el")
 (powerline-evil-vim-color-theme)
+
+;; Setup Key Chords
+(load "key-chord.el")
 
 ;; Setup Evil customizations
 (load "evil.el")
