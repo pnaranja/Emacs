@@ -1,6 +1,18 @@
 ;; javascript, node
+
+;; Enable paredit for JavaScript
+(defun my-paredit-js ()
+  "Turn on paredit mode for non-lisps."
+  (interactive)
+  (set (make-local-variable 'paredit-space-for-delimiter-predicates)
+       '((lambda (endp delimiter) nil)))
+  (paredit-mode 1))
+(add-hook 'js-mode-hook 'my-paredit-js)
+
 (add-hook 'js-mode-hook 'js2-minor-mode)
 (add-hook 'js2-mode-hook 'ac-js2-mode)
+
+
 (add-to-list 'interpreter-mode-alist '("node" . js2-mode))
 
 (setq js2-hightlight-level 3)
