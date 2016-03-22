@@ -159,7 +159,6 @@
 ;;For Evil leader mode
 (global-evil-leader-mode)
 
-
 ;;Hide Toolbar
 (tool-bar-mode -1)
 
@@ -170,11 +169,10 @@
 (css-eldoc-enable)
 
 ;; Turn on AutoComplete
-(add-to-list 'load-path "~/.emacs.d/auto-complete-20150618.1949/dict")
+(add-to-list 'load-path "~/.emacs.d/elpa/auto-complete-20160310.2248") 
 (require 'auto-complete-config)
 (add-to-list 'ac-dictionary-directories "~/.emacs.d/dict")
 (ac-config-default)
-
 
 ;; Turn on Key-Chords
 (require 'key-chord)
@@ -230,6 +228,8 @@
 ;; Setup Evil customizations
 (load "evil.el")
 
+;; Setup web mode configuration
+(load "web-mode-config.el")
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -247,7 +247,7 @@
  '(coffee-tab-width 2)
  '(custom-safe-themes
    (quote
-    ("030bed79e98026124afd4ef8038ba7fe064314baf18b58759a5c92b91ec872fb" "23cf1bbd82721df1785aa1a10f742e555d6ea41921b65fab0345947bdd56c3f8" default)))
+    ("2ab472df2b776b41fa249b4587d653a10ad87e60bd724e23a2f609fa5b0d25a7" "030bed79e98026124afd4ef8038ba7fe064314baf18b58759a5c92b91ec872fb" "23cf1bbd82721df1785aa1a10f742e555d6ea41921b65fab0345947bdd56c3f8" default)))
  '(frame-background-mode nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
