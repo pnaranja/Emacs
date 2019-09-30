@@ -1,25 +1,16 @@
-;;;;
-;; Packages
-;;;;
-
 ;; Define package repositories
 (require 'package)
 
-(add-to-list 'package-archives
-             '("melpa-stable" . "http://melpa.org/packages/") t)
-;(add-to-list 'package-archives
-;             '("marmalade" . "http://marmalade-repo.org/packages/") t)
-;(add-to-list 'package-archives
-;             '("tromey" . "http://tromey.com/elpa/") t)
-
-;; (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")^
-;;                          ("marmalade" . "http://marmalade-repo.org/packages/")
-;;                          ("melpa" . "http://melpa-stable.milkbox.net/packages/")))
-
-
-;; Load and activate emacs packages. Do this first so that the
-;; packages are loaded before you start trying to modify them.
-;; This also sets the load path.
+;; From Melpa
+(let* ((no-ssl (and (memq system-type '(windows-nt ms-dos))
+                 (not (gnutls-available-p))))
+    (proto (if no-ssl "http" "https")))
+    ;; Comment/uncomment these two lines to enable/disable MELPA and MELPA Stable as desired
+    (add-to-list 'package-archives (cons "melpa" (concat proto "://melpa.org/packages/")) t)
+    ;;(add-to-list 'package-archives (cons "melpa-stable" (concat proto "://stable.melpa.org/packages/")) t)
+    (when (< emacs-major-version 24)
+    ;; For important compatibility libraries like cl-lib
+(add-to-list 'package-archives '("gnu" . (concat proto "://elpa.gnu.org/packages/")))))
 (package-initialize)
 
 ;; Download the ELPA archive description if needed.
@@ -29,86 +20,124 @@
   (package-refresh-contents))
 
 
-;; The packages you want installed. You can also install these
+;; The packages you want installedn. You can also install these
 ;; manually with M-x package-install
 ;; Add in your own as you wish:
 (defvar my-packages
   '(
-    ;;EVIL MODE!
-    ;;git clone https://gitorious.org/evil/evil.git
-    evil
+    ;; Get env vars from shell
+    exec-path-from-shell
 
-    ;; To Change the <leader>
-    evil-leader
+    ;; Easy find files in repo
+    find-file-in-repository
+    find-file-in-project
 
-    ;; auto-complete sources for CIDER
-    ac-cider
+    yaml-mode
 
-    ;;PowerLine and integration with Evil mode
-    powerline
-    powerline-evil
+    ;; Language Server Protocol
+    lsp-mode
+    lsp-ui
 
-    ;; makes handling lisp expressions much, much easier
-    ;; Cheatsheet: http://www.emacswiki.org/emacs/PareditCheatsheet
-    paredit
-
-    ;; key bindings and code colorization for Clojure
-    ;; https://github.com/clojure-emacs/clojure-mode
-    clojure-mode
-
-    ;; extra syntax highlighting for clojure
-    clojure-mode-extra-font-locking
-
-    ;; JavaScript mode with autocompletion
-    js2-mode
-    ac-js2
-
-    ;; integration with a Clojure REPL
-    ;; https://github.com/clojure-emacs/cider
-    cider
-
-    ;; allow ido usage in as many contexts as possible. see
-    ;; customizations/navigation.el line 23 for a description
-    ;; of ido
-    ido-ubiquitous
+    ;; Dockerfile Mode
+    dockerfile-mode
 
     ;; Enhances M-x to allow easier execution of commands. Provides
     ;; a filterable list of possible commands in the minibuffer
     ;; http://www.emacswiki.org/emacs/Smex
     smex
 
-    ;; project navigation
-    projectile
+    ))
 
-    ;; colorful parenthesis matching
-    rainbow-delimiters
+;; Install/update packages
+(dolist (p my-packages)
+  (when (not (package-installed-p p))
+    (package-install p)))
 
-    ;; git integration
-    magit
 
-    ;; Auto-Scroll
-    smooth-scrolling
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(custom-enabled-themes (quote (tango-dark)))
+ '(package-selected-packages
+   (quote
+    (find-file-in-project dockerfile-mode ## find-file-in-repository yaml-mode lsp-ui lsp-mode exec-path-from-shell ac-js2))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
 
-    ;; edit html tags like sexps
-    web-mode
+;; Desktop mode
+(desktop-save-mode 1)
 
-    ;; Web dev interaction
-    skewer-mode
+;; smex
+(global-set-key (kbd "M-x") 'smex)
+(global-set-key (kbd "M-X") 'smex-major-mode-commands)
 
-    ;; ElDoc for editing css
-    el-get
-    css-eldoc
+;; No cursor blinking
+(blink-cursor-mode 0)
 
-    ;; Auto-Complete
-    auto-complete
-    fuzzy
+;; Cursor color
+(set-cursor-color "blue")
 
-    ;; Vim's NerdTree for EMACS
-    neotree
+;; full path in title bar
+(setq-default frame-title-format "%b (%f)")
 
-    ;; key-chord for mapping commands to pair of letters
-    key-chord
-))
+;; Turn off the tool bar
+(tool-bar-mode -1)
+
+;; Show line numbers
+(global-linum-mode)
+
+;; increase font size for better readability
+(set-face-attribute 'default nil :height 180)
+
+;; Changes all yes/no questions to y/n type
+(fset 'yes-or-no-p 'y-or-n-p)
+
+;; No need for ~ files when editing
+(setq create-lockfiles nil)
+
+;; Go straight to scratch buffer on startup
+(setq inhibit-startup-message t)
+
+;; Highlights matching parenthesis
+(show-paren-mode 1)
+
+;; Highlight current line
+(global-hl-line-mode 1)
+
+;; Turn off electric mode so no auto indenting
+(setq electric-indent-mode nil)
+
+;; Turn on delete selection mode
+(delete-selection-mode 1)
+
+
+;; Scrolling
+(defun scroll-down-in-place (n)
+  (interactive "p")
+  (previous-line n)
+  (unless (eq (window-start) (point-min))
+    (scroll-down n)))
+
+(defun scroll-up-in-place (n)
+  (interactive "p")
+  (next-line n)
+  (unless (eq (window-end) (point-max))
+    (scroll-up n)))
+
+(global-set-key "\M-n" 'scroll-up-in-place)
+(global-set-key "\M-p" 'scroll-down-in-place)
+
+
+;; Auto-save options
+(setq auto-save-default t)
+(setq auto-save-visited-file-name t)
+(setq auto-save-timeout 5)
 
 ;; On OS X, an Emacs instance started from the graphical user
 ;; interface will have a different environment than a shell in a
@@ -118,140 +147,16 @@
 ;; This library works around this problem by copying important
 ;; environment variables from the user's shell.
 ;; https://github.com/purcell/exec-path-from-shell
-(if (eq system-type 'darwin)
-    (add-to-list 'my-packages 'exec-path-from-shell))
+(when (memq window-system '(mac ns x))
+  (exec-path-from-shell-initialize))
 
-;; Install/update packages
-(dolist (p my-packages)
-  (when (not (package-installed-p p))
-    (package-install p)))
+;; Enable fd with find-file-in-project
+(setq ffip-use-rust-fd t)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; OSX: Use mdfind for locate
+(setq locate-command "mdfind")
 
-;; Place downloaded elisp files in ~/.emacs.d/vendor. You'll then be able
-;; to load them.
-;;
-;; For example, if you download yaml-mode.el to ~/.emacs.d/vendor,
-;; then you can add the following code to this file:
-;;
-;; (require 'yaml-mode)
-;; (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
-;; 
-;; Adding this code will make Emacs enter yaml mode whenever you open
-;; a .yml file
-(add-to-list 'load-path "~/.emacs.d/vendor")
-
-;;; Revert buffer. No need for user confirmation and automatically go to the end of the buffer
-(global-auto-revert-mode 1)
-(setq auto-revert-verbose nil)
-(global-set-key (kbd "<f5>") (lambda () (interactive) (revert-buffer nil t) (end-of-buffer)))
-
-;; Allow Case Conversion Commands
-(put 'upcase-region 'disabled nil)
-
-;; F2 for NeoTree
-(global-set-key [f2] 'neotree-toggle)
-
-;; For Evil mode
-(require 'evil)
-(evil-mode 1)
-
-;;For Evil leader mode
-(global-evil-leader-mode)
-
-;;Hide Toolbar
-(tool-bar-mode -1)
-
-;;Better word wrapping
-(visual-line-mode 1)
-
-;; Turn on CSS ELDoc
-(css-eldoc-enable)
-
-;; Turn on AutoComplete
-(add-to-list 'load-path "~/.emacs.d/elpa/auto-complete-20160310.2248") 
-(require 'auto-complete-config)
-(add-to-list 'ac-dictionary-directories "~/.emacs.d/dict")
-(ac-config-default)
-
-;; Turn on Key-Chords
-(require 'key-chord)
-(key-chord-mode 1)
-
-
-;;;;
-;; Customization files
-;;;;
-
-;; Add a directory to our load path so that when you `load` things
-;; below, Emacs knows where to look for the corresponding file.
-(add-to-list 'load-path "~/.emacs.d/customizations")
-
-;; Sets up exec-path-from-shell so that Emacs will use the correct
-;; environment variables
-(load "shell-integration.el")
-
-;; These customizations make it easier for you to navigate files,
-;; switch buffers, and choose options from the minibuffer.
-(load "navigation.el")
-
-;; These customizations change the way emacs looks and disable/enable
-;; some user interface elements
-(load "ui.el")
-
-;; These customizations make editing a bit nicer.
-(load "editing.el")
-
-;; Hard-to-categorize customizations
-(load "misc.el")
-
-;; For editing lisps
-(load "elisp-editing.el")
-
-;; Langauage-specific
-(load "setup-clojure.el")
-(load "setup-js.el")
-
-;; Enable Smooth scrolling
-(load "smooth-scrolling-customization.el")
-
-;; Skewer customization
-(load "skewer-customization.el")
-
-;; For PowerLine Evil theme
-(load "powerline-evil.el")
-(powerline-evil-vim-color-theme)
-
-;; Setup Key Chords
-(load "key-chord.el")
-
-;; Setup Evil customizations
-(load "evil.el")
-
-;; Setup web mode configuration
-(load "web-mode-config.el")
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Function to kill other buffers
-(defun kill-other-buffers ()
-"Kill all other buffers"
-(interactive)
-(mapc 'kill-buffer (delq (current-buffer) (buffer-list)))
-(message "Killed all other buffers"))
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(coffee-tab-width 2)
- '(custom-safe-themes
-   (quote
-    ("2ab472df2b776b41fa249b4587d653a10ad87e60bd724e23a2f609fa5b0d25a7" "030bed79e98026124afd4ef8038ba7fe064314baf18b58759a5c92b91ec872fb" "23cf1bbd82721df1785aa1a10f742e555d6ea41921b65fab0345947bdd56c3f8" default)))
- '(frame-background-mode nil))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
+(require 'lsp-ui)
+(add-hook 'lsp-mode-hook 'lsp-ui-mode)
+(add-hook 'javascript-mode-hook 'lsp-ui-mode)
+(add-hook 'python-mode-hook 'lsp-ui-mode)
