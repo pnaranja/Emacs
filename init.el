@@ -59,7 +59,7 @@
     (package-install p)))
 
 ;; Set color theme
-(load-theme 'sanityinc-tomorrow-night)
+(load-theme 'sanityinc-tomorrow-night t)
 
 ;; Ripgrep settings
 (require 'rg)
@@ -114,6 +114,9 @@
 ;; Turn on delete selection mode
 (delete-selection-mode 1)
 
+;; Auto-follow symlinks
+(setq vc-follow-symlinks t)
+
 
 ;; Scrolling
 (defun scroll-down-in-place (n)
@@ -135,7 +138,7 @@
 ;; Auto-save options
 (setq auto-save-default t)
 (setq auto-save-visited-file-name t)
-(setq auto-save-timeout 5)
+(setq auto-save-timeout 2)
 
 ;; On OS X, an Emacs instance started from the graphical user
 ;; interface will have a different environment than a shell in a
