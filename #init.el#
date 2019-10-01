@@ -165,7 +165,8 @@
 ;; OSX: Use mdfind for locate
 (setq locate-command "mdfind")
 
+(require 'lsp-mode)
 (require 'lsp-ui)
 (add-hook 'lsp-mode-hook 'lsp-ui-mode)
-(add-hook 'javascript-mode-hook 'lsp-ui-mode)
-(add-hook 'python-mode-hook 'lsp-ui-mode)
+(add-hook 'javascript-mode-hook 'flycheck-mode)
+(add-hook 'python-mode-hook 'flycheck-mode)
