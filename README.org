@@ -1,0 +1,3 @@
+* Emacs configuration
+** Archive directory has a 2016 configuration
+** Building new config in 2019!!
