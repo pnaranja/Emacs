@@ -25,6 +25,9 @@
 ;; Add in your own as you wish:
 (defvar my-packages
   '(
+    ;; Color themes
+    color-theme-sanityinc-tomorrow
+
     ;; Get env vars from shell
     exec-path-from-shell
 
@@ -50,27 +53,13 @@
 
     ))
 
-;; Install/update packages
+; Install/update packages
 (dolist (p my-packages)
   (when (not (package-installed-p p))
     (package-install p)))
 
-
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(custom-enabled-themes (quote (tango-dark)))
- '(package-selected-packages
-   (quote
-    (find-file-in-project dockerfile-mode ## yaml-mode lsp-ui lsp-mode exec-path-from-shell))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
+;; Set color theme
+(load-theme 'sanityinc-tomorrow-night)
 
 ;; Ripgrep settings
 (require 'rg)
@@ -169,3 +158,17 @@
 (add-hook 'lsp-mode-hook 'lsp-ui-mode)
 (add-hook 'javascript-mode-hook 'lsp-ui-mode)
 (add-hook 'python-mode-hook 'lsp-ui-mode)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   (quote
+    ("06f0b439b62164c6f8f84fdda32b62fb50b6d00e8b01c2208e55543a6337433a" default))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
