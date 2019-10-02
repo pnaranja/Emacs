@@ -72,6 +72,8 @@
 (setq rg-executable "/usr/local/bin/rg")
 (setq rg-group-result 1)
 
+;; Pasting text should still word wrap
+(setq term-suppress-hard-newline t)
 
 ;; Desktop mode
 (desktop-save-mode 1)
