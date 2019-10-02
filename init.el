@@ -140,7 +140,9 @@
 
 (global-set-key "\M-n" 'scroll-up-in-place)
 (global-set-key "\M-p" 'scroll-down-in-place)
-
+ 
+;; Change set-mark command
+(global-set-key (kbd "M-SPC") 'set-mark-command)
 
 ;; Auto-save options
 (setq auto-save-default t)
