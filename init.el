@@ -25,6 +25,8 @@
 ;; Add in your own as you wish:
 (defvar my-packages
   '(
+    restart-emacs
+
     ;; Color themes
     color-theme-sanityinc-tomorrow
 
@@ -37,12 +39,11 @@
     yaml-mode
 
     ;; Language Server Protocol
-    lsp-mode
-    lsp-ui
-
+    eglot
+    
     ;; Company
     company
-    company-lsp
+
 
     ;; Dockerfile Mode
     dockerfile-mode
@@ -57,7 +58,7 @@
 
     ))
 
-; Install/update packages
+;; Install/update packages
 (dolist (p my-packages)
   (when (not (package-installed-p p))
     (package-install p)))
@@ -101,7 +102,7 @@
 (fset 'yes-or-no-p 'y-or-n-p)
 
 ;; No need for ~ files when editing
-(setq create-lockfiles nil)
+;; (setq create-lockfiles nil)
 
 ;; Go straight to scratch buffer on startup
 (setq inhibit-startup-message t)
@@ -161,10 +162,7 @@
 ;; OSX: Use mdfind for locate
 (setq locate-command "mdfind")
 
-(require 'lsp-ui)
-(add-hook 'lsp-mode-hook 'lsp-ui-mode)
-(add-hook 'javascript-mode-hook 'lsp-ui-mode)
-(add-hook 'python-mode-hook 'lsp-ui-mode)
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -173,19 +171,13 @@
  '(custom-safe-themes
    (quote
     ("06f0b439b62164c6f8f84fdda32b62fb50b6d00e8b01c2208e55543a6337433a" default)))
+ '(ediff-window-setup-function (quote ediff-setup-windows-plain))
  '(package-selected-packages
    (quote
-    (company-lsp company yaml-mode smex rg find-file-in-project exec-path-from-shell dockerfile-mode color-theme-sanityinc-tomorrow))))
+    (company yaml-mode smex rg find-file-in-project exec-path-from-shell dockerfile-mode color-theme-sanityinc-tomorrow))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
-
-;; Company settings
-(add-hook 'after-init-hook 'global-company-mode)
-(require 'company-lsp)
-(push 'company-lsp company-backends)
-(setq company-lsp-async 1)
-(setq company-lsp-enable-recompletion 1)
