@@ -66,6 +66,9 @@
 ;; Set color theme
 (load-theme 'sanityinc-tomorrow-night t)
 
+;; Set region color
+(set-face-attribute 'region nil :background "yellow" :foreground "brown")
+
 ;; Ripgrep settings
 (require 'rg)
 (rg-enable-menu)
