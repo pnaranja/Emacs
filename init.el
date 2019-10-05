@@ -56,6 +56,9 @@
     ;; Use ripgrep for searching
     rg
 
+    ;; Latest Rust mode
+    rustic
+
     ))
 
 ;; Install/update packages
@@ -169,6 +172,14 @@
 ;; OSX: Use mdfind for locate
 (setq locate-command "mdfind")
 
+;; Org mode settings
+;;(org-indent-mode)
+
+;; eglot (LSP) settings
+(add-hook 'js-mode-hook 'eglot-ensure)
+(add-hook 'python-mode-hook 'eglot-ensure)
+(add-hook 'rust-mode-hook 'eglot-ensure)
+
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -179,6 +190,9 @@
    (quote
     ("06f0b439b62164c6f8f84fdda32b62fb50b6d00e8b01c2208e55543a6337433a" default)))
  '(ediff-window-setup-function (quote ediff-setup-windows-plain))
+ '(org-export-backends (quote (ascii html icalendar latex md odt)))
+ '(org-hide-leading-stars t)
+ '(org-odd-levels-only t)
  '(package-selected-packages
    (quote
     (company yaml-mode smex rg find-file-in-project exec-path-from-shell dockerfile-mode color-theme-sanityinc-tomorrow))))
@@ -188,3 +202,4 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+(put 'narrow-to-region 'disabled nil)
