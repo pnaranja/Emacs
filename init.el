@@ -27,6 +27,12 @@
   '(
     restart-emacs
 
+    ;; Relative Line Numbers
+    linum-relative
+
+    ;; Copy or Delete a whole line on cursor
+    whole-line-or-region
+
     ;; Color themes
     color-theme-sanityinc-tomorrow
 
@@ -101,7 +107,8 @@
 (tool-bar-mode -1)
 
 ;; Show line numbers
-(global-linum-mode)
+(require 'linum-relative)
+(linum-relative-mode)
 
 ;; increase font size for better readability
 (set-face-attribute 'default nil :height 180)
@@ -130,6 +137,9 @@
 ;; Auto-follow symlinks
 (setq vc-follow-symlinks t)
 
+;; Set whole line or region mode
+(whole-line-or-region-global-mode)
+
 
 ;; Scrolling
 (defun scroll-down-in-place (n)
@@ -137,6 +147,7 @@
   (previous-line n)
   (unless (eq (window-start) (point-min))
     (scroll-down n)))
+
 
 (defun scroll-up-in-place (n)
   (interactive "p")
