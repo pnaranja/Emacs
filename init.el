@@ -26,7 +26,7 @@
 (defvar my-packages
   '(
     restart-emacs
-
+    
     ;; Relative Line Numbers
     linum-relative
 
@@ -45,6 +45,7 @@
     yaml-mode
 
     ;; Language Server Protocol
+    lsp-mode
     eglot
     
     ;; Company
@@ -72,13 +73,24 @@
   (when (not (package-installed-p p))
     (package-install p)))
 
+;; Dired settings
+(autoload 'dired-jump "dired-x"
+  "Jump to Dired buffer corresponding to current buffer." t)
+    
+(autoload 'dired-jump-other-window "dired-x"
+  "Like \\[dired-jump] (dired-jump) but in other window." t)
+
+(require 'dired-x)
+
 ;; Set color theme
-(load-theme 'sanityinc-tomorrow-night t)
+(require 'color-theme-sanityinc-tomorrow)
+(load-theme 'sanityinc-tomorrow-bright t)
 
 ;; Set region color
 (set-face-attribute 'region nil :background "yellow" :foreground "brown")
 
 ;; Ripgrep settings
+;; Use Ctrl-c s
 (require 'rg)
 (rg-enable-menu)
 (setq rg-executable "/usr/local/bin/rg")
