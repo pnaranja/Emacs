@@ -89,6 +89,9 @@
 ;; Set region color
 (set-face-attribute 'region nil :background "yellow" :foreground "brown")
 
+;; Set global company mode 
+(add-hook 'after-init-hook 'global-company-mode)
+
 ;; Ripgrep settings
 ;; Use Ctrl-c s
 (require 'rg)
@@ -204,3 +207,4 @@
 (add-hook 'js-mode-hook 'eglot-ensure)
 (add-hook 'python-mode-hook 'eglot-ensure)
 (add-hook 'rust-mode-hook 'eglot-ensure)
+(put 'narrow-to-region 'disabled nil)
