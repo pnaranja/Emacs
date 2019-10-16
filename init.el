@@ -123,7 +123,8 @@
 
 ;; Show line numbers
 (require 'linum-relative)
-(linum-relative-mode)
+(linum-relative-on)
+(global-linum-mode t)
 
 ;; increase font size for better readability
 (set-face-attribute 'default nil :height 180)
