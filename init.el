@@ -218,4 +218,7 @@
 (add-hook 'python-mode-hook 'eglot-ensure)
 (add-hook 'rust-mode-hook 'eglot-ensure)
 
+;; Enable elpy
+(add-hook 'python-mode-hook 'elpy-enable)
+
 (global-set-key (kbd "<f3>") 'xref-find-definitions)
