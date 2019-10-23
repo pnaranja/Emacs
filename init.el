@@ -50,7 +50,13 @@
     
     ;; Company
     company
+    company-jedi
 
+    ;; Python specific
+    elpy
+
+    ;; Use fd for dired
+    fd-dired
 
     ;; Dockerfile Mode
     dockerfile-mode
@@ -182,6 +188,9 @@
 (setq auto-save-visited-file-name t)
 (setq auto-save-timeout 2)
 
+(put 'narrow-to-region 'disabled nil)
+
+
 ;; On OS X, an Emacs instance started from the graphical user
 ;; interface will have a different environment than a shell in a
 ;; terminal window, because OS X does not run a shell during the
@@ -208,4 +217,5 @@
 (add-hook 'js-mode-hook 'eglot-ensure)
 (add-hook 'python-mode-hook 'eglot-ensure)
 (add-hook 'rust-mode-hook 'eglot-ensure)
-(put 'narrow-to-region 'disabled nil)
+
+(global-set-key (kbd "<f3>") 'xref-find-definitions)
