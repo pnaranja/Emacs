@@ -26,6 +26,8 @@
 (defvar my-packages
   '(
     restart-emacs
+
+    yaml-mode
     
     ;; Relative Line Numbers
     linum-relative
@@ -39,17 +41,11 @@
     ;; Get env vars from shell
     exec-path-from-shell
 
-    ;; Easy find files in repo
-    find-file-in-project
-
-    yaml-mode
-
     ;; Language Server Protocol
     lsp-mode
     eglot
     
-    ;; Company
-    company
+    ;; Company Backends
     company-jedi
 
     ;; Python specific
