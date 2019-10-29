@@ -28,6 +28,9 @@
     restart-emacs
 
     yaml-mode
+
+    ;; ido for everything?
+    ido-completing-read+
     
     ;; Relative Line Numbers
     linum-relative
@@ -60,7 +63,7 @@
     ;; Enhances M-x to allow easier execution of commands. Provides
     ;; a filterable list of possible commands in the minibuffer
     ;; http://www.emacswiki.org/emacs/Smex
-    smex
+    amx
 
     ;; Use ripgrep for searching
     rg
@@ -107,9 +110,23 @@
 ;; Desktop mode
 (desktop-save-mode 1)
 
+;; Always turn on line wrap from screen
+(global-visual-line-mode 1)
+
 ;; smex
-(global-set-key (kbd "M-x") 'smex)
-(global-set-key (kbd "M-X") 'smex-major-mode-commands)
+;;(global-set-key (kbd "M-x") 'smex)
+;;(global-set-key (kbd "M-X") 'smex-major-mode-commands)
+
+;; ido
+(ido-mode 1)
+(ido-everywhere 1)
+
+(require 'ido-completing-read+)
+(ido-ubiquitous-mode 1)
+
+;; amex
+(require 'amx)
+(amx-mode 1)
 
 ;; No cursor blinking
 (blink-cursor-mode 0)
