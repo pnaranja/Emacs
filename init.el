@@ -125,6 +125,8 @@
 (require 'ido-completing-read+)
 (ido-ubiquitous-mode 1)
 
+(setq ffip-prefer-ido-mode t)
+
 ;; amex
 (require 'amx)
 (amx-mode 1)
@@ -236,3 +238,4 @@
 (add-hook 'python-mode-hook 'elpy-enable)
 
 (global-set-key (kbd "<f3>") 'xref-find-definitions)
+(global-set-key (kbd "<f4>") 'xref-find-references)
