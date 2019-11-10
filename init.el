@@ -27,7 +27,14 @@
   '(
     restart-emacs
 
+    ;; Jump to anywhere in the visible buffer
+    avy
+
+    ;; File modes
+    typescript-mode
     yaml-mode
+    dockerfile-mode
+    rustic
 
     ;; ido for everything?
     ido-completing-read+
@@ -57,9 +64,6 @@
     ;; Use fd for dired
     fd-dired
 
-    ;; Dockerfile Mode
-    dockerfile-mode
-
     ;; Enhances M-x to allow easier execution of commands. Provides
     ;; a filterable list of possible commands in the minibuffer
     ;; http://www.emacswiki.org/emacs/Smex
@@ -68,15 +72,15 @@
     ;; Use ripgrep for searching
     rg
 
-    ;; Latest Rust mode
-    rustic
-
     ))
 
 ;; Install/update packages
 (dolist (p my-packages)
   (when (not (package-installed-p p))
     (package-install p)))
+
+;; avy settings
+(global-set-key (kbd "C-;") 'avy-goto-char-timer)
 
 ;; Dired settings
 (autoload 'dired-jump "dired-x"
@@ -112,10 +116,6 @@
 
 ;; Always turn on line wrap from screen
 (global-visual-line-mode 1)
-
-;; smex
-;;(global-set-key (kbd "M-x") 'smex)
-;;(global-set-key (kbd "M-X") 'smex-major-mode-commands)
 
 ;; ido
 (ido-mode 1)
@@ -154,9 +154,6 @@
 ;; Changes all yes/no questions to y/n type
 (fset 'yes-or-no-p 'y-or-n-p)
 
-;; No need for ~ files when editing
-;; (setq create-lockfiles nil)
-
 ;; Go straight to scratch buffer on startup
 (setq inhibit-startup-message t)
 
@@ -179,7 +176,7 @@
 (whole-line-or-region-global-mode)
 
 
-;; Scrolling
+;; Scrolling in place (M-n and M-p)
 (defun scroll-down-in-place (n)
   (interactive "p")
   (previous-line n)
@@ -196,13 +193,13 @@
 (global-set-key "\M-n" 'scroll-up-in-place)
 (global-set-key "\M-p" 'scroll-down-in-place)
  
-;; Change set-mark command
+;; Add another command to set-mark
 (global-set-key (kbd "M-SPC") 'set-mark-command)
 
 ;; Auto-save options
 (setq auto-save-default t)
 (setq auto-save-visited-file-name t)
-(setq auto-save-timeout 2)
+(setq auto-save-timeout 1)
 
 (put 'narrow-to-region 'disabled nil)
 
@@ -237,5 +234,10 @@
 ;; Enable elpy
 (add-hook 'python-mode-hook 'elpy-enable)
 
+;; Go back to global mark shortcut
+(global-set-key (kbd "C-`") 'pop-global-mark)
+
 (global-set-key (kbd "<f3>") 'xref-find-definitions)
 (global-set-key (kbd "<f4>") 'xref-find-references)
+
+
