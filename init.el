@@ -69,6 +69,9 @@
     ;; http://www.emacswiki.org/emacs/Smex
     amx
 
+    ;; Org Journal
+    org-journal
+
     ;; Use ripgrep for searching
     rg
 
@@ -78,6 +81,11 @@
 (dolist (p my-packages)
   (when (not (package-installed-p p))
     (package-install p)))
+
+;; Turn on org-journal
+(require 'org-journal)
+(setq org-journal-dir "~/org/journal/")
+(setq org-journal-date-format "%A, %d %B %Y")
 
 ;; avy settings
 (global-set-key (kbd "C-;") 'avy-goto-char-timer)
@@ -201,6 +209,15 @@
 (setq auto-save-visited-file-name t)
 (setq auto-save-timeout 1)
 
+;; Put autosave files (ie #foo#) and backup files (ie foo~) in ~/.emacs.d/.
+(custom-set-variables
+  '(auto-save-file-name-transforms '((".*" "~/emacs/autosaves/\\1" t)))
+  '(backup-directory-alist '((".*" . "~/emacs/backups/"))))
+
+;; create the autosave dir if necessary, since emacs won't.
+(make-directory "~/emacs/autosaves/" t)
+
+
 (put 'narrow-to-region 'disabled nil)
 
 
@@ -239,5 +256,4 @@
 
 (global-set-key (kbd "<f3>") 'xref-find-definitions)
 (global-set-key (kbd "<f4>") 'xref-find-references)
-
 
