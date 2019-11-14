@@ -39,9 +39,6 @@
     ;; ido for everything?
     ido-completing-read+
     
-    ;; Relative Line Numbers
-    linum-relative
-
     ;; Copy or Delete a whole line on cursor
     whole-line-or-region
 
@@ -148,13 +145,14 @@
 ;; full path in title bar
 (setq-default frame-title-format "%b (%f)")
 
+;; Find out path of the current buffer
+(global-set-key (kbd "C-c C-p") (lambda () (interactive) (prin1 buffer-file-name)))
+
 ;; Turn off the tool bar
 (tool-bar-mode -1)
 
-;; Show line numbers
-(require 'linum-relative)
-(linum-relative-on)
-(global-linum-mode t)
+;; Turn off line numbers
+(global-linum-mode 0)
 
 ;; increase font size for better readability
 (set-face-attribute 'default nil :height 180)
@@ -209,17 +207,14 @@
 (setq auto-save-visited-file-name t)
 (setq auto-save-timeout 1)
 
+;; create the autosave dir if necessary, since emacs won't.
+(make-directory "~/emacs/autosaves/" t)
 ;; Put autosave files (ie #foo#) and backup files (ie foo~) in ~/.emacs.d/.
 (custom-set-variables
   '(auto-save-file-name-transforms '((".*" "~/emacs/autosaves/\\1" t)))
   '(backup-directory-alist '((".*" . "~/emacs/backups/"))))
 
-;; create the autosave dir if necessary, since emacs won't.
-(make-directory "~/emacs/autosaves/" t)
-
-
 (put 'narrow-to-region 'disabled nil)
-
 
 ;; On OS X, an Emacs instance started from the graphical user
 ;; interface will have a different environment than a shell in a
