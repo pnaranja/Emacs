@@ -72,6 +72,8 @@
     ;; Use ripgrep for searching
     rg
 
+    deadgrep
+
     ))
 
 ;; Install/update packages
@@ -113,6 +115,8 @@
 (setq rg-executable "/usr/local/bin/rg")
 (setq rg-group-result 1)
 
+(global-set-key (kbd "C-c r") #'deadgrep)
+
 ;; Pasting text should still word wrap
 (setq term-suppress-hard-newline t)
 
@@ -142,11 +146,14 @@
 ;; Cursor color
 (set-cursor-color "blue")
 
-;; full path in title bar
+;; full path in title bar and in mode line
 (setq-default frame-title-format "%b (%f)")
 
-;; Find out path of the current buffer
-(global-set-key (kbd "C-c C-p") (lambda () (interactive) (prin1 buffer-file-name)))
+(setq-default mode-line-format
+   (quote
+    ("%f     " mode-line-position
+     (vc-mode vc-mode)
+     "  " mode-line-modes mode-line-misc-info mode-line-end-spaces)))
 
 ;; Turn off the tool bar
 (tool-bar-mode -1)
@@ -207,12 +214,15 @@
 (setq auto-save-visited-file-name t)
 (setq auto-save-timeout 1)
 
+
+
+
 ;; create the autosave dir if necessary, since emacs won't.
 (make-directory "~/emacs/autosaves/" t)
+
 ;; Put autosave files (ie #foo#) and backup files (ie foo~) in ~/.emacs.d/.
-(custom-set-variables
-  '(auto-save-file-name-transforms '((".*" "~/emacs/autosaves/\\1" t)))
-  '(backup-directory-alist '((".*" . "~/emacs/backups/"))))
+(setq-default backup-directory-alist (quote ((".*" . "~/emacs/backups/"))))
+
 
 (put 'narrow-to-region 'disabled nil)
 
@@ -248,7 +258,11 @@
 
 ;; Go back to global mark shortcut
 (global-set-key (kbd "C-`") 'pop-global-mark)
-
 (global-set-key (kbd "<f3>") 'xref-find-definitions)
 (global-set-key (kbd "<f4>") 'xref-find-references)
-
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
