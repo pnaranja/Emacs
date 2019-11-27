@@ -27,6 +27,9 @@
   '(
     restart-emacs
 
+    ;; Shows key bindings for incomplete commands
+    which-key
+
     ;; Jump to anywhere in the visible buffer
     avy
 
@@ -80,6 +83,10 @@
 (dolist (p my-packages)
   (when (not (package-installed-p p))
     (package-install p)))
+
+;; Turn on which-key minor mode
+(require 'which-key)
+(which-key-mode)
 
 ;; Turn on org-journal
 (require 'org-journal)
@@ -215,8 +222,6 @@
 (setq auto-save-timeout 1)
 
 
-
-
 ;; create the autosave dir if necessary, since emacs won't.
 (make-directory "~/emacs/autosaves/" t)
 
@@ -258,11 +263,6 @@
 
 ;; Go back to global mark shortcut
 (global-set-key (kbd "C-`") 'pop-global-mark)
+(global-set-key (kbd "<f2>") 'eglot-help-at-point)
 (global-set-key (kbd "<f3>") 'xref-find-definitions)
 (global-set-key (kbd "<f4>") 'xref-find-references)
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
