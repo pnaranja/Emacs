@@ -261,8 +261,28 @@
 ;; Enable elpy
 (add-hook 'python-mode-hook 'elpy-enable)
 
+;; Enable rustic support with elgot
+(setq rustic-lsp-client 'eglot)
+
 ;; Go back to global mark shortcut
 (global-set-key (kbd "C-`") 'pop-global-mark)
 (global-set-key (kbd "<f2>") 'eglot-help-at-point)
 (global-set-key (kbd "<f3>") 'xref-find-definitions)
 (global-set-key (kbd "<f4>") 'xref-find-references)
+
+
+
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+    (yaml-mode whole-line-or-region which-key typescript-mode smex rustic rg restart-emacs org-journal lsp-mode linum-relative ido-completing-read+ find-file-in-project fd-dired exec-path-from-shell elpy eglot dockerfile-mode deadgrep company-jedi color-theme-sanityinc-tomorrow avy amx))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
