@@ -77,6 +77,9 @@
 
     deadgrep
 
+    ;; Dim other windows
+    dimmer
+
     ))
 
 ;; Install/update packages
@@ -87,6 +90,12 @@
 ;; Turn on which-key minor mode
 (require 'which-key)
 (which-key-mode)
+
+;; Turn on dimmer
+(require 'dimmer)
+(dimmer-configure-which-key)
+(dimmer-mode t)
+(setq dimmer-fraction 0.5)
 
 ;; Turn on org-journal
 (require 'org-journal)
