@@ -72,9 +72,7 @@
     ;; Org Journal
     org-journal
 
-    ;; Use ripgrep for searching
-    rg
-
+    ;; Use deadgrep (rg) for searching
     deadgrep
 
     ;; Dim other windows
@@ -105,6 +103,10 @@
 ;; avy settings
 (global-set-key (kbd "C-;") 'avy-goto-char-timer)
 
+;; flycheck hook
+(add-hook 'flyspell-mode-hook (local-set-key (kbd "C-}") 'flyspell-auto-correct-previous-word))
+
+
 ;; Dired settings
 (autoload 'dired-jump "dired-x"
   "Jump to Dired buffer corresponding to current buffer." t)
@@ -124,13 +126,7 @@
 ;; Set global company mode 
 (add-hook 'after-init-hook 'global-company-mode)
 
-;; Ripgrep settings
-;; Use Ctrl-c s
-(require 'rg)
-(rg-enable-menu)
-(setq rg-executable "/usr/local/bin/rg")
-(setq rg-group-result 1)
-
+;; Deadgrip settings
 (global-set-key (kbd "C-c r") #'deadgrep)
 
 ;; Pasting text should still word wrap
