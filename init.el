@@ -260,6 +260,7 @@
 
 ;; LSP settings
 (add-hook 'js-mode-hook #'lsp)
+(add-hook 'ts-mode-hook #'lsp)
 (add-hook 'python-mode-hook #'lsp)
 (add-hook 'rust-mode-hook #'lsp)
 
