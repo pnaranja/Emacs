@@ -34,6 +34,7 @@
     avy
 
     ;; File modes
+    js2-mode
     typescript-mode
     yaml-mode
     dockerfile-mode
@@ -77,6 +78,9 @@
 
     ;; Dim other windows
     dimmer
+
+    ;; For sending HTTP Requests
+   verb
 
     ))
 
@@ -258,9 +262,11 @@
       org-hide-leading-stars t
       org-odd-levels-only t)
 
+(with-eval-after-load 'org
+  (define-key org-mode-map (kbd "C-c C-r") verb-command-map))
+
 ;; LSP settings
 (add-hook 'js-mode-hook #'lsp)
-(add-hook 'ts-mode-hook #'lsp)
 (add-hook 'python-mode-hook #'lsp)
 (add-hook 'rust-mode-hook #'lsp)
 
@@ -274,4 +280,16 @@
 (global-set-key (kbd "<f2>") 'lsp-describe-thing-at-point)
 (global-set-key (kbd "<f3>") 'lsp-find-definition)
 (global-set-key (kbd "<f4>") 'lsp-find-references)
-
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   '(verb yaml-mode whole-line-or-region which-key typescript-mode smex rustic rg restart-emacs org-journal linum-relative js2-mode ido-completing-read+ find-file-in-project fd-dired exec-path-from-shell elpy dockerfile-mode dimmer deadgrep company-lsp company-jedi color-theme-sanityinc-tomorrow avy amx)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
