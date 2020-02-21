@@ -39,6 +39,7 @@
     yaml-mode
     dockerfile-mode
     rustic
+    groovy-mode
 
     ;; ido for everything?
     ido-completing-read+
