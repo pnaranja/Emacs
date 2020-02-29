@@ -270,6 +270,7 @@
 (add-hook 'js-mode-hook #'lsp)
 (add-hook 'python-mode-hook #'lsp)
 (add-hook 'rust-mode-hook #'lsp)
+(add-hook 'groovy-mode-hook #'lsp)
 
 ;; Enable elpy
 (add-hook 'python-mode-hook 'elpy-enable)
