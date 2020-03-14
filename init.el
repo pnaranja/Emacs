@@ -55,11 +55,15 @@
 
     ;; Language Server Protocol
     lsp-mode
+
+    ;; Pos-Tip
+    pos-tip
     
-    ;; Company Backends
+    ;; Company Packages
     company-jedi
     company-lsp
-
+    company-quickhelp
+    
     ;; Python specific
     elpy
 
@@ -81,8 +85,10 @@
     dimmer
 
     ;; For sending HTTP Requests
-   verb
+    verb
 
+    ;; git tools
+    vc-msg
     ))
 
 ;; Install/update packages
@@ -128,8 +134,14 @@
 ;; Set region color
 (set-face-attribute 'region nil :background "yellow" :foreground "brown")
 
-;; Set global company mode 
+;; Activate pos-tip
+(require 'pos-tip)
+
+;; Company settings
 (add-hook 'after-init-hook 'global-company-mode)
+(company-quickhelp-mode)
+(eval-after-load 'company
+  '(define-key company-active-map (kbd "C-c h") #'company-quickhelp-manual-begin))
 
 ;; Deadgrip settings
 (global-set-key (kbd "C-c r") #'deadgrep)
@@ -266,7 +278,19 @@
 (with-eval-after-load 'org
   (define-key org-mode-map (kbd "C-c C-r") verb-command-map))
 
+;; vc-msg settings
+(defun vc-msg-hook-setup (vcs-type commit-info)
+  ;; copy commit id to clipboard
+  (message (format "%s\n%s\n%s\n%s"
+                   (plist-get commit-info :id)
+                   (plist-get commit-info :author)
+                   (plist-get commit-info :author-time)
+                   (plist-get commit-info :author-summary))))
+(add-hook 'vc-msg-hook 'vc-msg-hook-setup)
+(global-set-key (kbd "C-x v j") 'vc-msg-show)
+
 ;; LSP settings
+(require 'lsp-mode)
 (add-hook 'js-mode-hook #'lsp)
 (add-hook 'python-mode-hook #'lsp)
 (add-hook 'rust-mode-hook #'lsp)
@@ -282,16 +306,3 @@
 (global-set-key (kbd "<f2>") 'lsp-describe-thing-at-point)
 (global-set-key (kbd "<f3>") 'lsp-find-definition)
 (global-set-key (kbd "<f4>") 'lsp-find-references)
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   '(verb yaml-mode whole-line-or-region which-key typescript-mode smex rustic rg restart-emacs org-journal linum-relative js2-mode ido-completing-read+ find-file-in-project fd-dired exec-path-from-shell elpy dockerfile-mode dimmer deadgrep company-lsp company-jedi color-theme-sanityinc-tomorrow avy amx)))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
