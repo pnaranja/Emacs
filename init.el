@@ -96,6 +96,9 @@
   (when (not (package-installed-p p))
     (package-install p)))
 
+;; Display relative line numbers
+(setq display-line-numbers 'relative)
+
 ;; Turn on which-key minor mode
 (require 'which-key)
 (which-key-mode)
@@ -112,7 +115,7 @@
 (setq org-journal-date-format "%A, %d %B %Y")
 
 ;; avy settings
-(global-set-key (kbd "C-;") 'avy-goto-char-timer)
+(global-set-key (kbd "C-M-;") 'avy-goto-char-timer)
 
 ;; flycheck hook
 (add-hook 'flyspell-mode-hook (local-set-key (kbd "C-}") 'flyspell-auto-correct-previous-word))
