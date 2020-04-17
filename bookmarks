@@ -1,8 +1,13 @@
-;;;; Emacs Bookmark Format Version 1 ;;;; -*- coding: utf-8-emacs -*- 
+;;;; Emacs Bookmark Format Version 1 ;;;; -*- coding: utf-8-emacs -*-
 ;;; This format is meant to be slightly human-readable;
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
-(("notes.org"
+(("verb_examples.org"
+ (filename . "~/REST_files/verb_examples.org")
+ (front-context-string . "* Quick Start fo")
+ (rear-context-string)
+ (position . 1))
+("notes.org"
  (filename . "~/Library/Mobile Documents/iCloud~com~appsonthemove~beorg/Documents/notes.org")
  (front-context-string . "* 10/14/2019\n** ")
  (rear-context-string . "e not updated**\n")
@@ -12,11 +17,6 @@
  (front-context-string . "* TODO See how w")
  (rear-context-string . "ns to ask David\n")
  (position . 75))
-("axe.js"
- (filename . "~/FlashTools/studyorange/qa-test/a11y_test/axe.js")
- (front-context-string . "  .forBrowser('c")
- (rear-context-string . "river.Builder()\n")
- (position . 326))
 ("init.el"
  (filename . "~/.emacs.d/init.el")
  (front-context-string . ";; Define packag")
