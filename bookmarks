@@ -2,7 +2,12 @@
 ;;; This format is meant to be slightly human-readable;
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
-(("verb_examples.org"
+(("org-capture-last-stored"
+ (filename . "~/journal/org-roam/20200507233202-vocalprayer.org")
+ (front-context-string . "#+TITLE: VocalPr")
+ (rear-context-string)
+ (position . 1))
+("verb_examples.org"
  (filename . "~/REST_files/verb_examples.org")
  (front-context-string . "* Quick Start fo")
  (rear-context-string)

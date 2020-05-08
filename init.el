@@ -67,6 +67,9 @@
     ;; Python specific
     elpy
 
+    ;; Nim LSP
+    nim-mode
+
     ;; Use fd for dired
     fd-dired
 
@@ -89,6 +92,9 @@
 
     ;; git tools
     vc-msg
+
+    ;; Roam
+    org-roam
     ))
 
 ;; Install/update packages
@@ -97,7 +103,8 @@
     (package-install p)))
 
 ;; Display relative line numbers
-(setq display-line-numbers 'relative)
+(global-display-line-numbers-mode)
+(setq display-line-numbers-type 'relative)
 
 ;; Turn on which-key minor mode
 (require 'which-key)
@@ -108,11 +115,6 @@
 (dimmer-configure-which-key)
 (dimmer-mode t)
 (setq dimmer-fraction 0.5)
-
-;; Turn on org-journal
-(require 'org-journal)
-(setq org-journal-dir "~/org/journal/")
-(setq org-journal-date-format "%A, %d %B %Y")
 
 ;; avy settings
 (global-set-key (kbd "C-M-;") 'avy-goto-char-timer)
@@ -292,12 +294,41 @@
 (add-hook 'vc-msg-hook 'vc-msg-hook-setup)
 (global-set-key (kbd "C-x v j") 'vc-msg-show)
 
+;; Use js2-mode for JS files
+(add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
+
+;; Turn on org-journal
+(require 'org-journal)
+(setq org-journal-dir "~/journal/emacs_journal")
+(setq org-journal-date-format "%A, %d %B %Y")
+(setq org-journal-file-format "%Y-%m-%d.org")
+
+;; Org Roam
+(require 'org-roam)
+(define-key org-roam-mode-map (kbd "C-c n l") #'org-roam)
+(define-key org-roam-mode-map (kbd "C-c n f") #'org-roam-find-file)
+(define-key org-roam-mode-map (kbd "C-c n j") #'org-roam-jump-to-index)
+(define-key org-roam-mode-map (kbd "C-c n b") #'org-roam-switch-to-buffer)
+(define-key org-roam-mode-map (kbd "C-c n g") #'org-roam-graph)
+(define-key org-mode-map (kbd "C-c n i") #'org-roam-insert)
+(define-key org-mode-map (kbd "C-c n c") #'org-roam-db-build-cache)
+(setq org-roam-directory "~/journal/org-roam")
+(org-roam-mode +1)
+
+;; Nim Settings
+(add-hook 'nim-mode-hook #'rainbow-delimiters-mode)
+(add-hook 'nim-mode-hook #'subword-mode)
+(add-hook 'nim-mode-hook #'nimsuggest-mode)
+
 ;; LSP settings
 (require 'lsp-mode)
 (add-hook 'js-mode-hook #'lsp)
+(add-hook 'ts-mode-hook #'lsp)
 (add-hook 'python-mode-hook #'lsp)
 (add-hook 'rust-mode-hook #'lsp)
 (add-hook 'groovy-mode-hook #'lsp)
+(add-hook 'nim-mode-hook #'lsp)
+
 
 ;; Enable elpy
 (add-hook 'python-mode-hook 'elpy-enable)
@@ -309,3 +340,16 @@
 (global-set-key (kbd "<f2>") 'lsp-describe-thing-at-point)
 (global-set-key (kbd "<f3>") 'lsp-find-definition)
 (global-set-key (kbd "<f4>") 'lsp-find-references)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   '(yaml-mode whole-line-or-region which-key verb vc-msg tide smex rustic rg restart-emacs org-journal linum-relative js2-mode ido-completing-read+ groovy-mode find-file-in-project fd-dired exec-path-from-shell elpy dockerfile-mode dimmer deadgrep company-quickhelp company-lsp company-jedi color-theme-sanityinc-tomorrow avy amx)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
