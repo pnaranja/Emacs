@@ -313,6 +313,7 @@
 (define-key org-mode-map (kbd "C-c n i") #'org-roam-insert)
 (define-key org-mode-map (kbd "C-c n c") #'org-roam-db-build-cache)
 (setq org-roam-directory "~/journal/org-roam")
+(setq org-roam-index-file "~/journal/org-roam/index.org")
 (org-roam-mode +1)
 
 ;; Nim Settings
