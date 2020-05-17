@@ -41,9 +41,6 @@
     rustic
     groovy-mode
 
-    ;; ido for everything?
-    ido-completing-read+
-    
     ;; Copy or Delete a whole line on cursor
     whole-line-or-region
 
@@ -73,10 +70,18 @@
     ;; Use fd for dired
     fd-dired
 
+    ;; ivy and counsel
+    ivy
+    counsel
+
     ;; Enhances M-x to allow easier execution of commands. Provides
     ;; a filterable list of possible commands in the minibuffer
     ;; http://www.emacswiki.org/emacs/Smex
-    amx
+    ;; amx
+
+    ;; ido for everything?
+    ;; ido-completing-read+
+    
 
     ;; Org Journal
     org-journal
@@ -160,22 +165,10 @@
 ;; Always turn on line wrap from screen
 (global-visual-line-mode 1)
 
-;; ido
-(ido-mode 1)
-(ido-everywhere 1)
-(setq ido-enable-flex-matching t)
-
-(require 'ido-completing-read+)
-(ido-ubiquitous-mode 1)
-
-(setq ffip-prefer-ido-mode t)
-
-;; amex
-(require 'amx)
-(amx-mode 1)
-
-;; No cursor blinking
-(blink-cursor-mode 0)
+;; ivy settings
+(ivy-mode 1)
+(setq ivy-use-virtual-buffers t)
+(setq ivy-count-format "(%d/%d) ")
 
 ;; Cursor color
 (set-cursor-color "blue")
@@ -283,6 +276,10 @@
 (with-eval-after-load 'org
   (define-key org-mode-map (kbd "C-c C-r") verb-command-map))
 
+; Allow to resize images
+(setq org-image-actual-width nil)
+
+
 ;; vc-msg settings
 (defun vc-msg-hook-setup (vcs-type commit-info)
   ;; copy commit id to clipboard
@@ -314,6 +311,7 @@
 (define-key org-mode-map (kbd "C-c n c") #'org-roam-db-build-cache)
 (setq org-roam-directory "~/journal/org-roam")
 (setq org-roam-index-file "~/journal/org-roam/index.org")
+(setq org-roam-completion-system 'ivy)
 (org-roam-mode +1)
 
 ;; Nim Settings
@@ -341,16 +339,3 @@
 (global-set-key (kbd "<f2>") 'lsp-describe-thing-at-point)
 (global-set-key (kbd "<f3>") 'lsp-find-definition)
 (global-set-key (kbd "<f4>") 'lsp-find-references)
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   '(yaml-mode whole-line-or-region which-key verb vc-msg tide smex rustic rg restart-emacs org-journal linum-relative js2-mode ido-completing-read+ groovy-mode find-file-in-project fd-dired exec-path-from-shell elpy dockerfile-mode dimmer deadgrep company-quickhelp company-lsp company-jedi color-theme-sanityinc-tomorrow avy amx)))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
