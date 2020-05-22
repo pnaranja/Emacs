@@ -165,10 +165,13 @@
 ;; Always turn on line wrap from screen
 (global-visual-line-mode 1)
 
-;; ivy settings
+;; ivy/counsel/swiper settings
 (ivy-mode 1)
 (setq ivy-use-virtual-buffers t)
 (setq ivy-count-format "(%d/%d) ")
+(global-set-key (kbd "C-s") 'swiper-isearch)
+(setq counsel-grep-base-command
+      "rg -i -M 120 --no-heading --line-number --color never %s %s")
 
 ;; Cursor color
 (set-cursor-color "blue")
