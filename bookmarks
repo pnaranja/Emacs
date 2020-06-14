@@ -1,10 +1,10 @@
-;;;; Emacs Bookmark Format Version 1 ;;;; -*- coding: utf-8-emacs -*-
+;;;; Emacs Bookmark Format Version 1;;;; -*- coding: utf-8-emacs; mode: lisp-data -*-
 ;;; This format is meant to be slightly human-readable;
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
 (("org-capture-last-stored"
- (filename . "~/journal/org-roam/20200520235317-ouridentity.org")
- (front-context-string . "#+TITLE: OurIden")
+ (filename . "~/journal/org-roam/20200610225826-exploratory_testing.org")
+ (front-context-string . "#+title: Explora")
  (rear-context-string)
  (position . 1))
 ("verb_examples.org"

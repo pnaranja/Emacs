@@ -124,10 +124,6 @@
 ;; avy settings
 (global-set-key (kbd "C-M-;") 'avy-goto-char-timer)
 
-;; flycheck hook
-(add-hook 'flyspell-mode-hook (local-set-key (kbd "C-}") 'flyspell-auto-correct-previous-word))
-
-
 ;; Dired settings
 (autoload 'dired-jump "dired-x"
   "Jump to Dired buffer corresponding to current buffer." t)
@@ -342,3 +338,16 @@
 (global-set-key (kbd "<f2>") 'lsp-describe-thing-at-point)
 (global-set-key (kbd "<f3>") 'lsp-find-definition)
 (global-set-key (kbd "<f4>") 'lsp-find-references)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   '(yaml-mode whole-line-or-region which-key verb vc-msg tide smex rustic rg restart-emacs org-roam org-journal nim-mode linum-relative js2-mode ido-completing-read+ groovy-mode find-file-in-project fd-dired exec-path-from-shell elpy dockerfile-mode dimmer deadgrep counsel company-quickhelp company-lsp company-jedi color-theme-sanityinc-tomorrow avy amx)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
