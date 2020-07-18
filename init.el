@@ -86,6 +86,9 @@
     ;; Org Journal
     org-journal
 
+    ;; Distraction Free writing
+    olivetti
+
     ;; Use deadgrep (rg) for searching
     deadgrep
 
@@ -299,6 +302,13 @@
 (setq org-journal-date-format "%A, %d %B %Y")
 (setq org-journal-file-format "%Y-%m-%d.org")
 
+;; Turn on olivetti
+(require 'olivetti)
+(add-hook 'org-journal-mode-hook 'olivetti-mode)
+
+;; Always turn on flyspell in org mode
+(add-hook 'org-mode-hook 'flyspell-mode)
+
 ;; Org Roam
 (require 'org-roam)
 (define-key org-roam-mode-map (kbd "C-c n l") #'org-roam)
@@ -327,6 +337,8 @@
 (add-hook 'groovy-mode-hook #'lsp)
 (add-hook 'nim-mode-hook #'lsp)
 
+;; Rust LSP settings for Rust Analyzer
+(setq lsp-rust-server 'rust-analyzer)
 
 ;; Enable elpy
 (add-hook 'python-mode-hook 'elpy-enable)
