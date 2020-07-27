@@ -40,6 +40,7 @@
     dockerfile-mode
     rustic
     groovy-mode
+    json-mode
 
     ;; Copy or Delete a whole line on cursor
     whole-line-or-region
@@ -273,7 +274,16 @@
 ;; Org mode settings
 (setq org-startup-indented t
       org-hide-leading-stars t
+      org-hide-emphasis-markers t
       org-odd-levels-only t)
+
+;; https://explog.in/notes/writingsetup.html
+(set-face-attribute 'default nil :family "Spectral" :height 200)
+(set-face-attribute 'fixed-pitch nil :family "Spectral" :height 200)
+(set-face-attribute 'variable-pitch nil :family "Spectral" :height 230)
+
+(add-hook 'text-mode-hook
+          'variable-pitch-mode)
 
 (with-eval-after-load 'org
   (define-key org-mode-map (kbd "C-c C-r") verb-command-map))
@@ -308,6 +318,8 @@
 
 ;; Always turn on flyspell in org mode
 (add-hook 'org-mode-hook 'flyspell-mode)
+(customize-set-variable 'ispell-program-name "aspell")
+(customize-set-variable 'ispell-extra-args '("--sug-mode=ultra"))
 
 ;; Org Roam
 (require 'org-roam)
