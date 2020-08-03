@@ -113,7 +113,7 @@
 
 ;; Display relative line numbers
 (global-display-line-numbers-mode)
-(setq display-line-numbers-type 'relative)
+(setq display-line-numbers-type 'visual)
 
 ;; Turn on which-key minor mode
 (require 'which-key)
@@ -140,9 +140,6 @@
 ;; Set color theme
 (require 'color-theme-sanityinc-tomorrow)
 (load-theme 'sanityinc-tomorrow-bright t)
-
-;; Set region color
-(set-face-attribute 'region nil :background "yellow" :foreground "brown")
 
 ;; Activate pos-tip
 (require 'pos-tip)
@@ -190,9 +187,6 @@
 
 ;; Turn off line numbers
 (global-linum-mode 0)
-
-;; increase font size for better readability
-(set-face-attribute 'default nil :height 180)
 
 ;; Changes all yes/no questions to y/n type
 (fset 'yes-or-no-p 'y-or-n-p)
@@ -277,6 +271,9 @@
       org-hide-emphasis-markers t
       org-odd-levels-only t)
 
+;; Turn off org adapt indentation to not include an extra white space for the heading
+(setq org-adapt-indentation nil)
+
 ;; https://explog.in/notes/writingsetup.html
 (set-face-attribute 'default nil :family "Spectral" :height 200)
 (set-face-attribute 'fixed-pitch nil :family "Spectral" :height 200)
@@ -284,6 +281,9 @@
 
 (add-hook 'text-mode-hook
           'variable-pitch-mode)
+
+;; Set region color
+(set-face-attribute 'region nil :background "yellow" :foreground "brown")
 
 (with-eval-after-load 'org
   (define-key org-mode-map (kbd "C-c C-r") verb-command-map))
