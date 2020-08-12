@@ -111,6 +111,9 @@
   (when (not (package-installed-p p))
     (package-install p)))
 
+;; Enable Auto revert mode
+(global-auto-revert-mode 1)
+
 ;; Display relative line numbers
 (global-display-line-numbers-mode)
 (setq display-line-numbers-type 'visual)
@@ -336,6 +339,7 @@
 (org-roam-mode +1)
 
 ;; Nim Settings
+(require 'nim-mode)
 (add-hook 'nim-mode-hook #'rainbow-delimiters-mode)
 (add-hook 'nim-mode-hook #'subword-mode)
 (add-hook 'nim-mode-hook #'nimsuggest-mode)
