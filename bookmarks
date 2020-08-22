@@ -2,9 +2,19 @@
 ;;; This format is meant to be slightly human-readable;
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
-(("org-capture-last-stored"
- (filename . "~/journal/org-roam/20200724104202-gatsby_tutorial_dev_to.org")
- (front-context-string . "#+title: Gatsby ")
+(("org-capture-last-stored-marker"
+ (filename . "~/.notes")
+ (front-context-string . "*** TODO \n  [202")
+ (rear-context-string . "+Test+Reports]]\n")
+ (position . 1265))
+("org-refile-last-stored"
+ (filename . "~/.notes")
+ (front-context-string . "*** TODO \n  [202")
+ (rear-context-string . "+Test+Reports]]\n")
+ (position . 1265))
+("org-capture-last-stored"
+ (filename . "~/journal/org-roam/20200821162655-typeerasure_vs_reification.org")
+ (front-context-string . "#+title: TypeEra")
  (rear-context-string)
  (position . 1))
 ("verb_examples.org"

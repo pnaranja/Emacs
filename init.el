@@ -278,12 +278,27 @@
 (setq org-adapt-indentation nil)
 
 ;; https://explog.in/notes/writingsetup.html
-(set-face-attribute 'default nil :family "Spectral" :height 200)
-(set-face-attribute 'fixed-pitch nil :family "Spectral" :height 200)
-(set-face-attribute 'variable-pitch nil :family "Spectral" :height 230)
+(set-face-attribute 'default nil :family "Geneva" :height 200)
+(set-face-attribute 'fixed-pitch nil :family "Menlo" :height 200)
+(set-face-attribute 'variable-pitch nil :family "Geneva" :height 200)
 
 (add-hook 'text-mode-hook
           'variable-pitch-mode)
+
+;; Set Menlo font in the buffer
+;; https://stackoverflow.com/questions/20866169/change-the-font-of-current-buffer-in-emacs
+(defun set-menlo-in-buffer ()
+  (interactive "sFont Family: ")
+  (defface tmp-buffer-local-face 
+    '((t :family "Menlo"))
+    "Temporary buffer-local face")
+  (buffer-face-set 'tmp-buffer-local-face))
+
+;; Menlo font for the calendar so it's misaligned
+(add-hook 'calendar-mode-hook 'set-menlo-in-buffer)
+
+;; Calendar shortcut
+(global-set-key (kbd "C-c C-c") 'calendar)
 
 ;; Set region color
 (set-face-attribute 'region nil :background "yellow" :foreground "brown")
@@ -323,6 +338,27 @@
 (add-hook 'org-mode-hook 'flyspell-mode)
 (customize-set-variable 'ispell-program-name "aspell")
 (customize-set-variable 'ispell-extra-args '("--sug-mode=ultra"))
+
+;; Org Capture and Agenda settings - http://pragmaticemacs.com/emacs/org-mode-basics-vi-a-simple-todo-list/
+;; set key for agenda
+(global-set-key (kbd "C-c a") 'org-agenda)
+
+;;file to save todo items
+(setq org-agenda-files (quote ("~/.todos.org")))
+
+;;set colours for priorities
+(setq org-priority-faces '((?A . (:foreground "#F0DFAF" :weight bold))
+                           (?B . (:foreground "LightSteelBlue"))
+                           (?C . (:foreground "OliveDrab"))))
+
+;;open agenda in current window
+(setq org-agenda-window-setup (quote current-window))
+
+;;capture todo items using C-c c t
+(define-key global-map (kbd "C-c c") 'org-capture)
+(setq org-capture-templates
+      '(("t" "todo" entry (file+headline "~/todos.org" "Tasks")
+         "* TODO [#A] %?")))
 
 ;; Org Roam
 (require 'org-roam)
