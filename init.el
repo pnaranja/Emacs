@@ -298,7 +298,7 @@
 (add-hook 'calendar-mode-hook 'set-menlo-in-buffer)
 
 ;; Calendar shortcut
-(global-set-key (kbd "C-c C-c") 'calendar)
+(global-set-key (kbd "C-x c") 'calendar)
 
 ;; Set region color
 (set-face-attribute 'region nil :background "yellow" :foreground "brown")
@@ -344,7 +344,7 @@
 (global-set-key (kbd "C-c a") 'org-agenda)
 
 ;;file to save todo items
-(setq org-agenda-files (quote ("~/.todos.org")))
+(setq org-agenda-files '("~/.notes"))
 
 ;;set colours for priorities
 (setq org-priority-faces '((?A . (:foreground "#F0DFAF" :weight bold))
@@ -357,7 +357,7 @@
 ;;capture todo items using C-c c t
 (define-key global-map (kbd "C-c c") 'org-capture)
 (setq org-capture-templates
-      '(("t" "todo" entry (file+headline "~/todos.org" "Tasks")
+      '(("t" "todo" entry (file+headline "~/.notes/Todo.org" "Tasks")
          "* TODO [#A] %?")))
 
 ;; Org Roam

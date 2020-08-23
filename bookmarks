@@ -13,10 +13,10 @@
  (rear-context-string . "+Test+Reports]]\n")
  (position . 1265))
 ("org-capture-last-stored"
- (filename . "~/journal/org-roam/20200821162655-typeerasure_vs_reification.org")
- (front-context-string . "#+title: TypeEra")
+ (filename . "~/todos.org")
+ (front-context-string . "*** TODO Add Tas")
  (rear-context-string)
- (position . 1))
+ (position . 9))
 ("verb_examples.org"
  (filename . "~/REST_files/verb_examples.org")
  (front-context-string . "* Quick Start fo")
