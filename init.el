@@ -117,6 +117,7 @@
 ;; Display relative line numbers
 (global-display-line-numbers-mode)
 (setq display-line-numbers-type 'visual)
+(setq display-line-numbers-width 0)
 
 ;; Turn on which-key minor mode
 (require 'which-key)
@@ -189,7 +190,7 @@
 (tool-bar-mode -1)
 
 ;; Turn off line numbers
-(global-linum-mode 0)
+;; (global-linum-mode 0)
 
 ;; Changes all yes/no questions to y/n type
 (fset 'yes-or-no-p 'y-or-n-p)
@@ -277,13 +278,18 @@
 ;; Turn off org adapt indentation to not include an extra white space for the heading
 (setq org-adapt-indentation nil)
 
-;; https://explog.in/notes/writingsetup.html
+;;https://explog.in/notes/writingsetup.html
 (set-face-attribute 'default nil :family "Geneva" :height 200)
 (set-face-attribute 'fixed-pitch nil :family "Menlo" :height 200)
 (set-face-attribute 'variable-pitch nil :family "Geneva" :height 200)
+(set-face-attribute 'line-number nil :family "Menlo" :height 200)
+(set-face-attribute 'line-number-current-line nil :family "Menlo" :height 200)
 
 (add-hook 'text-mode-hook
           'variable-pitch-mode)
+
+;; Cycle through ordered lists
+(global-set-key (kbd "C-c l") 'org-cycle-list-bullet)
 
 ;; Set Menlo font in the buffer
 ;; https://stackoverflow.com/questions/20866169/change-the-font-of-current-buffer-in-emacs
@@ -408,7 +414,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(yaml-mode whole-line-or-region which-key verb vc-msg tide smex rustic rg restart-emacs org-roam org-journal nim-mode linum-relative js2-mode ido-completing-read+ groovy-mode find-file-in-project fd-dired exec-path-from-shell elpy dockerfile-mode dimmer deadgrep counsel company-quickhelp company-lsp company-jedi color-theme-sanityinc-tomorrow avy amx)))
+   '(yaml-mode whole-line-or-region which-key verb vc-msg tide smex rustic rg restart-emacs org-roam org-journal olivetti nim-mode linum-relative json-mode js2-mode ido-completing-read+ groovy-mode find-file-in-project fd-dired exec-path-from-shell emacsql-sqlite elpy dockerfile-mode dimmer deadgrep counsel company-quickhelp company-lsp company-jedi color-theme-sanityinc-tomorrow avy amx)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
