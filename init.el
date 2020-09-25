@@ -104,6 +104,9 @@
 
     ;; Roam
     org-roam
+
+    ;; Better help files
+    helpful
     ))
 
 ;; Install/update packages
@@ -173,6 +176,15 @@
 (global-set-key (kbd "C-s") 'swiper-isearch)
 (setq counsel-grep-base-command
       "rg -i -M 120 --no-heading --line-number --color never %s %s")
+
+;; Settings for Helpful
+(global-set-key (kbd "C-h f") #'helpful-callable)
+(global-set-key (kbd "C-h v") #'helpful-variable)
+(global-set-key (kbd "C-h k") #'helpful-key)
+(global-set-key (kbd "C-c C-d") #'helpful-at-point)
+
+(setq counsel-describe-function-function #'helpful-callable)
+(setq counsel-describe-variable-function #'helpful-variable)
 
 ;; Cursor color
 (set-cursor-color "blue")
@@ -386,20 +398,25 @@
 (add-hook 'nim-mode-hook #'subword-mode)
 (add-hook 'nim-mode-hook #'nimsuggest-mode)
 
+;; Rust LSP settings for Rust Analyzer
+(setq lsp-rust-server 'rust-analyzer)
+
 ;; LSP settings
+(require 'lsp)
 (require 'lsp-mode)
+(add-hook 'c-mode-hook #'lsp)
+(add-hook 'c++-mode-hook #'lsp)
 (add-hook 'js-mode-hook #'lsp)
 (add-hook 'ts-mode-hook #'lsp)
-(add-hook 'python-mode-hook #'lsp)
 (add-hook 'rust-mode-hook #'lsp)
 (add-hook 'groovy-mode-hook #'lsp)
 (add-hook 'nim-mode-hook #'lsp)
 
-;; Rust LSP settings for Rust Analyzer
-(setq lsp-rust-server 'rust-analyzer)
-
 ;; Enable elpy
 (add-hook 'python-mode-hook 'elpy-enable)
+
+;; Enable Flycheck with elpy
+(add-hook 'elpy-mode-hook 'flycheck-mode)
 
 ;; Go back to global mark shortcut
 (global-set-key (kbd "C-`") 'pop-global-mark)

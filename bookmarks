@@ -13,7 +13,7 @@
  (rear-context-string . "+Test+Reports]]\n")
  (position . 1265))
 ("org-capture-last-stored"
- (filename . "~/journal/org-roam/20200830224444-typescript.org")
+ (filename . "~/journal/org-roam/20200922140852-typescript_type_guards_and_predicates.org")
  (front-context-string . "#+title: TypeScr")
  (rear-context-string)
  (position . 1))
