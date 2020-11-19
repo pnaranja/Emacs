@@ -375,7 +375,7 @@
 ;;capture todo items using C-c c t
 (define-key global-map (kbd "C-c c") 'org-capture)
 (setq org-capture-templates
-      '(("t" "todo" entry (file+headline "~/.notes/Todo.org" "Tasks")
+      '(("t" "todo" entry (file+headline "~/.notes/todo.org" "Tasks")
          "* TODO [#A] %?")))
 
 ;; Org Roam
@@ -407,16 +407,19 @@
 (add-hook 'c-mode-hook #'lsp)
 (add-hook 'c++-mode-hook #'lsp)
 (add-hook 'js-mode-hook #'lsp)
-(add-hook 'ts-mode-hook #'lsp)
-(add-hook 'rust-mode-hook #'lsp)
+(add-hook 'typescript-mode-hook #'lsp)
+(add-hook 'rustic-mode-hook #'lsp)
 (add-hook 'groovy-mode-hook #'lsp)
 (add-hook 'nim-mode-hook #'lsp)
 
+(setq lsp-headerline-breadcrumb-enable 1)
+
+;; Enable flycheck
+(global-flycheck-mode)
+(add-hook 'after-init-hook 'flycheck-mode)
+
 ;; Enable elpy
 (add-hook 'python-mode-hook 'elpy-enable)
-
-;; Enable Flycheck with elpy
-(add-hook 'elpy-mode-hook 'flycheck-mode)
 
 ;; Go back to global mark shortcut
 (global-set-key (kbd "C-`") 'pop-global-mark)
@@ -425,16 +428,3 @@
 (global-set-key (kbd "<f2>") 'lsp-describe-thing-at-point)
 (global-set-key (kbd "<f3>") 'lsp-find-definition)
 (global-set-key (kbd "<f4>") 'lsp-find-references)
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   '(yaml-mode whole-line-or-region which-key verb vc-msg tide smex rustic rg restart-emacs org-roam org-journal olivetti nim-mode linum-relative json-mode js2-mode ido-completing-read+ groovy-mode find-file-in-project fd-dired exec-path-from-shell emacsql-sqlite elpy dockerfile-mode dimmer deadgrep counsel company-quickhelp company-lsp company-jedi color-theme-sanityinc-tomorrow avy amx)))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
