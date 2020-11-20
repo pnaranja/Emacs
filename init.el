@@ -73,6 +73,7 @@
 
     ;; ivy and counsel
     ivy
+    ivy-rich
     counsel
 
     ;; Enhances M-x to allow easier execution of commands. Provides
@@ -176,6 +177,11 @@
 (global-set-key (kbd "C-s") 'swiper-isearch)
 (setq counsel-grep-base-command
       "rg -i -M 120 --no-heading --line-number --color never %s %s")
+
+(require 'ivy-rich)
+(ivy-rich-mode 1)
+(setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line)
+
 
 ;; Settings for Helpful
 (global-set-key (kbd "C-h f") #'helpful-callable)
@@ -428,3 +434,7 @@
 (global-set-key (kbd "<f2>") 'lsp-describe-thing-at-point)
 (global-set-key (kbd "<f3>") 'lsp-find-definition)
 (global-set-key (kbd "<f4>") 'lsp-find-references)
+
+;; Shortcuts for registers
+(global-set-key  (kbd "C-c y") 'copy-to-register )
+(global-set-key  (kbd "C-c p") 'insert-register )
