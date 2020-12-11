@@ -27,6 +27,9 @@
   '(
     restart-emacs
 
+    ;; Terminal emulator
+    vterm
+
     ;; Shows key bindings for incomplete commands
     which-key
 
@@ -101,10 +104,14 @@
     verb
 
     ;; git tools
+    magit
     vc-msg
 
     ;; Roam
     org-roam
+
+    ;; move text easily up and down
+    move-text
 
     ;; Better help files
     helpful
@@ -114,6 +121,12 @@
 (dolist (p my-packages)
   (when (not (package-installed-p p))
     (package-install p)))
+
+;; Activate libvterm
+(require 'vterm)
+
+;; Enable move-text
+(move-text-default-bindings)
 
 ;; Enable Auto revert mode
 (global-auto-revert-mode 1)
@@ -438,3 +451,16 @@
 ;; Shortcuts for registers
 (global-set-key  (kbd "C-c y") 'copy-to-register )
 (global-set-key  (kbd "C-c p") 'insert-register )
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   '(yaml-mode whole-line-or-region which-key verb vc-msg tide smex rustic rg restart-emacs org-roam org-journal olivetti nim-mode linum-relative json-mode js2-mode ivy-rich ido-completing-read+ helpful groovy-mode find-file-in-project fd-dired exec-path-from-shell emacsql-sqlite elpy dockerfile-mode dimmer deadgrep counsel company-quickhelp company-lsp company-jedi color-theme-sanityinc-tomorrow avy amx)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
