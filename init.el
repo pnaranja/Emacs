@@ -195,6 +195,8 @@
 (ivy-rich-mode 1)
 (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line)
 
+(global-set-key (kbd "C-c s") #'project-find-regexp)
+
 
 ;; Settings for Helpful
 (global-set-key (kbd "C-h f") #'helpful-callable)
@@ -439,6 +441,9 @@
 
 ;; Enable elpy
 (add-hook 'python-mode-hook 'elpy-enable)
+
+;; Magit settings
+(global-set-key (kbd "C-c g") 'magit-file-dispatch)
 
 ;; Go back to global mark shortcut
 (global-set-key (kbd "C-`") 'pop-global-mark)
