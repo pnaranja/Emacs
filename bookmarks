@@ -2,7 +2,12 @@
 ;;; This format is meant to be slightly human-readable;
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
-(("org-capture-last-stored-marker"
+(("default-checkout-web"
+ (filename . "~/chegg/gne/default-checkout-web/")
+ (front-context-string . ".env-browserstac")
+ (rear-context-string . "08 Dec  4 15:23 ")
+ (position . 259))
+("org-capture-last-stored-marker"
  (filename . "~/.notes")
  (front-context-string . "*** TODO \n  [202")
  (rear-context-string . "+Test+Reports]]\n")

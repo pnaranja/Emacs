@@ -196,6 +196,7 @@
 (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line)
 
 (global-set-key (kbd "C-c s") #'project-find-regexp)
+(global-set-key (kbd "C-c f") #'project-find-file)
 
 
 ;; Settings for Helpful
