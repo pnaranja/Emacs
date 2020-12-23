@@ -66,7 +66,9 @@
     company-quickhelp
     
     ;; Python specific
+    lsp-python-ms
     elpy
+    py-autopep8
 
     ;; Nim LSP
     nim-mode
@@ -148,6 +150,7 @@
 
 ;; avy settings
 (global-set-key (kbd "C-M-;") 'avy-goto-char-timer)
+(global-set-key (kbd "C-'") 'avy-goto-char-2)
 
 ;; Dired settings
 (autoload 'dired-jump "dired-x"
@@ -309,6 +312,13 @@
       org-hide-emphasis-markers t
       org-odd-levels-only t)
 
+;; Replace keys for cycle-agenda-files for avy
+(defun change-cycle-agenda-files-key ()
+  (local-set-key (kbd "C-'") 'avy-goto-char-2))
+
+(add-hook 'org-mode-hook 'change-cycle-agenda-files-key)
+
+
 ;; Turn off org adapt indentation to not include an extra white space for the heading
 (setq org-adapt-indentation nil)
 
@@ -434,6 +444,10 @@
 (add-hook 'groovy-mode-hook #'lsp)
 (add-hook 'nim-mode-hook #'lsp)
 
+(require 'lsp-python-ms)
+(setq lsp-python-ms-auto-install-server t)
+(add-hook 'python-mode-hook #'lsp) ; or lsp-deferred
+
 (setq lsp-headerline-breadcrumb-enable 1)
 
 ;; Enable flycheck
@@ -441,7 +455,13 @@
 (add-hook 'after-init-hook 'flycheck-mode)
 
 ;; Enable elpy
-(add-hook 'python-mode-hook 'elpy-enable)
+(elpy-enable)
+(setq python-shell-interpreter "ipython"
+      python-shell-interpreter-args "-i --simple-prompt")
+
+;; Enable autopep8
+(require 'py-autopep8)
+(add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save)
 
 ;; Magit settings
 (global-set-key (kbd "C-c g") 'magit-file-dispatch)
