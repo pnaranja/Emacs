@@ -201,6 +201,10 @@
 (global-set-key (kbd "C-c s") #'project-find-regexp)
 (global-set-key (kbd "C-c f") #'project-find-file)
 
+;; https://www.murilopereira.com/how-to-open-a-file-in-emacs/
+;; Might make find file faster?
+(remove-hook 'file-name-at-point-functions 'ffap-guess-file-name-at-point)
+
 
 ;; Settings for Helpful
 (global-set-key (kbd "C-h f") #'helpful-callable)
