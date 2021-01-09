@@ -56,6 +56,7 @@
 
     ;; Language Server Protocol
     lsp-mode
+    lsp-ui
 
     ;; Pos-Tip
     pos-tip
