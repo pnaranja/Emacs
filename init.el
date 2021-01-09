@@ -66,7 +66,6 @@
     company-quickhelp
     
     ;; Python specific
-    lsp-python-ms
     elpy
     py-autopep8
 
@@ -118,6 +117,22 @@
     ;; Better help files
     helpful
     ))
+
+;; Add to Path
+(setq exec-path (append exec-path '("/usr/local/bin")))
+
+
+;; On OS X, an Emacs instance started from the graphical user
+;; interface will have a different environment than a shell in a
+;; terminal window, because OS X does not run a shell during the
+;; login. Obviously this will lead to unexpected results when
+;; calling external utilities like make from Emacs.
+;; This library works around this problem by copying important
+;; environment variables from the user's shell.
+;; https://github.com/purcell/exec-path-from-shell
+(when (memq window-system '(mac ns x))
+  (exec-path-from-shell-initialize))
+
 
 ;; Install/update packages
 (dolist (p my-packages)
@@ -175,7 +190,7 @@
   '(define-key company-active-map (kbd "C-c h") #'company-quickhelp-manual-begin))
 
 ;; Deadgrip settings
-(global-set-key (kbd "C-c r") #'deadgrep)
+(global-set-key (kbd "C-c s") #'deadgrep)
 
 ;; Pasting text should still word wrap
 (setq term-suppress-hard-newline t)
@@ -198,7 +213,6 @@
 (ivy-rich-mode 1)
 (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line)
 
-(global-set-key (kbd "C-c s") #'project-find-regexp)
 (global-set-key (kbd "C-c f") #'project-find-file)
 
 ;; https://www.murilopereira.com/how-to-open-a-file-in-emacs/
@@ -292,17 +306,6 @@
 
 
 (put 'narrow-to-region 'disabled nil)
-
-;; On OS X, an Emacs instance started from the graphical user
-;; interface will have a different environment than a shell in a
-;; terminal window, because OS X does not run a shell during the
-;; login. Obviously this will lead to unexpected results when
-;; calling external utilities like make from Emacs.
-;; This library works around this problem by copying important
-;; environment variables from the user's shell.
-;; https://github.com/purcell/exec-path-from-shell
-(when (memq window-system '(mac ns x))
-  (exec-path-from-shell-initialize))
 
 ;; Enable fd with find-file-in-project
 (setq ffip-use-rust-fd t)
@@ -447,10 +450,8 @@
 (add-hook 'rustic-mode-hook #'lsp)
 (add-hook 'groovy-mode-hook #'lsp)
 (add-hook 'nim-mode-hook #'lsp)
-
-(require 'lsp-python-ms)
-(setq lsp-python-ms-auto-install-server t)
 (add-hook 'python-mode-hook #'lsp) ; or lsp-deferred
+
 
 (setq lsp-headerline-breadcrumb-enable 1)
 
@@ -460,8 +461,6 @@
 
 ;; Enable elpy
 (elpy-enable)
-(setq python-shell-interpreter "ipython"
-      python-shell-interpreter-args "-i --simple-prompt")
 
 ;; Enable autopep8
 (require 'py-autopep8)
