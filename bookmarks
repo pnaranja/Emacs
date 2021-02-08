@@ -2,7 +2,32 @@
 ;;; This format is meant to be slightly human-readable;
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
-(("default-checkout-web"
+(("checkout-components"
+ (filename . "~/chegg/gne/checkout-components/")
+ (front-context-string . ".browserstack\n  ")
+ (rear-context-string . "96 Oct 29 01:14 ")
+ (position . 258))
+("growth-enablement-robot-tests"
+ (filename . "~/chegg/gne/growth-enablement-robot-tests/")
+ (front-context-string . ".git\n  -rw-r--r-")
+ (rear-context-string . "12 Jan 28 09:50 ")
+ (position . 265))
+("robot-for-ecom"
+ (filename . "~/chegg/gne/robot-for-ecom/")
+ (front-context-string . ".git\n  -rw-r--r-")
+ (rear-context-string . "48 Jan 23 11:01 ")
+ (position . 247))
+("drop-in-payment"
+ (filename . "~/chegg/gne/drop-in-payment/")
+ (front-context-string . ".DS_Store\n  drwx")
+ (rear-context-string . "48 Aug  4 11:32 ")
+ (position . 257))
+("payment-methods"
+ (filename . "~/chegg/gne/payment-methods/")
+ (front-context-string . ".DS_Store\n  drwx")
+ (rear-context-string . "48 Aug 24 21:30 ")
+ (position . 254))
+("default-checkout-web"
  (filename . "~/chegg/gne/default-checkout-web/")
  (front-context-string . ".env-browserstac")
  (rear-context-string . "08 Dec  4 15:23 ")

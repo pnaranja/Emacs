@@ -469,6 +469,7 @@
 
 ;; Magit settings
 (global-set-key (kbd "C-c g") 'magit-file-dispatch)
+(global-set-key (kbd "C-x g") 'magit)
 
 ;; Go back to global mark shortcut
 (global-set-key (kbd "C-`") 'pop-global-mark)
