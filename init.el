@@ -164,6 +164,9 @@
 (dimmer-mode t)
 (setq dimmer-fraction 0.5)
 
+;; Set key for comment-or-uncomment-region
+(global-set-key (kbd "M-/") #'comment-or-uncomment-region)
+
 ;; avy settings
 (global-set-key (kbd "C-M-;") 'avy-goto-char-timer)
 (global-set-key (kbd "C-'") 'avy-goto-char-2)
@@ -295,9 +298,18 @@
 
 ;; Auto-save options
 (setq auto-save-default t)
-(setq auto-save-visited-file-name t)
-(setq auto-save-timeout 1)
+(setq auto-save-timeout 2)
+(setq  auto-save-visited-mode t)
+(setq auto-save-visited-interval 2)
 
+;; http://ergoemacs.org/emacs/emacs_auto_save.html
+(defun xah-save-all-unsaved ()
+  "Save all unsaved files. no ask.
+Version 2019-11-05"
+  (interactive)
+  (save-some-buffers t ))
+
+(setq after-focus-change-function 'xah-save-all-unsaved)
 
 ;; create the autosave dir if necessary, since emacs won't.
 (make-directory "~/emacs/autosaves/" t)
@@ -325,6 +337,8 @@
   (local-set-key (kbd "C-'") 'avy-goto-char-2))
 
 (add-hook 'org-mode-hook 'change-cycle-agenda-files-key)
+(add-hook 'org-mode-hook 'org-hide-block-all)
+(setq org-hide-block-startup t)
 
 
 ;; Turn off org adapt indentation to not include an extra white space for the heading
