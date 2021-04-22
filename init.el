@@ -475,7 +475,7 @@ Version 2019-11-05"
   (goto-char (point-min))
   (while (search-forward "\n" nil t) (replace-match "" nil t)))
 
-(define-key global-map (kbd "M-b") 'minify-buffer-contents)
+(define-key global-map (kbd "C-c b") 'minify-buffer-contents)
 
 
 ;; Vlang
