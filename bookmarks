@@ -2,7 +2,27 @@
 ;;; This format is meant to be slightly human-readable;
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
-(("checkout-components"
+(("robot-for-chegg-com"
+ (filename . "~/chegg/robot-for-chegg-com/")
+ (front-context-string . ".git\n  -rw-r--r-")
+ (rear-context-string . "80 Mar 30 16:54 ")
+ (position . 240))
+("geolocation"
+ (filename . "~/chegg/gne/geolocation/")
+ (front-context-string . ".dockerignore\n  ")
+ (rear-context-string . "22 Feb 10 11:19 ")
+ (position . 244))
+("testcafe-framework"
+ (filename . "~/chegg/testcafe-framework/")
+ (front-context-string . ".env-browserstac")
+ (rear-context-string . "81 Aug  7  2020 ")
+ (position . 249))
+("brand-partnership"
+ (filename . "~/chegg/gne/brand-partnership/")
+ (front-context-string . ".browserstack\n  ")
+ (rear-context-string . "96 Feb 16 10:36 ")
+ (position . 256))
+("checkout-components"
  (filename . "~/chegg/gne/checkout-components/")
  (front-context-string . ".browserstack\n  ")
  (rear-context-string . "96 Oct 29 01:14 ")

@@ -120,6 +120,9 @@
 
     ;; Better help files
     helpful
+
+    v-mode
+
     ))
 
 ;; Add to Path
@@ -286,7 +289,7 @@
   (unless (eq (window-start) (point-min))
     (scroll-down n)))
 
-
+;; Scrolling in place (M-n and M-p)
 (defun scroll-up-in-place (n)
   (interactive "p")
   (next-line n)
@@ -452,6 +455,32 @@ Version 2019-11-05"
       '(("t" "todo" entry (file+headline "~/.notes/todo.org" "Tasks")
          "* TODO [#A] %?")))
 
+;; Remove verilog mode since it's covers *.v files which I now want to refer to Vlang
+(defun replace-alist-mode (alist oldmode newmode)
+  (dolist (aitem alist)
+    (if (eq (cdr aitem) oldmode)
+    (setcdr aitem newmode))))
+
+;; not sure what mode you want here. You could default to 'fundamental-mode
+(replace-alist-mode auto-mode-alist 'verilog-mode 'v-mode)
+
+
+;; https://gist.github.com/leavesofgrass/23cf0f61e0092e36dbbaa3f33e4dd060
+;; Minify buffer contents
+(defun minify-buffer-contents()
+  "Minifies the buffer contents by removing whitespaces."
+  (interactive)
+  (delete-whitespace-rectangle (point-min) (point-max))
+  (mark-whole-buffer)
+  (goto-char (point-min))
+  (while (search-forward "\n" nil t) (replace-match "" nil t)))
+
+(define-key global-map (kbd "M-b") 'minify-buffer-contents)
+
+
+;; Vlang
+(require 'v-mode)
+
 ;; Org Roam
 (require 'org-roam)
 (define-key org-roam-mode-map (kbd "C-c n l") #'org-roam)
@@ -483,9 +512,7 @@ Version 2019-11-05"
 (add-hook 'js-mode-hook #'lsp)
 (add-hook 'typescript-mode-hook #'lsp)
 (add-hook 'rustic-mode-hook #'lsp)
-(add-hook 'groovy-mode-hook #'lsp)
 (add-hook 'nim-mode-hook #'lsp)
-(add-hook 'python-mode-hook #'lsp) ; or lsp-deferred
 
 
 (setq lsp-headerline-breadcrumb-enable 1)
