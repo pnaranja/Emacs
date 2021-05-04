@@ -239,6 +239,10 @@
 (setq counsel-describe-function-function #'helpful-callable)
 (setq counsel-describe-variable-function #'helpful-variable)
 
+;; shortcut to zap up to char
+(global-unset-key (kbd "M-z"))
+(global-set-key (kbd "M-z") #'zap-up-to-char)
+
 ;; Cursor color
 (set-cursor-color "blue")
 
@@ -477,6 +481,7 @@ Version 2019-11-05"
 
 (define-key global-map (kbd "C-c b") 'minify-buffer-contents)
 
+(define-key global-map (kbd "C-c i") 'string-insert-rectangle)
 
 ;; Vlang
 (require 'v-mode)
