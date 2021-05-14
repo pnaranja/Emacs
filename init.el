@@ -536,6 +536,8 @@ Version 2019-11-05"
 ;; Magit settings
 (global-set-key (kbd "C-c g") 'magit-file-dispatch)
 (global-set-key (kbd "C-x g") 'magit)
+;; From https://scripter.co/narrowing-the-author-column-in-magit/
+(setq magit-log-margin '(t "%Y-%m-%d %H:%M" magit-log-margin-width :author 18))
 
 ;; Go back to global mark shortcut
 (global-set-key (kbd "C-`") 'pop-global-mark)
