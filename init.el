@@ -429,6 +429,14 @@ Version 2019-11-05"
 (setq org-journal-date-format "%A, %d %B %Y")
 (setq org-journal-file-format "%Y-%m-%d.org")
 
+(defun replace_underscores_with_spaces ()
+  "Replace those 'underscores' from gmail to spaces"
+  (interactive)
+  (while (search-forward " " nil t)
+    (replace-match " " nil t)))
+
+(global-set-key (kbd "C-c r") 'replace_underscores_with_spaces)
+
 ;; Turn on olivetti
 (require 'olivetti)
 (add-hook 'org-journal-mode-hook 'olivetti-mode)
