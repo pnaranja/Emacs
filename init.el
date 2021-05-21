@@ -27,6 +27,9 @@
   '(
     restart-emacs
 
+    ;; super-save - https://github.com/bbatsov/super-save
+    super-save
+
     ;; Terminal emulator
     vterm
 
@@ -287,6 +290,7 @@
 
 
 ;; Scrolling in place (M-n and M-p)
+;; Has a parameter to pass if you want scroll >1 lines (C-u <number>)
 (defun scroll-down-in-place (n)
   (interactive "p")
   (previous-line n)
@@ -294,6 +298,7 @@
     (scroll-down n)))
 
 ;; Scrolling in place (M-n and M-p)
+;; Has a parameter to pass if you want scroll >1 lines (C-u <number>)
 (defun scroll-up-in-place (n)
   (interactive "p")
   (next-line n)
@@ -306,20 +311,19 @@
 ;; Add another command to set-mark
 (global-set-key (kbd "M-SPC") 'set-mark-command)
 
-;; Auto-save options
-(setq auto-save-default t)
-(setq auto-save-timeout 2)
-(setq  auto-save-visited-mode t)
-(setq auto-save-visited-interval 2)
+;; super-save settings
+(super-save-mode +1)
+(setq super-save-idle-duration 1)
+(setq super-save-auto-save-when-idle t)
+(setq auto-save-default nil)
 
 ;; http://ergoemacs.org/emacs/emacs_auto_save.html
-(defun xah-save-all-unsaved ()
-  "Save all unsaved files. no ask.
-Version 2019-11-05"
-  (interactive)
-  (save-some-buffers t ))
-
-(setq after-focus-change-function 'xah-save-all-unsaved)
+;; (defun xah-save-all-unsaved ()
+;;   "Save all unsaved files. no ask.
+;; Version 2019-11-05"
+;;   (interactive)
+;;   (save-some-buffers t ))
+;; (setq after-focus-change-function 'xah-save-all-unsaved)
 
 ;; https://batsov.com/articles/2012/03/08/emacs-tip-number-5-save-buffers-automatically-on-buffer-or-window-switch/
 ;; automatically save buffers associated with files on buffer switch
@@ -475,7 +479,6 @@ Version 2019-11-05"
 
 ;; not sure what mode you want here. You could default to 'fundamental-mode
 (replace-alist-mode auto-mode-alist 'verilog-mode 'v-mode)
-
 
 ;; https://gist.github.com/leavesofgrass/23cf0f61e0092e36dbbaa3f33e4dd060
 ;; Minify buffer contents

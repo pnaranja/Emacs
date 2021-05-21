@@ -2,7 +2,12 @@
 ;;; This format is meant to be slightly human-readable;
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
-(("robot-for-chegg-com"
+(("ce"
+ (filename . "~/chegg/gne/ce/")
+ (front-context-string . "it\n  -rw-r--r-- ")
+ (rear-context-string . " May 18 18:40 .g")
+ (position . 227))
+("robot-for-chegg-com"
  (filename . "~/chegg/robot-for-chegg-com/")
  (front-context-string . ".git\n  -rw-r--r-")
  (rear-context-string . "80 Mar 30 16:54 ")
