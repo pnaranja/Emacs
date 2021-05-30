@@ -90,7 +90,7 @@
     ;; Enhances M-x to allow easier execution of commands. Provides
     ;; a filterable list of possible commands in the minibuffer
     ;; http://www.emacswiki.org/emacs/Smex
-    ;; amx
+    amx
 
     ;; ido for everything?
     ;; ido-completing-read+
@@ -228,16 +228,21 @@
 
 (global-set-key (kbd "C-c f") #'project-find-file)
 
+;; Replace M-x (execute-extended-command)
+(global-set-key (kbd "M-x") #'counsel-M-x)
+
 ;; https://www.murilopereira.com/how-to-open-a-file-in-emacs/
 ;; Might make find file faster?
 (remove-hook 'file-name-at-point-functions 'ffap-guess-file-name-at-point)
 
+;; Re-map repeat command like vim (.)
+(global-set-key (kbd "C-.") #'repeat)
 
 ;; Settings for Helpful
 (global-set-key (kbd "C-h f") #'helpful-callable)
 (global-set-key (kbd "C-h v") #'helpful-variable)
 (global-set-key (kbd "C-h k") #'helpful-key)
-(global-set-key (kbd "C-c C-d") #'helpful-at-point)
+(global-set-key (kbd "C-h .") #'helpful-at-point)
 
 (setq counsel-describe-function-function #'helpful-callable)
 (setq counsel-describe-variable-function #'helpful-variable)
