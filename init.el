@@ -466,7 +466,7 @@
 (setq org-agenda-window-setup (quote current-window))
 
 ;;capture todo items using C-c c t
-(define-key global-map (kbd "C-c c") 'org-capture)
+(global-set-key (kbd "C-c c") 'org-capture)
 (setq org-capture-templates
       '(("t" "todo" entry (file+headline "~/.notes/todo.org" "Tasks")
          "* TODO [#A] %?")))
@@ -490,9 +490,9 @@
   (goto-char (point-min))
   (while (search-forward "\n" nil t) (replace-match "" nil t)))
 
-(define-key global-map (kbd "C-c b") 'minify-buffer-contents)
+(global-set-key (kbd "C-c b") 'minify-buffer-contents)
 
-(define-key global-map (kbd "C-c i") 'string-insert-rectangle)
+(global-set-key (kbd "C-c i") 'string-insert-rectangle)
 
 ;; Vlang
 (require 'v-mode)
@@ -561,6 +561,7 @@
 ;; Shortcuts for registers
 (global-set-key  (kbd "C-c y") 'copy-to-register )
 (global-set-key  (kbd "C-c p") 'insert-register )
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
