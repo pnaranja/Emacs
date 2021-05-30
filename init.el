@@ -559,9 +559,10 @@
 (global-set-key (kbd "C-`") 'pop-global-mark)
 
 ;; LSP shortcuts
-(global-set-key (kbd "<f2>") 'lsp-describe-thing-at-point)
-(global-set-key (kbd "<f3>") 'lsp-find-definition)
-(global-set-key (kbd "<f4>") 'lsp-find-references)
+(global-unset-key (kbd "C-c l"))
+(global-set-key (kbd "C-c l p") 'lsp-describe-thing-at-point)
+(global-set-key (kbd "C-c l d") 'lsp-find-definition)
+(global-set-key (kbd "C-c l r") 'lsp-find-references)
 
 ;; Shortcuts for registers
 (global-set-key  (kbd "C-c y") 'copy-to-register )
