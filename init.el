@@ -495,7 +495,7 @@
   (goto-char (point-min))
   (while (search-forward "\n" nil t) (replace-match "" nil t)))
 
-(global-set-key (kbd "C-c b") 'minify-buffer-contents)
+(global-set-key (kbd "C-c m") 'minify-buffer-contents)
 
 (global-set-key (kbd "C-c i") 'string-insert-rectangle)
 
@@ -563,6 +563,11 @@
 (global-set-key (kbd "C-c l p") 'lsp-describe-thing-at-point)
 (global-set-key (kbd "C-c l d") 'lsp-find-definition)
 (global-set-key (kbd "C-c l r") 'lsp-find-references)
+
+;; LSP settings
+(setq read-process-output-max (* 1024 1024))
+(setq gc-cons-threshold-original gc-cons-threshold)
+(setq gc-cons-threshold (* 1024 1024 100))
 
 ;; Shortcuts for registers
 (global-set-key  (kbd "C-c y") 'copy-to-register )
