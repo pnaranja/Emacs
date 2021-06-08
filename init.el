@@ -126,6 +126,9 @@
 
     v-mode
 
+    ;; To emulate '.' in VIM
+    dot-mode
+
     ))
 
 ;; Add to Path
@@ -151,6 +154,10 @@
 
 ;; Activate libvterm
 (require 'vterm)
+
+;; Activate dot-mode
+(require 'dot-mode)
+(global-dot-mode t) 
 
 ;; Enable move-text
 (move-text-default-bindings)
@@ -178,7 +185,7 @@
 
 ;; avy settings
 (global-set-key (kbd "C-M-;") 'avy-goto-char-timer)
-(global-set-key (kbd "C-'") 'avy-goto-char-2)
+(global-set-key (kbd "C-j") 'avy-goto-char)
 
 ;; Dired settings
 (autoload 'dired-jump "dired-x"
@@ -236,7 +243,7 @@
 (remove-hook 'file-name-at-point-functions 'ffap-guess-file-name-at-point)
 
 ;; Re-map repeat command like vim (.)
-(global-set-key (kbd "C-.") #'repeat)
+;;(global-set-key (kbd "C-.") #'repeat)
 
 ;; Settings for Helpful
 (global-set-key (kbd "C-h f") #'helpful-callable)
@@ -370,7 +377,7 @@
 
 ;; Replace keys for cycle-agenda-files for avy
 (defun change-cycle-agenda-files-key ()
-  (local-set-key (kbd "C-'") 'avy-goto-char-2))
+  (local-set-key (kbd "C-j") 'avy-goto-char))
 
 (add-hook 'org-mode-hook 'change-cycle-agenda-files-key)
 (add-hook 'org-mode-hook 'org-hide-block-all)
