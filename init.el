@@ -375,12 +375,16 @@
       org-hide-emphasis-markers t
       org-odd-levels-only t)
 
-;; Replace keys for cycle-agenda-files for avy
+;; Replace keys for cycle-agenda-files to org-agenda since I care more for that
+ (global-set-key (kbd "C-'") 'org-agenda)
+
 (defun change-cycle-agenda-files-key ()
-  (local-set-key (kbd "C-j") 'avy-goto-char))
+  (local-set-key (kbd "C-j") 'avy-goto-char)
+  (local-unset-key (kbd "C-'"))
+  (local-set-key (kbd "C-'") 'org-agenda)
+)
 
 (add-hook 'org-mode-hook 'change-cycle-agenda-files-key)
-(add-hook 'org-mode-hook 'org-hide-block-all)
 (setq org-hide-block-startup t)
 
 
