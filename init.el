@@ -392,9 +392,9 @@
 (setq org-adapt-indentation nil)
 
 ;;https://explog.in/notes/writingsetup.html
-(set-face-attribute 'default nil :family "Geneva" :height 200)
+(set-face-attribute 'default nil :family "Menlo" :height 200)
 (set-face-attribute 'fixed-pitch nil :family "Menlo" :height 200)
-(set-face-attribute 'variable-pitch nil :family "Geneva" :height 200)
+(set-face-attribute 'variable-pitch nil :family "Menlo" :height 200)
 (set-face-attribute 'line-number nil :family "Menlo" :height 200)
 (set-face-attribute 'line-number-current-line nil :family "Menlo" :height 200)
 
