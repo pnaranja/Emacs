@@ -33,6 +33,17 @@
 ;; (when (not package-archive-contents)
 ;;  (package-refresh-contents))
 
+
+;; super-save - https://github.com/bbatsov/super-save
+(use-package super-save
+  :ensure t
+  :config
+  (super-save-mode +1)
+  (setq super-save-idle-duration 1)
+  (setq super-save-auto-save-when-idle t)
+  (setq auto-save-default nil)
+)
+
 ;; Terminal emulator
 (use-package vterm
   :defer t
@@ -86,15 +97,86 @@
 ;; Activate pos-tip
 (use-package pos-tip)
 
-;; The packages you want installedn. You can also install these
+(use-package org-journal
+  :defer t
+  :config
+  (setq org-journal-dir "~/journal/emacs_journal")
+  (setq org-journal-date-format "%A, %d %B %Y")
+  (setq org-journal-file-format "%Y-%m-%d.org")
+)
+
+;; Distraction Free writing
+(use-package olivetti
+  :defer t
+  :hook (olivetti-mode . org-journal-mode-hook)
+)
+
+;; Vlang
+(use-package v-mode
+  :defer t
+)
+
+(use-package org-roam
+  :defer t
+  :init
+  (setq org-roam-v2-ack t)
+  :config
+  (global-set-key (kbd "C-c n l") 'org-roam-capture)
+  (global-set-key (kbd "C-c n f") 'org-roam-node-find)
+  (global-set-key (kbd "C-c n i") 'org-roam-node-insert)
+  (global-set-key (kbd "C-c n b") 'org-roam-buffer)
+  (global-set-key (kbd "C-c n g") 'org-roam-graph)
+  (setq org-roam-directory "~/journal/org-roam")
+)
+
+(use-package nim-mode
+  :defer t
+  :hook
+  (nim-mode . rainbow-delimiters-mode)
+  (nim-mode . subword-mode)
+  (nim-mode . nimsuggest-mode)
+)
+
+(use-package lsp-mode
+  :defer t
+  :config
+  ;; LSP shortcuts
+  (global-unset-key (kbd "C-c l"))
+  (global-set-key (kbd "C-c l p") 'lsp-describe-thing-at-point)
+  (global-set-key (kbd "C-c l d") 'lsp-find-definition)
+  (global-set-key (kbd "C-c l r") 'lsp-find-references)
+
+  ;; LSP settings
+  (setq lsp-headerline-breadcrumb-enable 1)
+  (setq read-process-output-max (* 1024 1024))
+  (setq gc-cons-threshold-original gc-cons-threshold)
+  (setq gc-cons-threshold (* 1024 1024 100))
+  (setq lsp-rust-server 'rust-analyzer)
+
+  :hook
+  (c-mode-hook . lsp)
+  (c++-mode-hook . lsp)
+  (js-mode-hook . lsp)
+  (typescript-mode-hook . lsp)
+  (rustic-mode-hook . lsp)
+  (nim-mode-hook . lsp)
+)
+
+(use-package lsp-ui)
+
+(use-package py-autopep8
+  :defer t
+  :hook
+  (elpy-mode-hook . py-autopep8-enable-on-save)
+)
+
+
+;; The packages you want installed. You can also install these
 ;; manually with M-x package-install
 ;; Add in your own as you wish:
 (defvar my-packages
   '(
     restart-emacs
-
-    ;; super-save - https://github.com/bbatsov/super-save
-    super-save
 
     ;; Jump to anywhere in the visible buffer
     avy
@@ -119,10 +201,6 @@
 
     ;; Get env vars from shell
     exec-path-from-shell
-
-    ;; Language Server Protocol
-    lsp-mode
-    lsp-ui
     
     ;; Company Packages
     company-jedi
@@ -131,10 +209,6 @@
     
     ;; Python specific
     elpy
-    py-autopep8
-
-    ;; Nim LSP
-    nim-mode
 
     ;; Use fd for dired
     fd-dired
@@ -143,12 +217,6 @@
     ;; a filterable list of possible commands in the minibuffer
     ;; http://www.emacswiki.org/emacs/Smex
     amx
-
-    ;; Org Journal
-    org-journal
-
-    ;; Distraction Free writing
-    olivetti
 
     ;; Use deadgrep (rg) for searching
     deadgrep
@@ -160,16 +228,11 @@
     magit
     vc-msg
 
-    ;; Roam
-    org-roam
-
     ;; move text easily up and down
     move-text
 
     ;; Better help files
     helpful
-
-    v-mode
 
     ;; Profile Emacs startup
     esup
@@ -331,12 +394,6 @@
 ;; Add another command to set-mark
 (global-set-key (kbd "M-SPC") 'set-mark-command)
 
-;; super-save settings
-(super-save-mode +1)
-(setq super-save-idle-duration 1)
-(setq super-save-auto-save-when-idle t)
-(setq auto-save-default nil)
-
 ;; http://ergoemacs.org/emacs/emacs_auto_save.html
 ;; (defun xah-save-all-unsaved ()
 ;;   "Save all unsaved files. no ask.
@@ -451,11 +508,6 @@
 ;; Use js2-mode for JS files
 (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
 
-;; Turn on org-journal
-(require 'org-journal)
-(setq org-journal-dir "~/journal/emacs_journal")
-(setq org-journal-date-format "%A, %d %B %Y")
-(setq org-journal-file-format "%Y-%m-%d.org")
 
 (defun replace_underscores_with_spaces ()
   "Replace those 'underscores' from gmail to spaces"
@@ -464,10 +516,6 @@
     (replace-match " " nil t)))
 
 (global-set-key (kbd "C-c r") 'replace_underscores_with_spaces)
-
-;; Turn on olivetti
-(require 'olivetti)
-(add-hook 'org-journal-mode-hook 'olivetti-mode)
 
 ;; Always turn on flyspell in org mode
 (add-hook 'org-mode-hook 'flyspell-mode)
@@ -518,43 +566,6 @@
 
 (global-set-key (kbd "C-c i") 'string-insert-rectangle)
 
-;; Vlang
-(require 'v-mode)
-
-;; Org Roam
-(setq org-roam-v2-ack t)
-(require 'org-roam)
-(global-set-key (kbd "C-c n l") 'org-roam-capture)
-(global-set-key (kbd "C-c n f") 'org-roam-node-find)
-(global-set-key (kbd "C-c n i") 'org-roam-node-insert)
-(global-set-key (kbd "C-c n b") 'org-roam-buffer)
-(global-set-key (kbd "C-c n g") 'org-roam-graph)
-(setq org-roam-directory "~/journal/org-roam")
-;(global-set-key (kbd "C-c n j") #'org-roam-jump-to-index)
-;(global-set-key (kbd "C-c n c") #'org-roam-db-build-cache)
-;(setq org-roam-index-file "~/journal/org-roam/index.org")
-
-;; Nim Settings
-(require 'nim-mode)
-(add-hook 'nim-mode-hook #'rainbow-delimiters-mode)
-(add-hook 'nim-mode-hook #'subword-mode)
-(add-hook 'nim-mode-hook #'nimsuggest-mode)
-
-;; Rust LSP settings for Rust Analyzer
-(setq lsp-rust-server 'rust-analyzer)
-
-;; LSP settings
-(require 'lsp)
-(require 'lsp-mode)
-(add-hook 'c-mode-hook #'lsp)
-(add-hook 'c++-mode-hook #'lsp)
-(add-hook 'js-mode-hook #'lsp)
-(add-hook 'typescript-mode-hook #'lsp)
-(add-hook 'rustic-mode-hook #'lsp)
-(add-hook 'nim-mode-hook #'lsp)
-
-
-(setq lsp-headerline-breadcrumb-enable 1)
 
 ;; Enable flycheck
 (global-flycheck-mode)
@@ -563,9 +574,6 @@
 ;; Enable elpy
 (elpy-enable)
 
-;; Enable autopep8
-(require 'py-autopep8)
-(add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save)
 
 ;; Magit settings
 (global-set-key (kbd "C-c g") 'magit-file-dispatch)
@@ -575,17 +583,6 @@
 
 ;; Go back to global mark shortcut
 (global-set-key (kbd "C-`") 'pop-global-mark)
-
-;; LSP shortcuts
-(global-unset-key (kbd "C-c l"))
-(global-set-key (kbd "C-c l p") 'lsp-describe-thing-at-point)
-(global-set-key (kbd "C-c l d") 'lsp-find-definition)
-(global-set-key (kbd "C-c l r") 'lsp-find-references)
-
-;; LSP settings
-(setq read-process-output-max (* 1024 1024))
-(setq gc-cons-threshold-original gc-cons-threshold)
-(setq gc-cons-threshold (* 1024 1024 100))
 
 ;; Shortcuts for registers
 (global-set-key  (kbd "C-c y") 'copy-to-register )
