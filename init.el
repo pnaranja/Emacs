@@ -514,18 +514,18 @@
 (require 'v-mode)
 
 ;; Org Roam
+(setq org-roam-v2-ack t)
 (require 'org-roam)
-(define-key org-roam-mode-map (kbd "C-c n l") #'org-roam)
-(define-key org-roam-mode-map (kbd "C-c n f") #'org-roam-find-file)
-(define-key org-roam-mode-map (kbd "C-c n j") #'org-roam-jump-to-index)
-(define-key org-roam-mode-map (kbd "C-c n b") #'org-roam-switch-to-buffer)
-(define-key org-roam-mode-map (kbd "C-c n g") #'org-roam-graph)
-(define-key org-mode-map (kbd "C-c n i") #'org-roam-insert)
-(define-key org-mode-map (kbd "C-c n c") #'org-roam-db-build-cache)
+(global-set-key (kbd "C-c n l") 'org-roam-capture)
+(global-set-key (kbd "C-c n f") 'org-roam-node-find)
+(global-set-key (kbd "C-c n i") 'org-roam-node-insert)
+(global-set-key (kbd "C-c n b") 'org-roam-buffer)
+(global-set-key (kbd "C-c n g") 'org-roam-graph)
 (setq org-roam-directory "~/journal/org-roam")
-(setq org-roam-index-file "~/journal/org-roam/index.org")
-(setq org-roam-completion-system 'ivy)
-(org-roam-mode +1)
+(setq ivy-use-selectable-prompt t)
+;(global-set-key (kbd "C-c n j") #'org-roam-jump-to-index)
+;(global-set-key (kbd "C-c n c") #'org-roam-db-build-cache)
+;(setq org-roam-index-file "~/journal/org-roam/index.org")
 
 ;; Nim Settings
 (require 'nim-mode)
@@ -583,6 +583,18 @@
 ;; Shortcuts for registers
 (global-set-key  (kbd "C-c y") 'copy-to-register )
 (global-set-key  (kbd "C-c p") 'insert-register )
+
+;; Check startup time
+(defun efs/display-startup-time ()
+  (message
+   "Emacs loaded in %s with %d garbage collections."
+   (format
+    "%.2f seconds"
+    (float-time
+     (time-subtract after-init-time before-init-time)))
+   gcs-done))
+
+(add-hook 'emacs-startup-hook #'efs/display-startup-time)
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
