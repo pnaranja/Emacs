@@ -4,7 +4,6 @@
 (setq file-name-handler-alist nil)
 
 
-
 ;; Define package repositories
 (require 'package)
 
@@ -20,71 +19,12 @@
 (add-to-list 'package-archives '("gnu" . (concat proto "://elpa.gnu.org/packages/")))))
 (package-initialize)
 
-(unless (package-installed-p 'use-package)
-  (package-refresh-contents)
-  (package-install 'use-package))
-(eval-and-compile
-  (setq use-package-always-ensure t
-        use-package-expand-minimally t))
-
 ;; Download the ELPA archive description if needed.
 ;; This informs Emacs about the latest versions of all packages, and
 ;; makes them available for download.
-;; (when (not package-archive-contents)
-;;  (package-refresh-contents))
+(when (not package-archive-contents)  
+  (package-refresh-contents))
 
-;; Terminal emulator
-(use-package vterm
-  :defer t
-)
-
-;; To emulate '.' in VIM
-(use-package dot-mode
-  :config
-  (global-dot-mode t)
-)
-
-;; Shows key bindings for incomplete commands
-(use-package which-key
-  :config
-  (which-key-mode)
-)
-
-;; Dim other windows
-(use-package dimmer
-  :config
-  (dimmer-configure-which-key)
-  (dimmer-mode t)
-  (setq dimmer-fraction 0.4)
-)
-
-(use-package ivy
-  :config
-  (ivy-mode 1)
-  (setq ivy-use-virtual-buffers t)
-  (setq ivy-count-format "(%d/%d) ")
-  (global-set-key (kbd "C-s") 'swiper-isearch)
-  (setq ivy-use-selectable-prompt t)
-)
-
-(use-package ivy-rich
-  :config
-  (ivy-rich-mode 1)
-  (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line)
-)
-
-(use-package counsel
-  :config
-  ;; Replace M-x (execute-extended-command)
-  (global-set-key (kbd "M-x") #'counsel-M-x)
-  (setq counsel-grep-base-command
-	"rg -i -M 120 --no-heading --line-number --color never %s %s")
-  (setq counsel-describe-function-function #'helpful-callable)
-  (setq counsel-describe-variable-function #'helpful-variable)
-)
-
-;; Activate pos-tip
-(use-package pos-tip)
 
 ;; The packages you want installedn. You can also install these
 ;; manually with M-x package-install
@@ -95,6 +35,12 @@
 
     ;; super-save - https://github.com/bbatsov/super-save
     super-save
+
+    ;; Terminal emulator
+    vterm
+
+    ;; Shows key bindings for incomplete commands
+    which-key
 
     ;; Jump to anywhere in the visible buffer
     avy
@@ -123,6 +69,9 @@
     ;; Language Server Protocol
     lsp-mode
     lsp-ui
+
+    ;; Pos-Tip
+    pos-tip
     
     ;; Company Packages
     company-jedi
@@ -139,10 +88,19 @@
     ;; Use fd for dired
     fd-dired
 
+    ;; ivy and counsel
+    ivy
+    ivy-rich
+    counsel
+
     ;; Enhances M-x to allow easier execution of commands. Provides
     ;; a filterable list of possible commands in the minibuffer
     ;; http://www.emacswiki.org/emacs/Smex
     amx
+
+    ;; ido for everything?
+    ;; ido-completing-read+
+    
 
     ;; Org Journal
     org-journal
@@ -152,6 +110,9 @@
 
     ;; Use deadgrep (rg) for searching
     deadgrep
+
+    ;; Dim other windows
+    dimmer
 
     ;; For sending HTTP Requests
     verb
@@ -170,6 +131,9 @@
     helpful
 
     v-mode
+
+    ;; To emulate '.' in VIM
+    dot-mode
 
     ;; Profile Emacs startup
     esup
@@ -197,6 +161,12 @@
   (when (not (package-installed-p p))
     (package-install p)))
 
+;; Activate libvterm
+(require 'vterm)
+
+;; Activate dot-mode
+(require 'dot-mode)
+(global-dot-mode t) 
 
 ;; Enable move-text
 (move-text-default-bindings)
@@ -208,6 +178,16 @@
 (global-display-line-numbers-mode)
 (setq display-line-numbers-type 'visual)
 (setq display-line-numbers-width 0)
+
+;; Turn on which-key minor mode
+(require 'which-key)
+(which-key-mode)
+
+;; Turn on dimmer
+(require 'dimmer)
+(dimmer-configure-which-key)
+(dimmer-mode t)
+(setq dimmer-fraction 0.5)
 
 ;; Set key for comment-or-uncomment-region
 (global-set-key (kbd "M-/") #'comment-or-uncomment-region)
@@ -229,6 +209,9 @@
 (require 'color-theme-sanityinc-tomorrow)
 (load-theme 'sanityinc-tomorrow-bright t)
 
+;; Activate pos-tip
+(require 'pos-tip)
+
 ;; Company settings
 (add-hook 'after-init-hook 'global-company-mode)
 (company-quickhelp-mode)
@@ -247,7 +230,22 @@
 ;; Always turn on line wrap from screen
 (global-visual-line-mode 1)
 
+;; ivy/counsel/swiper settings
+(ivy-mode 1)
+(setq ivy-use-virtual-buffers t)
+(setq ivy-count-format "(%d/%d) ")
+(global-set-key (kbd "C-s") 'swiper-isearch)
+(setq counsel-grep-base-command
+      "rg -i -M 120 --no-heading --line-number --color never %s %s")
+
+(require 'ivy-rich)
+(ivy-rich-mode 1)
+(setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line)
+
 (global-set-key (kbd "C-c f") #'project-find-file)
+
+;; Replace M-x (execute-extended-command)
+(global-set-key (kbd "M-x") #'counsel-M-x)
 
 ;; https://www.murilopereira.com/how-to-open-a-file-in-emacs/
 ;; Might make find file faster?
@@ -261,6 +259,9 @@
 (global-set-key (kbd "C-h v") #'helpful-variable)
 (global-set-key (kbd "C-h k") #'helpful-key)
 (global-set-key (kbd "C-h .") #'helpful-at-point)
+
+(setq counsel-describe-function-function #'helpful-callable)
+(setq counsel-describe-variable-function #'helpful-variable)
 
 ;; shortcut to zap up to char
 (global-unset-key (kbd "M-z"))
@@ -530,6 +531,7 @@
 (global-set-key (kbd "C-c n b") 'org-roam-buffer)
 (global-set-key (kbd "C-c n g") 'org-roam-graph)
 (setq org-roam-directory "~/journal/org-roam")
+(setq ivy-use-selectable-prompt t)
 ;(global-set-key (kbd "C-c n j") #'org-roam-jump-to-index)
 ;(global-set-key (kbd "C-c n c") #'org-roam-db-build-cache)
 ;(setq org-roam-index-file "~/journal/org-roam/index.org")
