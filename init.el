@@ -33,7 +33,6 @@
 ;; (when (not package-archive-contents)
 ;;  (package-refresh-contents))
 
-
 ;; super-save - https://github.com/bbatsov/super-save
 (use-package super-save
   :ensure t
@@ -51,18 +50,21 @@
 
 ;; To emulate '.' in VIM
 (use-package dot-mode
+  :defer t
   :config
   (global-dot-mode t)
 )
 
 ;; Shows key bindings for incomplete commands
 (use-package which-key
+  :defer t
   :config
   (which-key-mode)
 )
 
 ;; Dim other windows
 (use-package dimmer
+  :defer t
   :config
   (dimmer-configure-which-key)
   (dimmer-mode t)
@@ -70,6 +72,7 @@
 )
 
 (use-package ivy
+  :defer t
   :config
   (ivy-mode 1)
   (setq ivy-use-virtual-buffers t)
@@ -79,6 +82,7 @@
 )
 
 (use-package ivy-rich
+  :defer t
   :config
   (ivy-rich-mode 1)
   (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line)
@@ -95,7 +99,12 @@
 )
 
 ;; Activate pos-tip
-(use-package pos-tip)
+(use-package pos-tip :defer t)
+
+;; Copy or Delete a whole line on cursor
+(use-package whole-line-or-region
+  :defer t
+)
 
 (use-package org-journal
   :defer t
@@ -107,7 +116,6 @@
 
 ;; Distraction Free writing
 (use-package olivetti
-  :defer t
   :hook (olivetti-mode . org-journal-mode-hook)
 )
 
@@ -130,15 +138,14 @@
 )
 
 (use-package nim-mode
-  :defer t
   :hook
   (nim-mode . rainbow-delimiters-mode)
   (nim-mode . subword-mode)
   (nim-mode . nimsuggest-mode)
 )
 
+
 (use-package lsp-mode
-  :defer t
   :config
   ;; LSP shortcuts
   (global-unset-key (kbd "C-c l"))
@@ -162,14 +169,63 @@
   (nim-mode-hook . lsp)
 )
 
-(use-package lsp-ui)
+(use-package js2-mode :defer t)
+(use-package typescript-mode :defer t)
+(use-package yaml-mode :defer t)
+(use-package dockerfile-mode :defer t)
+(use-package groovy-mode :defer t)
+(use-package json-mode :defer t)
+(use-package rustic :defer t)
+
+(use-package lsp-ui :defer t)
 
 (use-package py-autopep8
-  :defer t
   :hook
   (elpy-mode-hook . py-autopep8-enable-on-save)
 )
 
+(use-package magit
+  :defer t
+  :config
+  (global-set-key (kbd "C-c g") 'magit-file-dispatch)
+  (global-set-key (kbd "C-x g") 'magit)
+  ;; From https://scripter.co/narrowing-the-author-column-in-magit/
+  (setq magit-log-margin '(t "%Y-%m-%d %H:%M" magit-log-margin-width :author 18))
+)
+
+(use-package avy
+  :init
+  (defun change-cycle-agenda-files-key ()
+  (local-set-key (kbd "C-j") 'avy-goto-char)
+  (local-unset-key (kbd "C-'"))
+  (local-set-key (kbd "C-'") 'org-agenda))
+
+  :config
+  (global-set-key (kbd "C-M-;") 'avy-goto-char-timer)
+  (global-set-key (kbd "C-j") 'avy-goto-char)
+
+  :hook
+  (org-mode-hook . 'change-cycle-agenda-files-key)
+)
+
+;; Access files in a docker container
+(use-package docker-tramp
+  :defer t
+)
+
+(use-package deadgrep
+  :defer t
+  :config
+  (global-set-key (kbd "C-c s") #'deadgrep)
+)
+
+;; For sending HTTP Requests
+(use-package verb
+  :defer t
+  :config
+  (with-eval-after-load 'org
+    (define-key org-mode-map (kbd "C-c C-r") verb-command-map))
+)
 
 ;; The packages you want installed. You can also install these
 ;; manually with M-x package-install
@@ -177,24 +233,6 @@
 (defvar my-packages
   '(
     restart-emacs
-
-    ;; Jump to anywhere in the visible buffer
-    avy
-
-    ;; Access files in a docker container
-    docker-tramp
-
-    ;; File modes
-    js2-mode
-    typescript-mode
-    yaml-mode
-    dockerfile-mode
-    rustic
-    groovy-mode
-    json-mode
-
-    ;; Copy or Delete a whole line on cursor
-    whole-line-or-region
 
     ;; Color themes
     color-theme-sanityinc-tomorrow
@@ -218,14 +256,7 @@
     ;; http://www.emacswiki.org/emacs/Smex
     amx
 
-    ;; Use deadgrep (rg) for searching
-    deadgrep
-
-    ;; For sending HTTP Requests
-    verb
-
     ;; git tools
-    magit
     vc-msg
 
     ;; move text easily up and down
@@ -233,9 +264,6 @@
 
     ;; Better help files
     helpful
-
-    ;; Profile Emacs startup
-    esup
 
     ))
 
@@ -275,9 +303,6 @@
 ;; Set key for comment-or-uncomment-region
 (global-set-key (kbd "M-/") #'comment-or-uncomment-region)
 
-;; avy settings
-(global-set-key (kbd "C-M-;") 'avy-goto-char-timer)
-(global-set-key (kbd "C-j") 'avy-goto-char)
 
 ;; Dired settings
 (autoload 'dired-jump "dired-x"
@@ -297,9 +322,6 @@
 (company-quickhelp-mode)
 (eval-after-load 'company
   '(define-key company-active-map (kbd "C-c h") #'company-quickhelp-manual-begin))
-
-;; Deadgrip settings
-(global-set-key (kbd "C-c s") #'deadgrep)
 
 ;; Pasting text should still word wrap
 (setq term-suppress-hard-newline t)
@@ -390,6 +412,8 @@
 
 (global-set-key "\M-n" 'scroll-up-in-place)
 (global-set-key "\M-p" 'scroll-down-in-place)
+
+(setq org-hide-block-startup t)
  
 ;; Add another command to set-mark
 (global-set-key (kbd "M-SPC") 'set-mark-command)
@@ -443,14 +467,6 @@
 ;; Replace keys for cycle-agenda-files to org-agenda since I care more for that
  (global-set-key (kbd "C-'") 'org-agenda)
 
-(defun change-cycle-agenda-files-key ()
-  (local-set-key (kbd "C-j") 'avy-goto-char)
-  (local-unset-key (kbd "C-'"))
-  (local-set-key (kbd "C-'") 'org-agenda)
-)
-
-(add-hook 'org-mode-hook 'change-cycle-agenda-files-key)
-(setq org-hide-block-startup t)
 
 
 ;; Turn off org adapt indentation to not include an extra white space for the heading
@@ -486,9 +502,6 @@
 
 ;; Set region color
 (set-face-attribute 'region nil :background "yellow" :foreground "brown")
-
-(with-eval-after-load 'org
-  (define-key org-mode-map (kbd "C-c C-r") verb-command-map))
 
 ; Allow to resize images
 (setq org-image-actual-width nil)
@@ -573,13 +586,6 @@
 
 ;; Enable elpy
 (elpy-enable)
-
-
-;; Magit settings
-(global-set-key (kbd "C-c g") 'magit-file-dispatch)
-(global-set-key (kbd "C-x g") 'magit)
-;; From https://scripter.co/narrowing-the-author-column-in-magit/
-(setq magit-log-margin '(t "%Y-%m-%d %H:%M" magit-log-margin-width :author 18))
 
 ;; Go back to global mark shortcut
 (global-set-key (kbd "C-`") 'pop-global-mark)
