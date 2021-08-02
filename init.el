@@ -50,7 +50,8 @@
 
 ;; To emulate '.' in VIM
 (use-package dot-mode
-  :defer t
+  :hook
+  (find-file-hooks . dot-mode-on)
   :config
   (global-dot-mode t)
 )
@@ -202,15 +203,14 @@
 )
 
 (use-package avy
+  :ensure t
   :init
+  (global-set-key (kbd "C-M-;") 'avy-goto-char-timer)
+  (global-set-key (kbd "C-j") 'avy-goto-char)
   (defun change-cycle-agenda-files-key ()
   (local-set-key (kbd "C-j") 'avy-goto-char)
   (local-unset-key (kbd "C-'"))
   (local-set-key (kbd "C-'") 'org-agenda))
-
-  :config
-  (global-set-key (kbd "C-M-;") 'avy-goto-char-timer)
-  (global-set-key (kbd "C-j") 'avy-goto-char)
 
   :hook
   (org-mode-hook . 'change-cycle-agenda-files-key)
@@ -286,7 +286,6 @@
 
 ;; move text easily up and down
 (use-package move-text 
-  :defer t
   :config
   (move-text-default-bindings)
 )
