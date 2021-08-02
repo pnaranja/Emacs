@@ -179,6 +179,14 @@
 
 (use-package lsp-ui :defer t)
 
+;; Python specific
+(use-package elpy
+  :defer t
+  :ensure t
+  :init
+  (elpy-enable)
+)
+
 (use-package py-autopep8
   :hook
   (elpy-mode-hook . py-autopep8-enable-on-save)
@@ -227,45 +235,66 @@
     (define-key org-mode-map (kbd "C-c C-r") verb-command-map))
 )
 
-;; The packages you want installed. You can also install these
-;; manually with M-x package-install
-;; Add in your own as you wish:
-(defvar my-packages
-  '(
-    restart-emacs
 
-    ;; Color themes
-    color-theme-sanityinc-tomorrow
+;; Get env vars from shell
+(use-package exec-path-from-shell :defer t)
 
-    ;; Get env vars from shell
-    exec-path-from-shell
-    
-    ;; Company Packages
-    company-jedi
-    company-lsp
-    company-quickhelp
-    
-    ;; Python specific
-    elpy
 
-    ;; Use fd for dired
-    fd-dired
+;; Use fd for dired
+(use-package fd-dired :defer t)
 
-    ;; Enhances M-x to allow easier execution of commands. Provides
-    ;; a filterable list of possible commands in the minibuffer
-    ;; http://www.emacswiki.org/emacs/Smex
-    amx
+;; Company Packages
+(use-package company-lsp :defer t)
+(use-package company-jedi :defer t)
+(use-package company-quickhelp 
+  :defer t
+  :hook
+  (after-init-hook . global-company-mode)
+  :config
+  (define-key company-active-map (kbd "C-c h") #'company-quickhelp-manual-begin)
+  (company-quickhelp-mode)
+)
 
-    ;; git tools
-    vc-msg
+(use-package helpful 
+  :defer t
+  :config
+  (global-set-key (kbd "C-h f") #'helpful-callable)
+  (global-set-key (kbd "C-h v") #'helpful-variable)
+  (global-set-key (kbd "C-h k") #'helpful-key)
+  (global-set-key (kbd "C-h .") #'helpful-at-point)
+)
 
-    ;; move text easily up and down
-    move-text
+;; Enhances M-x to allow easier execution of commands. Provides
+;; a filterable list of possible commands in the minibuffer
+;; http://www.emacswiki.org/emacs/Smex
+(use-package amx :defer t)
 
-    ;; Better help files
-    helpful
+(use-package vc-msg
+  :init
+  (defun vc-msg-hook-setup (vcs-type commit-info)
+  ;; copy commit id to clipboard
+  (message (format "%s\n%s\n%s\n%s"
+                   (plist-get commit-info :id)
+                   (plist-get commit-info :author)
+                   (plist-get commit-info :author-time)
+                   (plist-get commit-info :author-summary))))
+  :hook
+  (vc-msg-hook . 'vc-msg-hook-setup)
+  :config
+  (global-set-key (kbd "C-x v j") 'vc-msg-show)
+)
 
-    ))
+;; move text easily up and down
+(use-package move-text 
+  :defer t
+  :config
+  (move-text-default-bindings)
+)
+
+(use-package color-theme-sanityinc-tomorrow :defer t)
+
+(use-package restart-emacs :defer t)
+
 
 ;; Add to Path
 (setq exec-path (append exec-path '("/usr/local/bin")))
@@ -282,16 +311,6 @@
 (when (memq window-system '(mac ns x))
   (exec-path-from-shell-initialize))
 
-
-;; Install/update packages
-(dolist (p my-packages)
-  (when (not (package-installed-p p))
-    (package-install p)))
-
-
-;; Enable move-text
-(move-text-default-bindings)
-
 ;; Enable Auto revert mode
 (global-auto-revert-mode 1)
 
@@ -304,24 +323,8 @@
 (global-set-key (kbd "M-/") #'comment-or-uncomment-region)
 
 
-;; Dired settings
-(autoload 'dired-jump "dired-x"
-  "Jump to Dired buffer corresponding to current buffer." t)
-    
-(autoload 'dired-jump-other-window "dired-x"
-  "Like \\[dired-jump] (dired-jump) but in other window." t)
-
-(require 'dired-x)
-
 ;; Set color theme
-(require 'color-theme-sanityinc-tomorrow)
 (load-theme 'sanityinc-tomorrow-bright t)
-
-;; Company settings
-(add-hook 'after-init-hook 'global-company-mode)
-(company-quickhelp-mode)
-(eval-after-load 'company
-  '(define-key company-active-map (kbd "C-c h") #'company-quickhelp-manual-begin))
 
 ;; Pasting text should still word wrap
 (setq term-suppress-hard-newline t)
@@ -340,12 +343,6 @@
 
 ;; Re-map repeat command like vim (.)
 ;;(global-set-key (kbd "C-.") #'repeat)
-
-;; Settings for Helpful
-(global-set-key (kbd "C-h f") #'helpful-callable)
-(global-set-key (kbd "C-h v") #'helpful-variable)
-(global-set-key (kbd "C-h k") #'helpful-key)
-(global-set-key (kbd "C-h .") #'helpful-at-point)
 
 ;; shortcut to zap up to char
 (global-unset-key (kbd "M-z"))
@@ -393,7 +390,6 @@
 ;; Set whole line or region mode
 (whole-line-or-region-global-mode)
 
-
 ;; Scrolling in place (M-n and M-p)
 ;; Has a parameter to pass if you want scroll >1 lines (C-u <number>)
 (defun scroll-down-in-place (n)
@@ -418,13 +414,6 @@
 ;; Add another command to set-mark
 (global-set-key (kbd "M-SPC") 'set-mark-command)
 
-;; http://ergoemacs.org/emacs/emacs_auto_save.html
-;; (defun xah-save-all-unsaved ()
-;;   "Save all unsaved files. no ask.
-;; Version 2019-11-05"
-;;   (interactive)
-;;   (save-some-buffers t ))
-;; (setq after-focus-change-function 'xah-save-all-unsaved)
 
 ;; https://batsov.com/articles/2012/03/08/emacs-tip-number-5-save-buffers-automatically-on-buffer-or-window-switch/
 ;; automatically save buffers associated with files on buffer switch
@@ -467,8 +456,6 @@
 ;; Replace keys for cycle-agenda-files to org-agenda since I care more for that
  (global-set-key (kbd "C-'") 'org-agenda)
 
-
-
 ;; Turn off org adapt indentation to not include an extra white space for the heading
 (setq org-adapt-indentation nil)
 
@@ -505,18 +492,6 @@
 
 ; Allow to resize images
 (setq org-image-actual-width nil)
-
-
-;; vc-msg settings
-(defun vc-msg-hook-setup (vcs-type commit-info)
-  ;; copy commit id to clipboard
-  (message (format "%s\n%s\n%s\n%s"
-                   (plist-get commit-info :id)
-                   (plist-get commit-info :author)
-                   (plist-get commit-info :author-time)
-                   (plist-get commit-info :author-summary))))
-(add-hook 'vc-msg-hook 'vc-msg-hook-setup)
-(global-set-key (kbd "C-x v j") 'vc-msg-show)
 
 ;; Use js2-mode for JS files
 (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
@@ -584,9 +559,6 @@
 (global-flycheck-mode)
 (add-hook 'after-init-hook 'flycheck-mode)
 
-;; Enable elpy
-(elpy-enable)
-
 ;; Go back to global mark shortcut
 (global-set-key (kbd "C-`") 'pop-global-mark)
 
@@ -609,18 +581,16 @@
 (add-hook 'emacs-startup-hook
   (lambda ()
     (setq file-name-handler-alist temp-file-name-handler-alist)))
-
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(yaml-mode whole-line-or-region which-key verb vc-msg tide smex rustic rg restart-emacs org-roam org-journal olivetti nim-mode linum-relative json-mode js2-mode ivy-rich ido-completing-read+ helpful groovy-mode find-file-in-project fd-dired exec-path-from-shell emacsql-sqlite elpy dockerfile-mode dimmer deadgrep counsel company-quickhelp company-lsp company-jedi color-theme-sanityinc-tomorrow avy amx)))
+   '(dired-x yaml-mode whole-line-or-region which-key vterm verb vc-msg v-mode use-package tide super-save smex rustic rg restart-emacs real-auto-save py-autopep8 projectile org-roam org-journal olivetti nim-mode move-text magit lsp-ui lsp-python-ms lsp-pyright linum-relative json-mode js2-mode ivy-rich ido-completing-read+ helpful groovy-mode find-file-in-project fd-dired exec-path-from-shell esup emacsql-sqlite3 elpy dot-mode dockerfile-mode docker-tramp dimmer deadgrep dash-functional counsel company-quickhelp company-lsp company-jedi color-theme-sanityinc-tomorrow avy async amx)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
-
