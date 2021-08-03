@@ -3,10 +3,12 @@
 (defvar temp-file-name-handler-alist file-name-handler-alist)
 (setq file-name-handler-alist nil)
 
+;; Garbage collector settings
+(setq gc-cons-threshold-original gc-cons-threshold)
+;; Make startup faster by reducing the frequency of garbage
+;; collection.  The default is 800 kilobytes.  Measured in bytes.
+(setq gc-cons-threshold (* 50 1000 1000))
 
-
-;; Define package repositories
-(require 'package)
 
 ;; From Melpa
 (let* ((no-ssl (and (memq system-type '(windows-nt ms-dos))
@@ -18,7 +20,6 @@
     (when (< emacs-major-version 24)
     ;; For important compatibility libraries like cl-lib
 (add-to-list 'package-archives '("gnu" . (concat proto "://elpa.gnu.org/packages/")))))
-(package-initialize)
 
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
@@ -27,15 +28,8 @@
   (setq use-package-always-ensure t
         use-package-expand-minimally t))
 
-;; Download the ELPA archive description if needed.
-;; This informs Emacs about the latest versions of all packages, and
-;; makes them available for download.
-;; (when (not package-archive-contents)
-;;  (package-refresh-contents))
-
 ;; super-save - https://github.com/bbatsov/super-save
 (use-package super-save
-  :ensure t
   :config
   (super-save-mode +1)
   (setq super-save-idle-duration 1)
@@ -45,7 +39,7 @@
 
 ;; Terminal emulator
 (use-package vterm
-  :defer t
+  :defer 2
 )
 
 ;; To emulate '.' in VIM
@@ -58,14 +52,14 @@
 
 ;; Shows key bindings for incomplete commands
 (use-package which-key
-  :defer t
+  :defer 2
   :config
   (which-key-mode)
 )
 
 ;; Dim other windows
 (use-package dimmer
-  :defer t
+  :defer 2
   :config
   (dimmer-configure-which-key)
   (dimmer-mode t)
@@ -73,7 +67,6 @@
 )
 
 (use-package ivy
-  :defer t
   :config
   (ivy-mode 1)
   (setq ivy-use-virtual-buffers t)
@@ -83,13 +76,14 @@
 )
 
 (use-package ivy-rich
-  :defer t
+  :defer 2
   :config
   (ivy-rich-mode 1)
   (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line)
 )
 
 (use-package counsel
+  :defer 2
   :config
   ;; Replace M-x (execute-extended-command)
   (global-set-key (kbd "M-x") #'counsel-M-x)
@@ -100,15 +94,15 @@
 )
 
 ;; Activate pos-tip
-(use-package pos-tip :defer t)
+(use-package pos-tip :defer 2)
 
 ;; Copy or Delete a whole line on cursor
 (use-package whole-line-or-region
-  :defer t
+  :defer 2
 )
 
 (use-package org-journal
-  :defer t
+  :defer 2
   :config
   (setq org-journal-dir "~/journal/emacs_journal")
   (setq org-journal-date-format "%A, %d %B %Y")
@@ -122,11 +116,20 @@
 
 ;; Vlang
 (use-package v-mode
-  :defer t
+  :defer 2
+  :init
+  ;; Remove verilog mode since it's covers *.v files which I now want to refer to Vlang
+  (defun replace-alist-mode (alist oldmode newmode)
+    (dolist (aitem alist)
+      (if (eq (cdr aitem) oldmode)
+	  (setcdr aitem newmode))))
+
+  ;; not sure what mode you want here. You could default to 'fundamental-mode
+  (replace-alist-mode auto-mode-alist 'verilog-mode 'v-mode)
 )
 
 (use-package org-roam
-  :defer t
+  :defer 2
   :init
   (setq org-roam-v2-ack t)
   :config
@@ -136,6 +139,29 @@
   (global-set-key (kbd "C-c n b") 'org-roam-buffer)
   (global-set-key (kbd "C-c n g") 'org-roam-graph)
   (setq org-roam-directory "~/journal/org-roam")
+
+  ;; Org Capture and Agenda settings - http://pragmaticemacs.com/emacs/org-mode-basics-vi-a-simple-todo-list/
+  ;; set key for agenda
+  (global-set-key (kbd "C-c a") 'org-agenda)
+
+  ;;file to save todo items
+  (setq org-agenda-files '("~/.notes"))
+
+  (setq org-agenda-window-setup (quote current-window))
+  ;;capture todo items using C-c c t
+  (global-set-key (kbd "C-c c") 'org-capture)
+  (setq org-capture-templates
+      '(("t" "todo" entry (file+headline "~/.notes/todo.org" "Tasks")
+         "* TODO [#A] %?")))
+
+  ;; Replace keys for cycle-agenda-files to org-agenda since I care more for that
+  (global-set-key (kbd "C-'") 'org-agenda)
+
+  ;; Org mode settings
+  (setq org-startup-indented t
+	org-hide-leading-stars t
+	org-hide-emphasis-markers t
+	org-odd-levels-only t)
 )
 
 (use-package nim-mode
@@ -145,8 +171,8 @@
   (nim-mode . nimsuggest-mode)
 )
 
-
 (use-package lsp-mode
+  :defer 2
   :config
   ;; LSP shortcuts
   (global-unset-key (kbd "C-c l"))
@@ -157,44 +183,47 @@
   ;; LSP settings
   (setq lsp-headerline-breadcrumb-enable 1)
   (setq read-process-output-max (* 1024 1024))
-  (setq gc-cons-threshold-original gc-cons-threshold)
-  (setq gc-cons-threshold (* 1024 1024 100))
   (setq lsp-rust-server 'rust-analyzer)
 
-  :hook
-  (c-mode-hook . lsp)
-  (c++-mode-hook . lsp)
-  (js-mode-hook . lsp)
-  (typescript-mode-hook . lsp)
-  (rustic-mode-hook . lsp)
-  (nim-mode-hook . lsp)
+  (add-hook 'c-mode-hook #'lsp)
+  (add-hook 'c++-mode-hook #'lsp)
+  (add-hook 'js-mode-hook #'lsp)
+  (add-hook 'typescript-mode-hook #'lsp)
+  (add-hook 'rustic-mode-hook #'lsp)
+  (add-hook 'nim-mode-hook #'lsp)
 )
 
-(use-package js2-mode :defer t)
-(use-package typescript-mode :defer t)
-(use-package yaml-mode :defer t)
-(use-package dockerfile-mode :defer t)
-(use-package groovy-mode :defer t)
-(use-package json-mode :defer t)
-(use-package rustic :defer t)
+(use-package js2-mode :defer 2
+  :config
+  ;; Use js2-mode for JS files
+  (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
+)
 
-(use-package lsp-ui :defer t)
+(use-package typescript-mode :defer 2)
+(use-package yaml-mode :defer 2)
+(use-package dockerfile-mode :defer 2)
+(use-package groovy-mode :defer 2)
+(use-package json-mode :defer 2)
+(use-package rustic :defer 2)
+
+(use-package lsp-ui :defer 2)
 
 ;; Python specific
 (use-package elpy
-  :defer t
+  :defer 2
   :ensure t
   :init
   (elpy-enable)
 )
 
 (use-package py-autopep8
+  :defer 2
   :hook
   (elpy-mode-hook . py-autopep8-enable-on-save)
 )
 
 (use-package magit
-  :defer t
+  :defer 2
   :config
   (global-set-key (kbd "C-c g") 'magit-file-dispatch)
   (global-set-key (kbd "C-x g") 'magit)
@@ -203,33 +232,32 @@
 )
 
 (use-package avy
-  :ensure t
+  :defer 1
   :init
-  (global-set-key (kbd "C-M-;") 'avy-goto-char-timer)
   (global-set-key (kbd "C-j") 'avy-goto-char)
+  (global-set-key (kbd "C-M-;") 'avy-goto-char-timer)
   (defun change-cycle-agenda-files-key ()
   (local-set-key (kbd "C-j") 'avy-goto-char)
   (local-unset-key (kbd "C-'"))
   (local-set-key (kbd "C-'") 'org-agenda))
-
-  :hook
-  (org-mode-hook . 'change-cycle-agenda-files-key)
+  :config
+  (add-hook 'org-mode-hook 'change-cycle-agenda-files-key)
 )
 
 ;; Access files in a docker container
 (use-package docker-tramp
-  :defer t
+  :defer 2
 )
 
 (use-package deadgrep
-  :defer t
+  :defer 2
   :config
   (global-set-key (kbd "C-c s") #'deadgrep)
 )
 
 ;; For sending HTTP Requests
 (use-package verb
-  :defer t
+  :defer 2
   :config
   (with-eval-after-load 'org
     (define-key org-mode-map (kbd "C-c C-r") verb-command-map))
@@ -237,17 +265,17 @@
 
 
 ;; Get env vars from shell
-(use-package exec-path-from-shell :defer t)
+(use-package exec-path-from-shell :defer 2)
 
 
 ;; Use fd for dired
-(use-package fd-dired :defer t)
+(use-package fd-dired :defer 2)
 
 ;; Company Packages
-(use-package company-lsp :defer t)
-(use-package company-jedi :defer t)
+(use-package company-lsp :defer 2)
+(use-package company-jedi :defer 2)
 (use-package company-quickhelp 
-  :defer t
+  :defer 2
   :hook
   (after-init-hook . global-company-mode)
   :config
@@ -256,7 +284,7 @@
 )
 
 (use-package helpful 
-  :defer t
+  :defer 2
   :config
   (global-set-key (kbd "C-h f") #'helpful-callable)
   (global-set-key (kbd "C-h v") #'helpful-variable)
@@ -267,9 +295,10 @@
 ;; Enhances M-x to allow easier execution of commands. Provides
 ;; a filterable list of possible commands in the minibuffer
 ;; http://www.emacswiki.org/emacs/Smex
-(use-package amx :defer t)
+(use-package amx :defer 2)
 
 (use-package vc-msg
+  :defer 2
   :init
   (defun vc-msg-hook-setup (vcs-type commit-info)
   ;; copy commit id to clipboard
@@ -286,13 +315,25 @@
 
 ;; move text easily up and down
 (use-package move-text 
+  :defer 2
   :config
   (move-text-default-bindings)
 )
 
-(use-package color-theme-sanityinc-tomorrow :defer t)
+(use-package color-theme-sanityinc-tomorrow :defer 1)
 
-(use-package restart-emacs :defer t)
+(use-package flycheck
+  :defer 2
+  :config
+  (add-hook 'after-init-hook 'flycheck-mode)
+
+  ;; Always turn on flyspell in org mode
+  (add-hook 'org-mode-hook 'flyspell-mode)
+  (customize-set-variable 'ispell-program-name "aspell")
+  (customize-set-variable 'ispell-extra-args '("--sug-mode=ultra"))
+)
+
+(use-package restart-emacs :defer 2)
 
 
 ;; Add to Path
@@ -321,7 +362,6 @@
 ;; Set key for comment-or-uncomment-region
 (global-set-key (kbd "M-/") #'comment-or-uncomment-region)
 
-
 ;; Set color theme
 (load-theme 'sanityinc-tomorrow-bright t)
 
@@ -339,9 +379,6 @@
 ;; https://www.murilopereira.com/how-to-open-a-file-in-emacs/
 ;; Might make find file faster?
 (remove-hook 'file-name-at-point-functions 'ffap-guess-file-name-at-point)
-
-;; Re-map repeat command like vim (.)
-;;(global-set-key (kbd "C-.") #'repeat)
 
 ;; shortcut to zap up to char
 (global-unset-key (kbd "M-z"))
@@ -361,9 +398,6 @@
 
 ;; Turn off the tool bar
 (tool-bar-mode -1)
-
-;; Turn off line numbers
-;; (global-linum-mode 0)
 
 ;; Changes all yes/no questions to y/n type
 (fset 'yes-or-no-p 'y-or-n-p)
@@ -446,14 +480,6 @@
 ;; OSX: Use mdfind for locate
 (setq locate-command "mdfind")
 
-;; Org mode settings
-(setq org-startup-indented t
-      org-hide-leading-stars t
-      org-hide-emphasis-markers t
-      org-odd-levels-only t)
-
-;; Replace keys for cycle-agenda-files to org-agenda since I care more for that
- (global-set-key (kbd "C-'") 'org-agenda)
 
 ;; Turn off org adapt indentation to not include an extra white space for the heading
 (setq org-adapt-indentation nil)
@@ -492,10 +518,6 @@
 ; Allow to resize images
 (setq org-image-actual-width nil)
 
-;; Use js2-mode for JS files
-(add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
-
-
 (defun replace_underscores_with_spaces ()
   "Replace those 'underscores' from gmail to spaces"
   (interactive)
@@ -504,40 +526,12 @@
 
 (global-set-key (kbd "C-c r") 'replace_underscores_with_spaces)
 
-;; Always turn on flyspell in org mode
-(add-hook 'org-mode-hook 'flyspell-mode)
-(customize-set-variable 'ispell-program-name "aspell")
-(customize-set-variable 'ispell-extra-args '("--sug-mode=ultra"))
-
-;; Org Capture and Agenda settings - http://pragmaticemacs.com/emacs/org-mode-basics-vi-a-simple-todo-list/
-;; set key for agenda
-(global-set-key (kbd "C-c a") 'org-agenda)
-
-;;file to save todo items
-(setq org-agenda-files '("~/.notes"))
 
 ;;set colours for priorities
 (setq org-priority-faces '((?A . (:foreground "#F0DFAF" :weight bold))
                            (?B . (:foreground "LightSteelBlue"))
                            (?C . (:foreground "OliveDrab"))))
 
-;;open agenda in current window
-(setq org-agenda-window-setup (quote current-window))
-
-;;capture todo items using C-c c t
-(global-set-key (kbd "C-c c") 'org-capture)
-(setq org-capture-templates
-      '(("t" "todo" entry (file+headline "~/.notes/todo.org" "Tasks")
-         "* TODO [#A] %?")))
-
-;; Remove verilog mode since it's covers *.v files which I now want to refer to Vlang
-(defun replace-alist-mode (alist oldmode newmode)
-  (dolist (aitem alist)
-    (if (eq (cdr aitem) oldmode)
-    (setcdr aitem newmode))))
-
-;; not sure what mode you want here. You could default to 'fundamental-mode
-(replace-alist-mode auto-mode-alist 'verilog-mode 'v-mode)
 
 ;; https://gist.github.com/leavesofgrass/23cf0f61e0092e36dbbaa3f33e4dd060
 ;; Minify buffer contents
@@ -553,10 +547,6 @@
 
 (global-set-key (kbd "C-c i") 'string-insert-rectangle)
 
-
-;; Enable flycheck
-(global-flycheck-mode)
-(add-hook 'after-init-hook 'flycheck-mode)
 
 ;; Go back to global mark shortcut
 (global-set-key (kbd "C-`") 'pop-global-mark)
@@ -580,6 +570,10 @@
 (add-hook 'emacs-startup-hook
   (lambda ()
     (setq file-name-handler-alist temp-file-name-handler-alist)))
+
+
+;; Make gc pauses faster by decreasing the threshold.
+(setq gc-cons-threshold (* 2 1000 1000))
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
