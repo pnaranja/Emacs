@@ -1,13 +1,9 @@
 ;;; package -- Summary
 ;;; Commentary:
-(defvar temp-file-name-handler-alist file-name-handler-alist)
-(setq file-name-handler-alist nil)
-
-;; Garbage collector settings
-(setq gc-cons-threshold-original gc-cons-threshold)
-;; Make startup faster by reducing the frequency of garbage
-;; collection.  The default is 800 kilobytes.  Measured in bytes.
-(setq gc-cons-threshold (* 50 1000 1000))
+(defvar last-file-name-handler-alist file-name-handler-alist)
+(setq gc-cons-threshold 402653184
+      gc-cons-percentage 0.6
+      file-name-handler-alist nil)
 
 
 ;; From Melpa
@@ -25,8 +21,7 @@
   (package-refresh-contents)
   (package-install 'use-package))
 (eval-and-compile
-  (setq use-package-always-ensure t
-        use-package-expand-minimally t))
+  (setq use-package-expand-minimally t))
 
 ;; super-save - https://github.com/bbatsov/super-save
 (use-package super-save
@@ -193,6 +188,30 @@
   (add-hook 'nim-mode-hook #'lsp)
 )
 
+(use-package tide :defer 2
+  :config
+  (defun setup-tide-mode ()
+    (interactive)
+    (tide-setup)
+    (flycheck-mode +1)
+    (setq flycheck-check-syntax-automatically '(save mode-enabled))
+    (eldoc-mode +1)
+    (tide-hl-identifier-mode +1)
+    ;; company is an optional dependency. You have to
+    ;; install it separately via package-install
+    ;; `M-x package-install [ret] company`
+    (company-mode +1))
+
+  ;; aligns annotation to the right hand side
+  (setq company-tooltip-align-annotations t)
+
+  ;; formats the buffer before saving
+  (add-hook 'before-save-hook 'tide-format-before-save)
+
+  (add-hook 'typescript-mode-hook #'setup-tide-mode)
+)
+
+
 (use-package js2-mode :defer 2
   :config
   ;; Use js2-mode for JS files
@@ -232,7 +251,6 @@
 )
 
 (use-package avy
-  :defer 1
   :init
   (global-set-key (kbd "C-j") 'avy-goto-char)
   (global-set-key (kbd "C-M-;") 'avy-goto-char-timer)
@@ -565,15 +583,12 @@
      (time-subtract after-init-time before-init-time)))
    gcs-done))
 
-(add-hook 'emacs-startup-hook #'efs/display-startup-time)
-
 (add-hook 'emacs-startup-hook
-  (lambda ()
-    (setq file-name-handler-alist temp-file-name-handler-alist)))
+  (setq gc-cons-threshold 16777216
+        gc-cons-percentage 0.1
+        file-name-handler-alist last-file-name-handler-alist)
+  (efs/display-startup-time))
 
-
-;; Make gc pauses faster by decreasing the threshold.
-(setq gc-cons-threshold (* 2 1000 1000))
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
