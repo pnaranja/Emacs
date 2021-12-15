@@ -257,6 +257,7 @@
   (local-set-key (kbd "C-'") 'org-agenda))
   :config
   (add-hook 'org-mode-hook 'change-cycle-agenda-files-key)
+  (add-hook 'v-mode-hook 'change-cycle-agenda-files-key)
 )
 
 ;; Access files in a docker container
@@ -592,7 +593,8 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(dired-x yaml-mode whole-line-or-region which-key vterm verb vc-msg v-mode use-package tide super-save smex rustic rg restart-emacs real-auto-save py-autopep8 projectile org-roam org-journal olivetti nim-mode move-text magit lsp-ui lsp-python-ms lsp-pyright linum-relative json-mode js2-mode ivy-rich ido-completing-read+ helpful groovy-mode find-file-in-project fd-dired exec-path-from-shell esup emacsql-sqlite3 elpy dot-mode dockerfile-mode docker-tramp dimmer deadgrep dash-functional counsel company-quickhelp company-lsp company-jedi color-theme-sanityinc-tomorrow avy async amx)))
+   '(dired-x yaml-mode whole-line-or-region which-key vterm verb vc-msg v-mode use-package tide super-save smex rustic rg restart-emacs real-auto-save py-autopep8 projectile org-roam org-journal olivetti nim-mode move-text magit lsp-ui lsp-python-ms lsp-pyright linum-relative json-mode js2-mode ivy-rich ido-completing-read+ helpful groovy-mode find-file-in-project fd-dired exec-path-from-shell esup emacsql-sqlite3 elpy dot-mode dockerfile-mode docker-tramp dimmer deadgrep dash-functional counsel company-quickhelp company-lsp company-jedi color-theme-sanityinc-tomorrow avy async amx))
+ '(warning-suppress-types '((comp) (comp))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

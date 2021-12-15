@@ -2,7 +2,12 @@
 ;;; This format is meant to be slightly human-readable;
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
-(("pricing-sdk"
+(("gce-playground"
+ (filename . "~/chegg/gne/gce-playground/")
+ (front-context-string . "..\n  -rw-r--r-- ")
+ (rear-context-string . "20 Dec  1 11:14 ")
+ (position . 198))
+("pricing-sdk"
  (filename . "~/Chegg/gne/pricing-sdk/")
  (front-context-string . ".\n  drwxr-xr-x  ")
  (rear-context-string . "64 Sep 29 17:02 ")
