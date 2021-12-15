@@ -5,6 +5,7 @@
       gc-cons-percentage 0.6
       file-name-handler-alist nil)
 
+(require 'package)
 
 ;; From Melpa
 (let* ((no-ssl (and (memq system-type '(windows-nt ms-dos))
