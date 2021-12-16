@@ -26,6 +26,7 @@
 
 ;; super-save - https://github.com/bbatsov/super-save
 (use-package super-save
+  :ensure t
   :config
   (super-save-mode +1)
   (setq super-save-idle-duration 1)
@@ -33,13 +34,24 @@
   (setq auto-save-default nil)
 )
 
-;; Terminal emulator
-(use-package vterm
+
+;; Company Packages
+(use-package company :ensure t)
+(use-package company-jedi :defer 2 :ensure t)
+(use-package company-quickhelp 
+  :ensure t
   :defer 2
+  :hook
+  (after-init-hook . global-company-mode)
+  :config
+  (define-key company-active-map (kbd "C-c h") #'company-quickhelp-manual-begin)
+  (company-quickhelp-mode)
 )
+
 
 ;; To emulate '.' in VIM
 (use-package dot-mode
+  :ensure t
   :hook
   (find-file-hooks . dot-mode-on)
   :config
@@ -48,6 +60,7 @@
 
 ;; Shows key bindings for incomplete commands
 (use-package which-key
+  :ensure t
   :defer 2
   :config
   (which-key-mode)
@@ -55,6 +68,7 @@
 
 ;; Dim other windows
 (use-package dimmer
+  :ensure t
   :defer 2
   :config
   (dimmer-configure-which-key)
@@ -63,6 +77,7 @@
 )
 
 (use-package ivy
+  :ensure t
   :config
   (ivy-mode 1)
   (setq ivy-use-virtual-buffers t)
@@ -72,6 +87,7 @@
 )
 
 (use-package ivy-rich
+  :ensure t
   :defer 2
   :config
   (ivy-rich-mode 1)
@@ -79,6 +95,7 @@
 )
 
 (use-package counsel
+  :ensure t
   :defer 2
   :config
   ;; Replace M-x (execute-extended-command)
@@ -90,14 +107,16 @@
 )
 
 ;; Activate pos-tip
-(use-package pos-tip :defer 2)
+(use-package pos-tip :defer 2 )
 
 ;; Copy or Delete a whole line on cursor
 (use-package whole-line-or-region
+  :ensure t
   :defer 2
 )
 
 (use-package org-journal
+  :ensure t
   :defer 2
   :config
   (setq org-journal-dir "~/journal/emacs_journal")
@@ -107,11 +126,13 @@
 
 ;; Distraction Free writing
 (use-package olivetti
+  :ensure t
   :hook (olivetti-mode . org-journal-mode-hook)
 )
 
 ;; Vlang
 (use-package v-mode
+  :ensure t
   :defer 2
   :init
   ;; Remove verilog mode since it's covers *.v files which I now want to refer to Vlang
@@ -125,6 +146,7 @@
 )
 
 (use-package org-roam
+  :ensure t
   :defer 2
   :init
   (setq org-roam-v2-ack t)
@@ -161,6 +183,7 @@
 )
 
 (use-package nim-mode
+  :ensure t
   :hook
   (nim-mode . rainbow-delimiters-mode)
   (nim-mode . subword-mode)
@@ -168,6 +191,7 @@
 )
 
 (use-package lsp-mode
+  :ensure t
   :defer 2
   :config
   ;; LSP shortcuts
@@ -190,6 +214,7 @@
 )
 
 (use-package tide :defer 2
+  :ensure t
   :config
   (defun setup-tide-mode ()
     (interactive)
@@ -211,22 +236,24 @@
 
 
 (use-package js2-mode :defer 2
+  :ensure t
   :config
   ;; Use js2-mode for JS files
   (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
 )
 
-(use-package typescript-mode :defer 2)
-(use-package yaml-mode :defer 2)
-(use-package dockerfile-mode :defer 2)
-(use-package groovy-mode :defer 2)
-(use-package json-mode :defer 2)
-(use-package rustic :defer 2)
+(use-package typescript-mode :defer 2 :ensure t)
+(use-package yaml-mode :defer 2 :ensure t)
+(use-package dockerfile-mode :defer 2 :ensure t)
+(use-package groovy-mode :defer 2 :ensure t)
+(use-package json-mode :defer 2 :ensure t)
+(use-package rustic :defer 2 :ensure t)
 
-(use-package lsp-ui :defer 2)
+(use-package lsp-ui :defer 2 :ensure t)
 
 ;; Python specific
 (use-package elpy
+  :ensure t
   :defer 2
   :ensure t
   :init
@@ -234,12 +261,14 @@
 )
 
 (use-package py-autopep8
+  :ensure t
   :defer 2
   :hook
   (elpy-mode-hook . py-autopep8-enable-on-save)
 )
 
 (use-package magit
+  :ensure t
   :defer 2
   :config
   (global-set-key (kbd "C-c g") 'magit-file-dispatch)
@@ -249,6 +278,7 @@
 )
 
 (use-package avy
+  :ensure t
   :init
   (global-set-key (kbd "C-j") 'avy-goto-char)
   (global-set-key (kbd "C-M-;") 'avy-goto-char-timer)
@@ -263,44 +293,35 @@
 
 ;; Access files in a docker container
 (use-package docker-tramp
+  :ensure t
   :defer 2
 )
 
 (use-package deadgrep
+  :ensure t
   :defer 2
   :config
   (global-set-key (kbd "C-c s") #'deadgrep)
 )
 
-;; For sending HTTP Requests
+;; Verb - For sending HTTP Requests
 (use-package verb
-  :defer 2
-  :config
-  (with-eval-after-load 'org
-    (define-key org-mode-map (kbd "C-c C-r") verb-command-map))
-)
-
+  :ensure t)
+(use-package org
+  :mode ("\\.org\\'" . org-mode)
+  :config (define-key org-mode-map (kbd "C-c C-r") verb-command-map))
 
 ;; Get env vars from shell
-(use-package exec-path-from-shell :defer 2)
+(use-package exec-path-from-shell :defer 2 :ensure t)
 
 
 ;; Use fd for dired
-(use-package fd-dired :defer 2)
+(use-package fd-dired :defer 2 :ensure t)
 
-;; Company Packages
-(use-package company-lsp :defer 2)
-(use-package company-jedi :defer 2)
-(use-package company-quickhelp 
-  :defer 2
-  :hook
-  (after-init-hook . global-company-mode)
-  :config
-  (define-key company-active-map (kbd "C-c h") #'company-quickhelp-manual-begin)
-  (company-quickhelp-mode)
-)
+
 
 (use-package helpful 
+  :ensure t
   :defer 2
   :config
   (global-set-key (kbd "C-h f") #'helpful-callable)
@@ -312,9 +333,10 @@
 ;; Enhances M-x to allow easier execution of commands. Provides
 ;; a filterable list of possible commands in the minibuffer
 ;; http://www.emacswiki.org/emacs/Smex
-(use-package amx :defer 2)
+(use-package amx :defer 2 :ensure t)
 
 (use-package vc-msg
+  :ensure t
   :defer 2
   :init
   (defun vc-msg-hook-setup (vcs-type commit-info)
@@ -332,14 +354,16 @@
 
 ;; move text easily up and down
 (use-package move-text 
+  :ensure t
   :defer 2
   :config
   (move-text-default-bindings)
 )
 
-(use-package color-theme-sanityinc-tomorrow :defer 1)
+(use-package color-theme-sanityinc-tomorrow :defer 1 :ensure t)
 
 (use-package flycheck
+  :ensure t
   :defer 2
   :config
   (add-hook 'after-init-hook 'flycheck-mode)
@@ -350,7 +374,13 @@
   (customize-set-variable 'ispell-extra-args '("--sug-mode=ultra"))
 )
 
-(use-package restart-emacs :defer 2)
+(use-package restart-emacs :defer 2 :ensure t)
+
+;; Terminal emulator
+(use-package vterm
+  :ensure t
+  :defer 2
+)
 
 
 ;; Add to Path
