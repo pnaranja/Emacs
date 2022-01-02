@@ -8,20 +8,20 @@
  (rear-context-string . "20 Dec  1 11:14 ")
  (position . 198))
 ("pricing-sdk"
- (filename . "~/Chegg/gne/pricing-sdk/")
- (front-context-string . ".\n  drwxr-xr-x  ")
- (rear-context-string . "64 Sep 29 17:02 ")
- (position . 139))
-("one-click"
- (filename . "~/Chegg/gne/one-click/")
- (front-context-string . ".eslintignore\n  ")
- (rear-context-string . " 4 Aug 24 08:50 ")
- (position . 245))
-("testcafe-for-chegg-com"
- (filename . "~/Chegg/testcafe-for-chegg-com/")
+ (filename . "~/chegg/pricing-sdk/")
  (front-context-string . "..\n  -rw-r--r-- ")
- (rear-context-string . "56 Jul 20 15:10 ")
- (position . 197))
+ (rear-context-string . "84 Dec 20 09:57 ")
+ (position . 148))
+("one-click"
+ (filename . "~/chegg/one-click/")
+ (front-context-string . "..\n  -rw-r--r-- ")
+ (rear-context-string . "84 Dec 20 09:57 ")
+ (position . 152))
+("testcafe-for-chegg-com"
+ (filename . "~/chegg/testcafe-for-chegg-com/")
+ (front-context-string . "..\n  -rw-r--r-- ")
+ (rear-context-string . "84 Dec 20 09:57 ")
+ (position . 159))
 ("ce"
  (filename . "~/chegg/gne/ce/")
  (front-context-string . "it\n  -rw-r--r-- ")
@@ -68,10 +68,10 @@
  (rear-context-string . "48 Aug 24 21:30 ")
  (position . 254))
 ("default-checkout-web"
- (filename . "~/chegg/gne/default-checkout-web/")
- (front-context-string . ".env-browserstac")
- (rear-context-string . "08 Dec  4 15:23 ")
- (position . 259))
+ (filename . "~/chegg/default-checkout-web/")
+ (front-context-string . "..\n  drwxr-xr-x ")
+ (rear-context-string . "84 Dec 20 09:57 ")
+ (position . 163))
 ("org-capture-last-stored-marker"
  (filename . "~/.notes")
  (front-context-string . "*** TODO \n  [202")
@@ -83,10 +83,10 @@
  (rear-context-string . "+Test+Reports]]\n")
  (position . 1265))
 ("org-capture-last-stored"
- (filename . "~/journal/org-roam/20200929170851-exploratory_testing_heuristics.org")
- (front-context-string . "#+title: Explora")
- (rear-context-string)
- (position . 1))
+ (filename . "~/journal/org-roam/20211231123230-unbound.org")
+ (front-context-string . "\nA Catholic Orga")
+ (rear-context-string . "+title: Unbound\n")
+ (position . 85))
 ("verb_examples.org"
  (filename . "~/REST_files/verb_examples.org")
  (front-context-string . "* Quick Start fo")

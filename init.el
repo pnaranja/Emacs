@@ -94,6 +94,12 @@
   (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line)
 )
 
+
+(use-package all-the-icons-ivy-rich
+  :ensure t
+  :init (all-the-icons-ivy-rich-mode 1))
+
+
 (use-package counsel
   :ensure t
   :defer 2
@@ -154,9 +160,17 @@
   (global-set-key (kbd "C-c n l") 'org-roam-capture)
   (global-set-key (kbd "C-c n f") 'org-roam-node-find)
   (global-set-key (kbd "C-c n i") 'org-roam-node-insert)
-  (global-set-key (kbd "C-c n b") 'org-roam-buffer)
+  (global-set-key (kbd "C-c n b") 'org-roam-buffer-display-dedicated)
   (global-set-key (kbd "C-c n g") 'org-roam-graph)
   (setq org-roam-directory "~/journal/org-roam")
+  (org-roam-db-autosync-mode)
+
+  (add-to-list 'display-buffer-alist
+               '("\\*org-roam\\*"
+		 (display-buffer-in-direction)
+		 (direction . right)
+		 (window-width . 0.33)
+		 (window-height . fit-window-to-buffer)))
 
   ;; Org Capture and Agenda settings - http://pragmaticemacs.com/emacs/org-mode-basics-vi-a-simple-todo-list/
   ;; set key for agenda
@@ -181,6 +195,26 @@
 	org-hide-emphasis-markers t
 	org-odd-levels-only t)
 )
+
+
+;; https://zzamboni.org/post/how-to-insert-screenshots-in-org-documents-on-macos/
+(use-package org-download
+    :after org
+    :ensure t
+    :defer nil
+    :custom
+    (org-download-method 'directory)
+    (org-download-image-dir "images")
+    (org-download-heading-lvl nil)
+    (org-download-timestamp "%Y%m%d-%H%M%S_")
+    (org-image-actual-width 300)
+    (org-download-screenshot-method "/usr/local/bin/pngpaste %s")
+    :bind
+    ("C-M-y" . org-download-screenshot)
+    :config
+    (require 'org-download))
+
+
 
 (use-package nim-mode
   :ensure t
