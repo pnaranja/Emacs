@@ -2,7 +2,17 @@
 ;;; This format is meant to be slightly human-readable;
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
-(("gce-playground"
+(("chegg-web"
+ (filename . "~/chegg/chegg-web/")
+ (front-context-string . "..\n  -rw-r--r-- ")
+ (rear-context-string . "12 Jan 18 10:03 ")
+ (position . 148))
+("study-interstitial-automation"
+ (filename . "~/chegg/study-interstitial-automation/")
+ (front-context-string . "..\n  drwxr-xr-x ")
+ (rear-context-string . "48 Jan  7 17:04 ")
+ (position . 164))
+("gce-playground"
  (filename . "~/chegg/gne/gce-playground/")
  (front-context-string . "..\n  -rw-r--r-- ")
  (rear-context-string . "20 Dec  1 11:14 ")
@@ -58,15 +68,15 @@
  (rear-context-string . "48 Jan 23 11:01 ")
  (position . 247))
 ("drop-in-payment"
- (filename . "~/chegg/gne/drop-in-payment/")
- (front-context-string . ".DS_Store\n  drwx")
- (rear-context-string . "48 Aug  4 11:32 ")
- (position . 257))
+ (filename . "~/chegg/drop-in-payment/")
+ (front-context-string . "..\n  -rw-r--r-- ")
+ (rear-context-string . "44 Jan 18 15:30 ")
+ (position . 152))
 ("payment-methods"
- (filename . "~/chegg/gne/payment-methods/")
- (front-context-string . ".DS_Store\n  drwx")
- (rear-context-string . "48 Aug 24 21:30 ")
- (position . 254))
+ (filename . "~/chegg/payment-methods/")
+ (front-context-string . "..\n  -rw-r--r-- ")
+ (rear-context-string . "44 Jan 18 15:30 ")
+ (position . 154))
 ("default-checkout-web"
  (filename . "~/chegg/default-checkout-web/")
  (front-context-string . "..\n  drwxr-xr-x ")
@@ -83,10 +93,10 @@
  (rear-context-string . "+Test+Reports]]\n")
  (position . 1265))
 ("org-capture-last-stored"
- (filename . "~/journal/org-roam/20211231123230-unbound.org")
- (front-context-string . "\nA Catholic Orga")
- (rear-context-string . "+title: Unbound\n")
- (position . 85))
+ (filename . "~/journal/org-roam/20220102202604-magandang_balita_biblia.org")
+ (front-context-string . "\nA Tagalog Bible")
+ (rear-context-string . "g Balita Biblia\n")
+ (position . 101))
 ("verb_examples.org"
  (filename . "~/REST_files/verb_examples.org")
  (front-context-string . "* Quick Start fo")

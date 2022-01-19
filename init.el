@@ -283,7 +283,24 @@
 (use-package json-mode :defer 2 :ensure t)
 (use-package rustic :defer 2 :ensure t)
 
-(use-package lsp-ui :defer 2 :ensure t)
+(use-package lsp-ui
+  :requires lsp-mode flycheck
+  :config
+
+  (setq lsp-ui-doc-enable t
+        lsp-ui-doc-use-childframe t
+        lsp-ui-doc-position 'top
+        lsp-ui-doc-include-signature t
+        lsp-ui-sideline-enable nil
+        lsp-ui-flycheck-enable t
+        lsp-ui-flycheck-list-position 'right
+        lsp-ui-flycheck-live-reporting t
+        lsp-ui-peek-enable t
+        lsp-ui-peek-list-width 60
+        lsp-ui-peek-peek-height 25)
+
+  (add-hook 'lsp-mode-hook 'lsp-ui-mode))
+
 
 ;; Python specific
 (use-package elpy
