@@ -34,13 +34,26 @@
   (setq auto-save-default nil)
 )
 
+(use-package doom-modeline
+  :ensure t
+  :defer t
+  :hook (after-init . doom-modeline-mode)
+  :config
+  (setq doom-modeline-height 15)
+  (setq doom-modeline-bar-width 8)
+  (setq doom-modeline-window-width-limit 3)
+  (setq doom-modeline-lsp t)
+
+
+)
+
 
 ;; Company Packages
 (use-package company :ensure t)
-(use-package company-jedi :defer 2 :ensure t)
+(use-package company-jedi :defer 1 :ensure t)
 (use-package company-quickhelp 
   :ensure t
-  :defer 2
+  :defer 1
   :hook
   (after-init-hook . global-company-mode)
   :config
@@ -61,7 +74,7 @@
 ;; Shows key bindings for incomplete commands
 (use-package which-key
   :ensure t
-  :defer 2
+  :defer 1
   :config
   (which-key-mode)
 )
@@ -69,7 +82,7 @@
 ;; Dim other windows
 (use-package dimmer
   :ensure t
-  :defer 2
+  :defer 1
   :config
   (dimmer-configure-which-key)
   (dimmer-mode t)
@@ -88,7 +101,7 @@
 
 (use-package ivy-rich
   :ensure t
-  :defer 2
+  :defer 1
   :config
   (ivy-rich-mode 1)
   (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line)
@@ -102,7 +115,7 @@
 
 (use-package counsel
   :ensure t
-  :defer 2
+  :defer 1
   :config
   ;; Replace M-x (execute-extended-command)
   (global-set-key (kbd "M-x") #'counsel-M-x)
@@ -112,18 +125,32 @@
   (setq counsel-describe-variable-function #'helpful-variable)
 )
 
+
+(use-package flycheck
+  :ensure t
+  :defer 1
+  :config
+  (add-hook 'after-init-hook 'flycheck-mode)
+
+  ;; Always turn on flyspell in org mode
+  (add-hook 'org-mode-hook 'flyspell-mode)
+  (customize-set-variable 'ispell-program-name "aspell")
+  (customize-set-variable 'ispell-extra-args '("--sug-mode=ultra"))
+)
+
+
 ;; Activate pos-tip
-(use-package pos-tip :defer 2 )
+(use-package pos-tip :defer 1 )
 
 ;; Copy or Delete a whole line on cursor
 (use-package whole-line-or-region
   :ensure t
-  :defer 2
+  :defer 1
 )
 
 (use-package org-journal
   :ensure t
-  :defer 2
+  :defer 1
   :config
   (setq org-journal-dir "~/journal/emacs_journal")
   (setq org-journal-date-format "%A, %d %B %Y")
@@ -139,7 +166,7 @@
 ;; Vlang
 (use-package v-mode
   :ensure t
-  :defer 2
+  :defer 1
   :init
   ;; Remove verilog mode since it's covers *.v files which I now want to refer to Vlang
   (defun replace-alist-mode (alist oldmode newmode)
@@ -153,7 +180,7 @@
 
 (use-package org-roam
   :ensure t
-  :defer 2
+  :defer 1
   :init
   (setq org-roam-v2-ack t)
   :config
@@ -226,7 +253,7 @@
 
 (use-package lsp-mode
   :ensure t
-  :defer 2
+  :defer 1
   :config
   ;; LSP shortcuts
   (global-unset-key (kbd "C-c l"))
@@ -247,7 +274,7 @@
   (add-hook 'nim-mode-hook #'lsp)
 )
 
-(use-package tide :defer 2
+(use-package tide :defer 1
   :ensure t
   :config
   (defun setup-tide-mode ()
@@ -268,20 +295,31 @@
   (add-hook 'typescript-mode-hook #'setup-tide-mode)
 )
 
+(use-package web-mode
+  :ensure t
+  :config
+  (add-to-list 'auto-mode-alist '("\\.tsx\\'" . web-mode))
+  (add-hook 'web-mode-hook
+            (lambda ()
+              (when (string-equal "tsx" (file-name-extension buffer-file-name))
+                (setup-tide-mode))))
 
-(use-package js2-mode :defer 2
+)
+
+
+(use-package js2-mode :defer 1
   :ensure t
   :config
   ;; Use js2-mode for JS files
   (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
 )
 
-(use-package typescript-mode :defer 2 :ensure t)
-(use-package yaml-mode :defer 2 :ensure t)
-(use-package dockerfile-mode :defer 2 :ensure t)
-(use-package groovy-mode :defer 2 :ensure t)
-(use-package json-mode :defer 2 :ensure t)
-(use-package rustic :defer 2 :ensure t)
+(use-package typescript-mode :defer 1 :ensure t)
+(use-package yaml-mode :defer 1 :ensure t)
+(use-package dockerfile-mode :defer 1 :ensure t)
+(use-package groovy-mode :defer 1 :ensure t)
+(use-package json-mode :defer 1 :ensure t)
+(use-package rustic :defer 1 :ensure t)
 
 (use-package lsp-ui
   :requires lsp-mode flycheck
@@ -305,22 +343,25 @@
 ;; Python specific
 (use-package elpy
   :ensure t
-  :defer 2
-  :ensure t
+  :defer 1
   :init
   (elpy-enable)
+  :config
+  (add-to-list 'process-coding-system-alist '("python" . (utf-8 . utf-8)))
+  (setq elpy-rpc-python-command "python3")
+
 )
 
 (use-package py-autopep8
   :ensure t
-  :defer 2
+  :defer 1
   :hook
   (elpy-mode-hook . py-autopep8-enable-on-save)
 )
 
 (use-package magit
   :ensure t
-  :defer 2
+  :defer 1
   :config
   (global-set-key (kbd "C-c g") 'magit-file-dispatch)
   (global-set-key (kbd "C-x g") 'magit)
@@ -345,12 +386,12 @@
 ;; Access files in a docker container
 (use-package docker-tramp
   :ensure t
-  :defer 2
+  :defer 1
 )
 
 (use-package deadgrep
   :ensure t
-  :defer 2
+  :defer 1
   :config
   (global-set-key (kbd "C-c s") #'deadgrep)
 )
@@ -363,17 +404,17 @@
   :config (define-key org-mode-map (kbd "C-c C-r") verb-command-map))
 
 ;; Get env vars from shell
-(use-package exec-path-from-shell :defer 2 :ensure t)
+(use-package exec-path-from-shell :defer 1 :ensure t)
 
 
 ;; Use fd for dired
-(use-package fd-dired :defer 2 :ensure t)
+(use-package fd-dired :defer 1 :ensure t)
 
 
 
 (use-package helpful 
   :ensure t
-  :defer 2
+  :defer 1
   :config
   (global-set-key (kbd "C-h f") #'helpful-callable)
   (global-set-key (kbd "C-h v") #'helpful-variable)
@@ -384,11 +425,11 @@
 ;; Enhances M-x to allow easier execution of commands. Provides
 ;; a filterable list of possible commands in the minibuffer
 ;; http://www.emacswiki.org/emacs/Smex
-(use-package amx :defer 2 :ensure t)
+(use-package amx :defer 1 :ensure t)
 
 (use-package vc-msg
   :ensure t
-  :defer 2
+  :defer 1
   :init
   (defun vc-msg-hook-setup (vcs-type commit-info)
   ;; copy commit id to clipboard
@@ -406,31 +447,20 @@
 ;; move text easily up and down
 (use-package move-text 
   :ensure t
-  :defer 2
+  :defer 1
   :config
   (move-text-default-bindings)
 )
 
 (use-package color-theme-sanityinc-tomorrow :defer 1 :ensure t)
 
-(use-package flycheck
-  :ensure t
-  :defer 2
-  :config
-  (add-hook 'after-init-hook 'flycheck-mode)
+(use-package restart-emacs :defer 1 :ensure t)
 
-  ;; Always turn on flyspell in org mode
-  (add-hook 'org-mode-hook 'flyspell-mode)
-  (customize-set-variable 'ispell-program-name "aspell")
-  (customize-set-variable 'ispell-extra-args '("--sug-mode=ultra"))
-)
-
-(use-package restart-emacs :defer 2 :ensure t)
 
 ;; Terminal emulator
 (use-package vterm
   :ensure t
-  :defer 2
+  :defer 1
 )
 
 
@@ -486,13 +516,13 @@
 (set-cursor-color "blue")
 
 ;; full path in title bar and in mode line
-(setq-default frame-title-format "%b (%f)")
+;; (setq-default frame-title-format "%b (%f)")
 
-(setq-default mode-line-format
-   (quote
-    ("%f     " mode-line-position
-     (vc-mode vc-mode)
-     "  " mode-line-modes mode-line-misc-info mode-line-end-spaces)))
+;; (setq-default mode-line-format
+;;    (quote
+;;     ("%f     " mode-line-position
+;;      (vc-mode vc-mode)
+;;      "  " mode-line-modes mode-line-misc-info mode-line-end-spaces)))
 
 ;; Turn off the tool bar
 (tool-bar-mode -1)
