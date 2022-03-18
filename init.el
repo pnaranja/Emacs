@@ -683,6 +683,15 @@
 (global-set-key  (kbd "C-c y") 'copy-to-register )
 (global-set-key  (kbd "C-c p") 'insert-register )
 
+
+;; Easily create scratch buffers
+(defun generate-scratch-buffer ()
+    "Create and switch to a temporary scratch buffer with a random
+       name."
+    (interactive)
+    (switch-to-buffer (generate-new-buffer-name "scratchbuffer")))
+(global-set-key  (kbd "C-c b") 'generate-scratch-buffer )
+
 ;; Check startup time
 (defun efs/display-startup-time ()
   (message

@@ -2,7 +2,12 @@
 ;;; This format is meant to be slightly human-readable;
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
-(("chegg-web"
+(("study-next-web"
+ (filename . "~/chegg/study-next-web/")
+ (front-context-string . "..\n  -rw-r--r--@")
+ (rear-context-string . "96 Mar  2 17:43 ")
+ (position . 151))
+("chegg-web"
  (filename . "~/chegg/chegg-web/")
  (front-context-string . "..\n  -rw-r--r-- ")
  (rear-context-string . "12 Jan 18 10:03 ")
@@ -93,10 +98,10 @@
  (rear-context-string . "+Test+Reports]]\n")
  (position . 1265))
 ("org-capture-last-stored"
- (filename . "~/journal/org-roam/20220102202604-magandang_balita_biblia.org")
- (front-context-string . "\nA Tagalog Bible")
- (rear-context-string . "g Balita Biblia\n")
- (position . 101))
+ (filename . "~/journal/org-roam/20220213110858-directv.org")
+ (front-context-string . "\n[[id:64DC97C9-C")
+ (rear-context-string . "+title: Directv\n")
+ (position . 85))
 ("verb_examples.org"
  (filename . "~/REST_files/verb_examples.org")
  (front-context-string . "* Quick Start fo")
