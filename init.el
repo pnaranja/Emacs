@@ -363,7 +363,9 @@
   :ensure t
   :defer 1
   :config
+  (global-unset-key (kbd "C-c M-g"))
   (global-set-key (kbd "C-c g") 'magit-file-dispatch)
+  (global-set-key (kbd "C-c F") 'magit-pull)
   (global-set-key (kbd "C-x g") 'magit)
   ;; From https://scripter.co/narrowing-the-author-column-in-magit/
   (setq magit-log-margin '(t "%Y-%m-%d %H:%M" magit-log-margin-width :author 18))
@@ -689,7 +691,9 @@
     "Create and switch to a temporary scratch buffer with a random
        name."
     (interactive)
-    (switch-to-buffer (generate-new-buffer-name "scratchbuffer")))
+    (switch-to-buffer (generate-new-buffer-name "scratchbuffer"))
+    (json-mode)
+)
 (global-set-key  (kbd "C-c b") 'generate-scratch-buffer )
 
 ;; Check startup time
