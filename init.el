@@ -43,9 +43,16 @@
   (setq doom-modeline-bar-width 8)
   (setq doom-modeline-window-width-limit 3)
   (setq doom-modeline-lsp t)
-
-
 )
+
+(use-package projectile
+  :ensure t
+  :init
+  (projectile-mode +1)
+  :bind (:map projectile-mode-map
+              ("C-c p" . projectile-command-map)
+	      ("C-c f" . #'projectile-find-file)
+))
 
 
 ;; Company Packages
@@ -119,6 +126,7 @@
   :config
   ;; Replace M-x (execute-extended-command)
   (global-set-key (kbd "M-x") #'counsel-M-x)
+  (global-set-key (kbd "C-x C-f") 'counsel-find-file)
   (setq counsel-grep-base-command
 	"rg -i -M 120 --no-heading --line-number --color never %s %s")
   (setq counsel-describe-function-function #'helpful-callable)
@@ -504,8 +512,6 @@
 ;; Always turn on line wrap from screen
 (global-visual-line-mode 1)
 
-(global-set-key (kbd "C-c f") #'project-find-file)
-
 ;; https://www.murilopereira.com/how-to-open-a-file-in-emacs/
 ;; Might make find file faster?
 (remove-hook 'file-name-at-point-functions 'ffap-guess-file-name-at-point)
@@ -726,3 +732,5 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+(put 'downcase-region 'disabled nil)
+(put 'upcase-region 'disabled nil)
