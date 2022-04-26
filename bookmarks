@@ -18,7 +18,7 @@
  (rear-context-string . "48 Jan  7 17:04 ")
  (position . 164))
 ("gce-playground"
- (filename . "~/chegg/gne/gce-playground/")
+ (filename . "~/chegg/gce-playground/")
  (front-context-string . "..\n  -rw-r--r-- ")
  (rear-context-string . "20 Dec  1 11:14 ")
  (position . 198))
