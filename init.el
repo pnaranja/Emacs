@@ -194,7 +194,7 @@
   (global-set-key (kbd "C-c n b") 'org-roam-buffer-display-dedicated) 
   (global-set-key (kbd "C-c n g") 'org-roam-graph) 
   (setq org-roam-directory "~/journal/org-roam") 
-  (org-roam-db-autosync-mode)
+  (org-roam-db-autosync-mode) 
   (add-to-list 'display-buffer-alist '("\\*org-roam\\*" (display-buffer-in-direction) 
 				       (direction . right) 
 				       (window-width . 0.33) 
@@ -205,7 +205,7 @@
   (global-set-key (kbd "C-c a") 'org-agenda)
 
   ;;file to save todo items
-  (setq org-agenda-files '("~/.notes"))
+  (setq org-agenda-files '("~/.notes")) 
   (setq org-agenda-window-setup (quote current-window))
   ;;capture todo items using C-c c t
   (global-set-key (kbd "C-c c") 'org-capture) 
@@ -258,7 +258,7 @@
   ;; LSP settings
   (setq lsp-headerline-breadcrumb-enable 1) 
   (setq read-process-output-max (* 1024 1024)) 
-  (setq lsp-rust-server 'rust-analyzer)
+  (setq lsp-rust-server 'rust-analyzer) 
   (add-hook 'c-mode-hook #'lsp) 
   (add-hook 'c++-mode-hook #'lsp) 
   (add-hook 'js-mode-hook #'lsp) 
@@ -283,7 +283,7 @@
 	    (company-mode +1))
 
   ;; aligns annotation to the right hand side
-  (setq company-tooltip-align-annotations t)
+  (setq company-tooltip-align-annotations t) 
   (add-hook 'typescript-mode-hook #'setup-tide-mode))
 
 (use-package 
@@ -292,8 +292,7 @@
   :config (add-to-list 'auto-mode-alist '("\\.tsx\\'" . web-mode)) 
   (add-hook 'web-mode-hook (lambda () 
 			     (when (string-equal "tsx" (file-name-extension buffer-file-name)) 
-			       (setup-tide-mode))))
-)
+			       (setup-tide-mode)))))
 
 
 (use-package 
@@ -333,11 +332,10 @@
   lsp-ui 
   :requires lsp-mode 
   flycheck 
-  :config
-  (setq lsp-ui-doc-enable t lsp-ui-doc-use-childframe t lsp-ui-doc-position 'top
-	lsp-ui-doc-include-signature t lsp-ui-sideline-enable nil lsp-ui-flycheck-enable t
-	lsp-ui-flycheck-list-position 'right lsp-ui-flycheck-live-reporting t lsp-ui-peek-enable t
-	lsp-ui-peek-list-width 60 lsp-ui-peek-peek-height 25)
+  :config (setq lsp-ui-doc-enable t lsp-ui-doc-use-childframe t lsp-ui-doc-position 'top
+		lsp-ui-doc-include-signature t lsp-ui-sideline-enable nil lsp-ui-flycheck-enable t
+		lsp-ui-flycheck-list-position 'right lsp-ui-flycheck-live-reporting t
+		lsp-ui-peek-enable t lsp-ui-peek-list-width 60 lsp-ui-peek-peek-height 25) 
   (add-hook 'lsp-mode-hook 'lsp-ui-mode))
 
 
@@ -348,8 +346,7 @@
   :defer 1 
   :init (elpy-enable) 
   :config (add-to-list 'process-coding-system-alist '("python" . (utf-8 . utf-8))) 
-  (setq elpy-rpc-python-command "python3")
-)
+  (setq elpy-rpc-python-command "python3"))
 
 (use-package 
   py-autopep8 
@@ -373,11 +370,13 @@
 (use-package 
   avy 
   :ensure t 
-  :init (global-set-key (kbd "C-j") 'avy-goto-char-timer)
+  :init (global-set-key (kbd "C-j") 'avy-goto-char-timer) 
   (defun change-cycle-agenda-files-key () 
     (local-set-key (kbd "C-j") 'avy-goto-char-timer) 
     (local-unset-key (kbd "C-'")) 
     (local-set-key (kbd "C-'") 'org-agenda))
+
+  ;;https://gist.github.com/karthink/af013ffd77fe09e67360f040b57b4c7b
   (defun avy-show-dispatch-help () 
     (let* ((len (length "avy-action-")) 
 	   (fw (frame-width)) 
@@ -393,7 +392,7 @@
 									      display-strings) 
 	       (when (= (mod N per-row) 0) 
 		 (push "\n" display-strings))) 
-      (message "%s" (apply #'concat (nreverse display-strings)))))
+      (message "%s" (apply #'concat (nreverse display-strings))))) 
   (defun avy-action-copy-whole-line (pt) 
     (save-excursion (goto-char pt) 
 		    (cl-destructuring-bind (start . end) 
@@ -402,12 +401,18 @@
     (select-window (cdr (ring-ref avy-ring 0)))
     t)
 
+  (defun avy-action-kill-whole-line (pt) 
+    (save-excursion (goto-char pt) 
+		    (kill-whole-line)) 
+    (select-window (cdr (ring-ref avy-ring 0)))
+    t)
   :config (add-hook 'org-mode-hook 'change-cycle-agenda-files-key) 
   (add-hook 'v-mode-hook 'change-cycle-agenda-files-key)
 
   ;; Add option to copy whole line
-  (setf (alist-get ?N avy-dispatch-alist) 'avy-action-copy-whole-line)
-)
+  (setf (alist-get ?N avy-dispatch-alist) 'avy-action-copy-whole-line (alist-get ?K
+										 avy-dispatch-alist)
+	'avy-action-kill-whole-line))
 
 ;; Access files in a docker container
 (use-package 
