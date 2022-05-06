@@ -32,8 +32,9 @@
   super-save 
   :ensure t 
   :config (super-save-mode +1) 
-  (setq super-save-idle-duration .75) 
+  (setq super-save-idle-duration .75)
   (setq super-save-auto-save-when-idle t) 
+  (setq super-save-max-buffer-size 9999999999999999999999)
   (setq auto-save-default nil))
 
 (use-package 
