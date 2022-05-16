@@ -3,8 +3,6 @@
 (defvar last-file-name-handler-alist file-name-handler-alist)
 (setq gc-cons-threshold 402653184 gc-cons-percentage 0.6 file-name-handler-alist nil)
 
-(require 'package)
-
 ;; From Melpa
 (let* ((no-ssl (and (memq system-type '(windows-nt ms-dos)) 
 		    (not (gnutls-available-p)))) 
@@ -22,6 +20,16 @@
 (eval-and-compile 
   (setq use-package-expand-minimally t))
 
+(use-package esup
+  :ensure t
+  ;; To use MELPA Stable use ":pin melpa-stable",
+  :pin melpa
+  :config
+  ;; Work around a bug where esup tries to step into the byte-compiled
+  ;; version of `cl-lib', and fails horribly.
+  (setq esup-depth 0)
+)
+
 (use-package 
   elisp-format 
   :ensure t 
@@ -31,10 +39,11 @@
 (use-package 
   super-save 
   :ensure t 
-  :config (super-save-mode +1) 
+  :config 
   (setq super-save-idle-duration .75)
   (setq super-save-auto-save-when-idle t) 
-  (setq super-save-max-buffer-size 9999999999999999999999)
+  (setq super-save-max-buffer-size 9999999999999999)
+  (super-save-mode +1) 
   (setq auto-save-default nil))
 
 (use-package 
@@ -62,12 +71,12 @@
   :ensure t)
 (use-package 
   company-jedi 
-  :defer 1 
+  :defer t 
   :ensure t)
 (use-package 
   company-quickhelp 
   :ensure t 
-  :defer 1 
+  :defer t 
   :hook (after-init-hook . global-company-mode) 
   :config (define-key company-active-map (kbd "C-c h") #'company-quickhelp-manual-begin) 
   (company-quickhelp-mode))
@@ -84,14 +93,14 @@
 (use-package 
   which-key 
   :ensure t 
-  :defer 1 
+  :defer t 
   :config (which-key-mode))
 
 ;; Dim other windows
 (use-package 
   dimmer 
   :ensure t 
-  :defer 1 
+  :defer t 
   :config (dimmer-configure-which-key) 
   (dimmer-mode t) 
   (setq dimmer-fraction 0.4))
@@ -108,7 +117,7 @@
 (use-package 
   ivy-rich 
   :ensure t 
-  :defer 1 
+  :defer t 
   :config (ivy-rich-mode 1) 
   (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line))
 
@@ -122,7 +131,7 @@
 (use-package 
   counsel 
   :ensure t 
-  :defer 1 
+  :defer t 
   :config
   ;; Replace M-x (execute-extended-command)
   (global-set-key (kbd "M-x") #'counsel-M-x) 
@@ -135,7 +144,7 @@
 (use-package 
   flycheck 
   :ensure t 
-  :defer 1 
+  :defer t 
   :config (add-hook 'after-init-hook 'flycheck-mode)
 
   ;; Always turn on flyspell in org mode
@@ -147,18 +156,18 @@
 ;; Activate pos-tip
 (use-package 
   pos-tip 
-  :defer 1)
+  :defer t)
 
 ;; Copy or Delete a whole line on cursor
 (use-package 
   whole-line-or-region 
   :ensure t 
-  :defer 1)
+  :defer t)
 
 (use-package 
   org-journal 
   :ensure t 
-  :defer 1 
+  :defer t 
   :config (setq org-journal-dir "~/journal/emacs_journal") 
   (setq org-journal-date-format "%A, %d %B %Y") 
   (setq org-journal-file-format "%Y-%m-%d.org"))
@@ -173,7 +182,7 @@
 (use-package 
   v-mode 
   :ensure t 
-  :defer 1 
+  :defer t 
   :init
   ;; Remove verilog mode since it's covers *.v files which I now want to refer to Vlang
   (defun replace-alist-mode (alist oldmode newmode) 
@@ -187,7 +196,7 @@
 (use-package 
   org-roam 
   :ensure t 
-  :defer 1 
+  :defer t 
   :init (setq org-roam-v2-ack t) 
   :config (global-set-key (kbd "C-c n l") 'org-roam-capture) 
   (global-set-key (kbd "C-c n f") 'org-roam-node-find) 
@@ -248,7 +257,7 @@
 (use-package 
   lsp-mode 
   :ensure t 
-  :defer 1 
+  :defer t 
   :config
   ;; LSP shortcuts
   (global-unset-key (kbd "C-c l")) 
@@ -269,7 +278,7 @@
 
 (use-package 
   tide 
-  :defer 1 
+  :defer t 
   :ensure t 
   :config (defun setup-tide-mode () 
 	    (interactive) 
@@ -298,7 +307,7 @@
 
 (use-package 
   js2-mode 
-  :defer 1 
+  :defer t 
   :ensure t 
   :config
   ;; Use js2-mode for JS files
@@ -306,27 +315,27 @@
 
 (use-package 
   typescript-mode 
-  :defer 1 
+  :defer t 
   :ensure t)
 (use-package 
   yaml-mode 
-  :defer 1 
+  :defer t 
   :ensure t)
 (use-package 
   dockerfile-mode 
-  :defer 1 
+  :defer t 
   :ensure t)
 (use-package 
   groovy-mode 
-  :defer 1 
+  :defer t 
   :ensure t)
 (use-package 
   json-mode 
-  :defer 1 
+  :defer t 
   :ensure t)
 (use-package 
   rustic 
-  :defer 1 
+  :defer t 
   :ensure t)
 
 (use-package 
@@ -344,7 +353,7 @@
 (use-package 
   elpy 
   :ensure t 
-  :defer 1 
+  :defer t 
   :init (elpy-enable) 
   :config (add-to-list 'process-coding-system-alist '("python" . (utf-8 . utf-8))) 
   (setq elpy-rpc-python-command "python3"))
@@ -352,13 +361,13 @@
 (use-package 
   py-autopep8 
   :ensure t 
-  :defer 1 
+  :defer t 
   :hook (elpy-mode-hook . py-autopep8-enable-on-save))
 
 (use-package 
   magit 
   :ensure t 
-  :defer 1 
+  :defer t 
   :config (global-unset-key (kbd "C-c M-g")) 
   (global-set-key (kbd "C-c g") 'magit-file-dispatch) 
   (global-set-key (kbd "C-c F") 'magit-pull) 
@@ -419,12 +428,12 @@
 (use-package 
   docker-tramp 
   :ensure t 
-  :defer 1)
+  :defer t)
 
 (use-package 
   deadgrep 
   :ensure t 
-  :defer 1 
+  :defer t 
   :config (global-set-key (kbd "C-c s") #'deadgrep))
 
 ;; Verb - For sending HTTP Requests
@@ -439,14 +448,14 @@
 ;; Get env vars from shell
 (use-package 
   exec-path-from-shell 
-  :defer 1 
+  :defer t 
   :ensure t)
 
 
 ;; Use fd for dired
 (use-package 
   fd-dired 
-  :defer 1 
+  :defer t 
   :ensure t)
 
 
@@ -454,7 +463,7 @@
 (use-package 
   helpful 
   :ensure t 
-  :defer 1 
+  :defer t 
   :config (global-set-key (kbd "C-h f") #'helpful-callable) 
   (global-set-key (kbd "C-h v") #'helpful-variable) 
   (global-set-key (kbd "C-h k") #'helpful-key) 
@@ -465,13 +474,13 @@
 ;; http://www.emacswiki.org/emacs/Smex
 (use-package 
   amx 
-  :defer 1 
+  :defer t 
   :ensure t)
 
 (use-package 
   vc-msg 
   :ensure t 
-  :defer 1 
+  :defer t 
   :init (defun vc-msg-hook-setup (vcs-type commit-info)
 	  ;; copy commit id to clipboard
 	  (message (format "%s\n%s\n%s\n%s" (plist-get commit-info 
@@ -489,17 +498,17 @@
 (use-package 
   move-text 
   :ensure t 
-  :defer 1 
+  :defer t 
   :config (move-text-default-bindings))
 
 (use-package 
   color-theme-sanityinc-tomorrow 
-  :defer 1 
+  :defer t 
   :ensure t)
 
 (use-package 
   restart-emacs 
-  :defer 1 
+  :defer t 
   :ensure t)
 
 
@@ -507,7 +516,7 @@
 (use-package 
   vterm 
   :ensure t 
-  :defer 1)
+  :defer t)
 
 
 ;; Add to Path
@@ -773,19 +782,9 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(package-selected-packages '(dired-x yaml-mode whole-line-or-region which-key vterm verb vc-msg
-				       v-mode use-package tide super-save smex rustic rg
-				       restart-emacs real-auto-save py-autopep8 projectile org-roam
-				       org-journal olivetti nim-mode move-text magit lsp-ui
-				       lsp-python-ms lsp-pyright linum-relative json-mode js2-mode
-				       ivy-rich ido-completing-read+ helpful groovy-mode
-				       find-file-in-project fd-dired exec-path-from-shell esup
-				       emacsql-sqlite3 elpy dot-mode dockerfile-mode docker-tramp
-				       dimmer deadgrep dash-functional counsel company-quickhelp
-				       company-lsp company-jedi color-theme-sanityinc-tomorrow avy
-				       async amx)) 
- '(warning-suppress-types '((comp) 
-			    (comp))))
+ '(package-selected-packages
+   '(dired-x yaml-mode whole-line-or-region which-key vterm verb vc-msg v-mode use-package tide super-save smex rustic rg restart-emacs real-auto-save py-autopep8 projectile org-roam org-journal olivetti nim-mode move-text magit lsp-ui lsp-python-ms lsp-pyright linum-relative json-mode js2-mode ivy-rich ido-completing-read+ helpful groovy-mode find-file-in-project fd-dired exec-path-from-shell esup emacsql-sqlite3 elpy dot-mode dockerfile-mode docker-tramp dimmer deadgrep dash-functional counsel company-quickhelp company-lsp company-jedi color-theme-sanityinc-tomorrow avy async amx))
+ '(warning-suppress-types '((comp) (comp))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
