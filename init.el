@@ -3,6 +3,9 @@
 (defvar last-file-name-handler-alist file-name-handler-alist)
 (setq gc-cons-threshold 402653184 gc-cons-percentage 0.6 file-name-handler-alist nil)
 
+(eval-when-compile
+  (require 'use-package))
+
 ;; From Melpa
 (let* ((no-ssl (and (memq system-type '(windows-nt ms-dos)) 
 		    (not (gnutls-available-p)))) 
@@ -49,7 +52,6 @@
 (use-package 
   doom-modeline 
   :ensure t 
-  :defer t 
   :hook (after-init . doom-modeline-mode) 
   :config (setq doom-modeline-height 15) 
   (setq doom-modeline-bar-width 8) 
@@ -71,12 +73,11 @@
   :ensure t)
 (use-package 
   company-jedi 
-  :defer t 
+  :commands company-jedi
   :ensure t)
 (use-package 
   company-quickhelp 
   :ensure t 
-  :defer t 
   :hook (after-init-hook . global-company-mode) 
   :config (define-key company-active-map (kbd "C-c h") #'company-quickhelp-manual-begin) 
   (company-quickhelp-mode))
@@ -93,14 +94,12 @@
 (use-package 
   which-key 
   :ensure t 
-  :defer t 
   :config (which-key-mode))
 
 ;; Dim other windows
 (use-package 
   dimmer 
   :ensure t 
-  :defer t 
   :config (dimmer-configure-which-key) 
   (dimmer-mode t) 
   (setq dimmer-fraction 0.4))
@@ -117,7 +116,6 @@
 (use-package 
   ivy-rich 
   :ensure t 
-  :defer t 
   :config (ivy-rich-mode 1) 
   (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line))
 
@@ -131,7 +129,6 @@
 (use-package 
   counsel 
   :ensure t 
-  :defer t 
   :config
   ;; Replace M-x (execute-extended-command)
   (global-set-key (kbd "M-x") #'counsel-M-x) 
@@ -144,7 +141,7 @@
 (use-package 
   flycheck 
   :ensure t 
-  :defer t 
+  :commands flycheck
   :config (add-hook 'after-init-hook 'flycheck-mode)
 
   ;; Always turn on flyspell in org mode
@@ -156,18 +153,18 @@
 ;; Activate pos-tip
 (use-package 
   pos-tip 
-  :defer t)
+  )
 
 ;; Copy or Delete a whole line on cursor
 (use-package 
   whole-line-or-region 
   :ensure t 
-  :defer t)
+  )
 
 (use-package 
   org-journal 
   :ensure t 
-  :defer t 
+  :commands org-journal
   :config (setq org-journal-dir "~/journal/emacs_journal") 
   (setq org-journal-date-format "%A, %d %B %Y") 
   (setq org-journal-file-format "%Y-%m-%d.org"))
@@ -182,8 +179,8 @@
 (use-package 
   v-mode 
   :ensure t 
-  :defer t 
-  :init
+  :commands v-mode
+  :config
   ;; Remove verilog mode since it's covers *.v files which I now want to refer to Vlang
   (defun replace-alist-mode (alist oldmode newmode) 
     (dolist (aitem alist) 
@@ -196,9 +193,10 @@
 (use-package 
   org-roam 
   :ensure t 
-  :defer t 
-  :init (setq org-roam-v2-ack t) 
-  :config (global-set-key (kbd "C-c n l") 'org-roam-capture) 
+  :commands org-roam
+  :config 
+  (setq org-roam-v2-ack t) 
+  (global-set-key (kbd "C-c n l") 'org-roam-capture) 
   (global-set-key (kbd "C-c n f") 'org-roam-node-find) 
   (global-set-key (kbd "C-c n i") 'org-roam-node-insert) 
   (global-set-key (kbd "C-c n b") 'org-roam-buffer-display-dedicated) 
@@ -250,6 +248,7 @@
 (use-package 
   nim-mode 
   :ensure t 
+  :commands nim-mode
   :hook (nim-mode . rainbow-delimiters-mode) 
   (nim-mode . subword-mode) 
   (nim-mode . nimsuggest-mode))
@@ -257,7 +256,7 @@
 (use-package 
   lsp-mode 
   :ensure t 
-  :defer t 
+  :commands lsp-mode
   :config
   ;; LSP shortcuts
   (global-unset-key (kbd "C-c l")) 
@@ -278,8 +277,8 @@
 
 (use-package 
   tide 
-  :defer t 
   :ensure t 
+  :commands tide
   :config (defun setup-tide-mode () 
 	    (interactive) 
 	    (tide-setup) 
@@ -299,6 +298,7 @@
 (use-package 
   web-mode 
   :ensure t 
+  :commands web-mode
   :config (add-to-list 'auto-mode-alist '("\\.tsx\\'" . web-mode)) 
   (add-hook 'web-mode-hook (lambda () 
 			     (when (string-equal "tsx" (file-name-extension buffer-file-name)) 
@@ -307,35 +307,35 @@
 
 (use-package 
   js2-mode 
-  :defer t 
   :ensure t 
+  :commands js2-mode
   :config
   ;; Use js2-mode for JS files
   (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode)))
 
 (use-package 
   typescript-mode 
-  :defer t 
+  :commands typescript-mode
   :ensure t)
 (use-package 
   yaml-mode 
-  :defer t 
+  :commands yaml-mode
   :ensure t)
 (use-package 
   dockerfile-mode 
-  :defer t 
+  :commands dockerfile-mode
   :ensure t)
 (use-package 
   groovy-mode 
-  :defer t 
+  :commands groovy-mode
   :ensure t)
 (use-package 
   json-mode 
-  :defer t 
+  :commands json-mode
   :ensure t)
 (use-package 
   rustic 
-  :defer t 
+  :commands rustic
   :ensure t)
 
 (use-package 
@@ -353,7 +353,7 @@
 (use-package 
   elpy 
   :ensure t 
-  :defer t 
+  :commands elpy
   :init (elpy-enable) 
   :config (add-to-list 'process-coding-system-alist '("python" . (utf-8 . utf-8))) 
   (setq elpy-rpc-python-command "python3"))
@@ -361,13 +361,13 @@
 (use-package 
   py-autopep8 
   :ensure t 
-  :defer t 
+  :commands py-autopep8
   :hook (elpy-mode-hook . py-autopep8-enable-on-save))
 
 (use-package 
   magit 
   :ensure t 
-  :defer t 
+  :commands magit
   :config (global-unset-key (kbd "C-c M-g")) 
   (global-set-key (kbd "C-c g") 'magit-file-dispatch) 
   (global-set-key (kbd "C-c F") 'magit-pull) 
@@ -428,17 +428,19 @@
 (use-package 
   docker-tramp 
   :ensure t 
-  :defer t)
+  :commands docker-tramp
+  )
 
 (use-package 
   deadgrep 
-  :ensure t 
-  :defer t 
+  :ensure t
+  :commands deadgrep
   :config (global-set-key (kbd "C-c s") #'deadgrep))
 
 ;; Verb - For sending HTTP Requests
 (use-package 
   verb 
+  :commands verb
   :ensure t)
 (use-package 
   org 
@@ -448,14 +450,14 @@
 ;; Get env vars from shell
 (use-package 
   exec-path-from-shell 
-  :defer t 
+  :commands exec-path-from-shell
   :ensure t)
 
 
 ;; Use fd for dired
 (use-package 
   fd-dired 
-  :defer t 
+  :commands fd-dired
   :ensure t)
 
 
@@ -463,7 +465,7 @@
 (use-package 
   helpful 
   :ensure t 
-  :defer t 
+  :commands helpful
   :config (global-set-key (kbd "C-h f") #'helpful-callable) 
   (global-set-key (kbd "C-h v") #'helpful-variable) 
   (global-set-key (kbd "C-h k") #'helpful-key) 
@@ -474,13 +476,11 @@
 ;; http://www.emacswiki.org/emacs/Smex
 (use-package 
   amx 
-  :defer t 
   :ensure t)
 
 (use-package 
   vc-msg 
   :ensure t 
-  :defer t 
   :init (defun vc-msg-hook-setup (vcs-type commit-info)
 	  ;; copy commit id to clipboard
 	  (message (format "%s\n%s\n%s\n%s" (plist-get commit-info 
@@ -498,17 +498,14 @@
 (use-package 
   move-text 
   :ensure t 
-  :defer t 
   :config (move-text-default-bindings))
 
 (use-package 
   color-theme-sanityinc-tomorrow 
-  :defer t 
   :ensure t)
 
 (use-package 
   restart-emacs 
-  :defer t 
   :ensure t)
 
 
@@ -516,7 +513,8 @@
 (use-package 
   vterm 
   :ensure t 
-  :defer t)
+  :commands vterm
+  )
 
 
 ;; Add to Path
