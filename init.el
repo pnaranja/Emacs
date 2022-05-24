@@ -193,7 +193,6 @@
 (use-package 
   org-roam 
   :ensure t 
-  :commands org-roam
   :config 
   (setq org-roam-v2-ack t) 
   (global-set-key (kbd "C-c n l") 'org-roam-capture) 
@@ -208,9 +207,9 @@
 				       (window-width . 0.33) 
 				       (window-height . fit-window-to-buffer)))
 
-  ;; Org Capture and Agenda settings - http://pragmaticemacs.com/emacs/org-mode-basics-vi-a-simple-todo-list/
-  ;; set key for agenda
-  (global-set-key (kbd "C-c a") 'org-agenda)
+   ;; Org Capture and Agenda settings - http://pragmaticemacs.com/emacs/org-mode-basics-vi-a-simple-todo-list/
+   ;; set key for agenda
+   (global-set-key (kbd "C-'") 'org-agenda)
 
   ;;file to save todo items
   (setq org-agenda-files '("~/.notes")) 
@@ -219,9 +218,6 @@
   (global-set-key (kbd "C-c c") 'org-capture) 
   (setq org-capture-templates '(("t" "todo" entry (file+headline "~/.notes/todo.org" "Tasks")
 				 "* TODO [#A] %?")))
-
-  ;; Replace keys for cycle-agenda-files to org-agenda since I care more for that
-  (global-set-key (kbd "C-'") 'org-agenda)
 
   ;; Org mode settings
   (setq org-startup-indented t org-hide-leading-stars t org-hide-emphasis-markers t
@@ -434,7 +430,6 @@
 (use-package 
   deadgrep 
   :ensure t
-  :commands deadgrep
   :config (global-set-key (kbd "C-c s") #'deadgrep))
 
 ;; Verb - For sending HTTP Requests
@@ -751,6 +746,7 @@
 ;; Shortcuts for registers
 (global-set-key  (kbd "C-c y") 'copy-to-register )
 (global-set-key  (kbd "C-c p") 'insert-register )
+
 
 
 ;; Easily create scratch buffers
