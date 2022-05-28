@@ -63,7 +63,7 @@
  (rear-context-string . "96 Oct 29 01:14 ")
  (position . 258))
 ("growth-enablement-robot-tests"
- (filename . "~/chegg/gne/growth-enablement-robot-tests/")
+ (filename . "~/chegg/growth-enablement-robot-tests/")
  (front-context-string . ".git\n  -rw-r--r-")
  (rear-context-string . "12 Jan 28 09:50 ")
  (position . 265))

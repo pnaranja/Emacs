@@ -47,7 +47,42 @@
   (setq super-save-auto-save-when-idle t) 
   (setq super-save-max-buffer-size 9999999999999999)
   (super-save-mode +1) 
-  (setq auto-save-default nil))
+  (setq auto-save-default nil)
+
+  ;; https://batsov.com/articles/2012/03/08/emacs-tip-number-5-save-buffers-automatically-on-buffer-or-window-switch/
+  ;; automatically save buffers associated with files on buffer switch
+  ;; and on windows switch
+  (defadvice switch-to-buffer (before save-buffer-now activate) 
+    (when buffer-file-name (save-buffer)))
+  (defadvice other-window (before other-window-now activate) 
+    (when buffer-file-name (save-buffer)))
+  (defadvice windmove-up (before other-window-now activate) 
+    (when buffer-file-name (save-buffer)))
+  (defadvice windmove-down (before other-window-now activate) 
+    (when buffer-file-name (save-buffer)))
+  (defadvice windmove-left (before other-window-now activate) 
+    (when buffer-file-name (save-buffer)))
+  (defadvice windmove-right (before other-window-now activate) 
+    (when buffer-file-name (save-buffer)))
+  
+  
+  ;; create the autosave dir if necessary, since emacs won't.
+  (make-directory "~/emacs/autosaves/" t)
+  
+  ;; Put autosave files (ie #foo#) and backup files (ie foo~) in ~/.emacs.d/.
+  (setq-default backup-directory-alist (quote ((".*" . "~/emacs/backups/"))))
+  
+  ;; Easily create scratch buffers
+  (defun generate-scratch-buffer () 
+    "Create and switch to a temporary scratch buffer with a random
+         name." 
+    (interactive) 
+    (switch-to-buffer (generate-new-buffer-name "scratchbuffer")) 
+    (json-mode))
+  (global-set-key  (kbd "C-c b") 'generate-scratch-buffer )
+  
+
+)
 
 (use-package 
   doom-modeline 
@@ -64,7 +99,12 @@
   :init (projectile-mode +1) 
   :bind (:map projectile-mode-map
 	      ("C-c p" . projectile-command-map) 
-	      ("C-c f" . #'projectile-find-file)))
+	      ("C-c f" . #'projectile-find-file))
+  :config
+  ;; Enable fd with find-file-in-project
+  (setq ffip-use-rust-fd t)
+
+)
 
 
 ;; Company Packages
@@ -135,7 +175,18 @@
   (global-set-key (kbd "C-x C-f") 'counsel-find-file) 
   (setq counsel-grep-base-command "rg -i -M 120 --no-heading --line-number --color never %s %s") 
   (setq counsel-describe-function-function #'helpful-callable) 
-  (setq counsel-describe-variable-function #'helpful-variable))
+  (setq counsel-describe-variable-function #'helpful-variable)
+
+  ;; Display relative line numbers
+  (global-display-line-numbers-mode)
+  (setq display-line-numbers-type 'visual)
+  (setq display-line-numbers-width 0)
+
+  ;; https://www.murilopereira.com/how-to-open-a-file-in-emacs/
+  ;; Might make find file faster?
+  (remove-hook 'file-name-at-point-functions 'ffap-guess-file-name-at-point)
+
+)
 
 
 (use-package 
@@ -159,7 +210,11 @@
 (use-package 
   whole-line-or-region 
   :ensure t 
-  )
+  :config
+  ;; Set key for comment-or-uncomment-region
+  (global-set-key (kbd "M-/") #'comment-or-uncomment-region)
+
+)
 
 (use-package 
   org-journal 
@@ -221,7 +276,28 @@
 
   ;; Org mode settings
   (setq org-startup-indented t org-hide-leading-stars t org-hide-emphasis-markers t
-	org-odd-levels-only t))
+	org-odd-levels-only t)
+
+  ;; Calendar shortcut
+  (global-set-key (kbd "C-x c") 'calendar)
+  
+  					; Allow to resize images
+  (setq org-image-actual-width nil)
+  
+  (defun replace_underscores_with_spaces () 
+    "Replace those 'underscores' from gmail to spaces" 
+    (interactive) 
+    (while (search-forward " " nil t) 
+      (replace-match " " nil t)))
+  
+  (global-set-key (kbd "C-c r") 'replace_underscores_with_spaces)
+
+  ;; Cycle through ordered lists
+  (global-set-key (kbd "C-c l") 'org-cycle-list-bullet)
+  
+  (setq org-hide-block-startup t)
+  
+)
 
 
 ;; https://zzamboni.org/post/how-to-insert-screenshots-in-org-documents-on-macos/
@@ -237,7 +313,12 @@
   (org-image-actual-width 300) 
   (org-download-screenshot-method "/usr/local/bin/pngpaste %s") 
   :bind ("C-M-y" . org-download-screenshot) 
-  :config (require 'org-download))
+  :config 
+  (require 'org-download)
+
+  ;; Pasting text should still word wrap
+  (setq term-suppress-hard-newline t)
+)
 
 
 
@@ -418,7 +499,37 @@
   ;; Add option to copy whole line
   (setf (alist-get ?N avy-dispatch-alist) 'avy-action-copy-whole-line (alist-get ?K
 										 avy-dispatch-alist)
-	'avy-action-kill-whole-line))
+	'avy-action-kill-whole-line)
+
+  ;; Scrolling in place (M-n and M-p)
+  ;; Has a parameter to pass if you want scroll >1 lines (C-u <number>)
+  (defun scroll-down-in-place (n) 
+    (interactive "p") 
+    (previous-line n) 
+    (unless (eq (window-start) 
+  	      (point-min)) 
+      (scroll-down n)))
+  
+  ;; Scrolling in place (M-n and M-p)
+  ;; Has a parameter to pass if you want scroll >1 lines (C-u <number>)
+  (defun scroll-up-in-place (n) 
+    (interactive "p") 
+    (next-line n) 
+    (unless (eq (window-end) 
+  	      (point-max)) 
+      (scroll-up n)))
+  
+  (global-set-key "\M-n" 'scroll-up-in-place)
+  (global-set-key "\M-p" 'scroll-down-in-place)
+
+  ;; Always turn on line wrap from screen
+  (global-visual-line-mode 1)
+  
+  ;; shortcut to zap up to char
+  (global-unset-key (kbd "M-z"))
+  (global-set-key (kbd "M-z") #'zap-up-to-char)
+  
+)
 
 ;; Access files in a docker container
 (use-package 
@@ -446,7 +557,22 @@
 (use-package 
   exec-path-from-shell 
   :commands exec-path-from-shell
-  :ensure t)
+  :ensure t
+  :config
+  ;; Add to Path
+  (setq exec-path (append exec-path '("/usr/local/bin")))
+
+  ;; On OS X, an Emacs instance started from the graphical user
+  ;; interface will have a different environment than a shell in a
+  ;; terminal window, because OS X does not run a shell during the
+  ;; login. Obviously this will lead to unexpected results when
+  ;; calling external utilities like make from Emacs.
+  ;; This library works around this problem by copying important
+  ;; environment variables from the user's shell.
+  ;; https://github.com/purcell/exec-path-from-shell
+  (when (memq window-system '(mac ns x)) 
+    (exec-path-from-shell-initialize))
+)
 
 
 ;; Use fd for dired
@@ -497,11 +623,78 @@
 
 (use-package 
   color-theme-sanityinc-tomorrow 
-  :ensure t)
+  :ensure t
+  :config
+  ;; Set color theme
+  (load-theme 'sanityinc-tomorrow-bright t)
+
+  ;; Cursor color
+  (set-cursor-color "blue")
+
+  ;; Set region color
+  (set-face-attribute 'region nil 
+  		    :background "yellow" 
+  		    :foreground "brown")
+
+  ;;https://explog.in/notes/writingsetup.html
+  (set-face-attribute 'default nil 
+  		    :family "Menlo" 
+  		    :height 200)
+  (set-face-attribute 'fixed-pitch nil 
+  		    :family "Menlo" 
+  		    :height 200)
+  (set-face-attribute 'variable-pitch nil 
+  		    :family "Menlo" 
+  		    :height 200)
+  (set-face-attribute 'line-number nil 
+  		    :family "Menlo" 
+  		    :height 200)
+  (set-face-attribute 'line-number-current-line nil 
+  		    :family "Menlo" 
+  		    :height 200)
+  
+  (add-hook 'text-mode-hook 'variable-pitch-mode)
+  
+  ;; Set Menlo font in the buffer
+  ;; https://stackoverflow.com/questions/20866169/change-the-font-of-current-buffer-in-emacs
+  (defun set-menlo-in-buffer () 
+    (interactive "sFont Family: ") 
+    (defface tmp-buffer-local-face '((t :family "Menlo")) 
+      "Temporary buffer-local face") 
+    (buffer-face-set 'tmp-buffer-local-face))
+  
+  ;; Menlo font for the calendar so it's misaligned
+  (add-hook 'calendar-mode-hook 'set-menlo-in-buffer)
+
+  ;;set colours for priorities
+  (setq org-priority-faces '((?A . 
+  			       (:foreground "#F0DFAF" 
+  					    :weight bold)) 
+  			   (?B . 
+  			       (:foreground "LightSteelBlue")) 
+  			   (?C . 
+  			       (:foreground "OliveDrab"))))
+    
+)
 
 (use-package 
   restart-emacs 
-  :ensure t)
+  :ensure t
+  :config
+  ;; Check startup time
+  (defun efs/display-startup-time () 
+    (message "Emacs loaded in %s with %d garbage collections." (format "%.2f seconds" (float-time
+  										     (time-subtract
+  										      after-init-time
+  										      before-init-time)))
+  	   gcs-done))
+  
+  (add-hook 'emacs-startup-hook 
+  	  (setq gc-cons-threshold 16777216 gc-cons-percentage 0.1 file-name-handler-alist
+  		last-file-name-handler-alist) 
+  	  (efs/display-startup-time))
+  
+)
 
 
 ;; Terminal emulator
@@ -512,54 +705,12 @@
   )
 
 
-;; Add to Path
-(setq exec-path (append exec-path '("/usr/local/bin")))
-
-
-;; On OS X, an Emacs instance started from the graphical user
-;; interface will have a different environment than a shell in a
-;; terminal window, because OS X does not run a shell during the
-;; login. Obviously this will lead to unexpected results when
-;; calling external utilities like make from Emacs.
-;; This library works around this problem by copying important
-;; environment variables from the user's shell.
-;; https://github.com/purcell/exec-path-from-shell
-(when (memq window-system '(mac ns x)) 
-  (exec-path-from-shell-initialize))
 
 ;; Enable Auto revert mode
 (global-auto-revert-mode 1)
 
-;; Display relative line numbers
-(global-display-line-numbers-mode)
-(setq display-line-numbers-type 'visual)
-(setq display-line-numbers-width 0)
-
-;; Set key for comment-or-uncomment-region
-(global-set-key (kbd "M-/") #'comment-or-uncomment-region)
-
-;; Set color theme
-(load-theme 'sanityinc-tomorrow-bright t)
-
-;; Pasting text should still word wrap
-(setq term-suppress-hard-newline t)
-
 ;; Desktop mode
 (desktop-save-mode 1)
-
-;; Always turn on line wrap from screen
-(global-visual-line-mode 1)
-
-;; https://www.murilopereira.com/how-to-open-a-file-in-emacs/
-;; Might make find file faster?
-(remove-hook 'file-name-at-point-functions 'ffap-guess-file-name-at-point)
-
-;; shortcut to zap up to char
-(global-unset-key (kbd "M-z"))
-(global-set-key (kbd "M-z") #'zap-up-to-char)
-
-;; Cursor color
-(set-cursor-color "blue")
 
 ;; full path in title bar and in mode line
 ;; (setq-default frame-title-format "%b (%f)")
@@ -597,61 +748,10 @@
 ;; Set whole line or region mode
 (whole-line-or-region-global-mode)
 
-;; Scrolling in place (M-n and M-p)
-;; Has a parameter to pass if you want scroll >1 lines (C-u <number>)
-(defun scroll-down-in-place (n) 
-  (interactive "p") 
-  (previous-line n) 
-  (unless (eq (window-start) 
-	      (point-min)) 
-    (scroll-down n)))
-
-;; Scrolling in place (M-n and M-p)
-;; Has a parameter to pass if you want scroll >1 lines (C-u <number>)
-(defun scroll-up-in-place (n) 
-  (interactive "p") 
-  (next-line n) 
-  (unless (eq (window-end) 
-	      (point-max)) 
-    (scroll-up n)))
-
-(global-set-key "\M-n" 'scroll-up-in-place)
-(global-set-key "\M-p" 'scroll-down-in-place)
-
-(setq org-hide-block-startup t)
-
 ;; Add another command to set-mark
 (global-set-key (kbd "M-SPC") 'set-mark-command)
 
-
-;; https://batsov.com/articles/2012/03/08/emacs-tip-number-5-save-buffers-automatically-on-buffer-or-window-switch/
-;; automatically save buffers associated with files on buffer switch
-;; and on windows switch
-(defadvice switch-to-buffer (before save-buffer-now activate) 
-  (when buffer-file-name (save-buffer)))
-(defadvice other-window (before other-window-now activate) 
-  (when buffer-file-name (save-buffer)))
-(defadvice windmove-up (before other-window-now activate) 
-  (when buffer-file-name (save-buffer)))
-(defadvice windmove-down (before other-window-now activate) 
-  (when buffer-file-name (save-buffer)))
-(defadvice windmove-left (before other-window-now activate) 
-  (when buffer-file-name (save-buffer)))
-(defadvice windmove-right (before other-window-now activate) 
-  (when buffer-file-name (save-buffer)))
-
-
-;; create the autosave dir if necessary, since emacs won't.
-(make-directory "~/emacs/autosaves/" t)
-
-;; Put autosave files (ie #foo#) and backup files (ie foo~) in ~/.emacs.d/.
-(setq-default backup-directory-alist (quote ((".*" . "~/emacs/backups/"))))
-
-
 (put 'narrow-to-region 'disabled nil)
-
-;; Enable fd with find-file-in-project
-(setq ffip-use-rust-fd t)
 
 ;; OSX: Use mdfind for locate
 (setq locate-command "mdfind")
@@ -659,68 +759,6 @@
 
 ;; Turn off org adapt indentation to not include an extra white space for the heading
 (setq org-adapt-indentation nil)
-
-;;https://explog.in/notes/writingsetup.html
-(set-face-attribute 'default nil 
-		    :family "Menlo" 
-		    :height 200)
-(set-face-attribute 'fixed-pitch nil 
-		    :family "Menlo" 
-		    :height 200)
-(set-face-attribute 'variable-pitch nil 
-		    :family "Menlo" 
-		    :height 200)
-(set-face-attribute 'line-number nil 
-		    :family "Menlo" 
-		    :height 200)
-(set-face-attribute 'line-number-current-line nil 
-		    :family "Menlo" 
-		    :height 200)
-
-(add-hook 'text-mode-hook 'variable-pitch-mode)
-
-;; Cycle through ordered lists
-(global-set-key (kbd "C-c l") 'org-cycle-list-bullet)
-
-;; Set Menlo font in the buffer
-;; https://stackoverflow.com/questions/20866169/change-the-font-of-current-buffer-in-emacs
-(defun set-menlo-in-buffer () 
-  (interactive "sFont Family: ") 
-  (defface tmp-buffer-local-face '((t :family "Menlo")) 
-    "Temporary buffer-local face") 
-  (buffer-face-set 'tmp-buffer-local-face))
-
-;; Menlo font for the calendar so it's misaligned
-(add-hook 'calendar-mode-hook 'set-menlo-in-buffer)
-
-;; Calendar shortcut
-(global-set-key (kbd "C-x c") 'calendar)
-
-;; Set region color
-(set-face-attribute 'region nil 
-		    :background "yellow" 
-		    :foreground "brown")
-
-					; Allow to resize images
-(setq org-image-actual-width nil)
-
-(defun replace_underscores_with_spaces () 
-  "Replace those 'underscores' from gmail to spaces" 
-  (interactive) 
-  (while (search-forward " " nil t) 
-    (replace-match " " nil t)))
-
-(global-set-key (kbd "C-c r") 'replace_underscores_with_spaces)
-
-
-;;set colours for priorities
-(setq org-priority-faces '((?A . 
-			       (:foreground "#F0DFAF" 
-					    :weight bold)) 
-			   (?B . 
-			       (:foreground "LightSteelBlue")) 
-			   (?C . 
-			       (:foreground "OliveDrab"))))
 
 
 ;; https://gist.github.com/leavesofgrass/23cf0f61e0092e36dbbaa3f33e4dd060
@@ -737,7 +775,7 @@
 
 (global-set-key (kbd "C-c m") 'minify-buffer-contents)
 
-(global-set-key (kbd "C-c i") 'string-insert-rectangle)
+(global-set-key (kbd "C-c i") 'string-rectangle)
 
 
 ;; Go back to global mark shortcut
@@ -747,29 +785,6 @@
 (global-set-key  (kbd "C-c y") 'copy-to-register )
 (global-set-key  (kbd "C-c p") 'insert-register )
 
-
-
-;; Easily create scratch buffers
-(defun generate-scratch-buffer () 
-  "Create and switch to a temporary scratch buffer with a random
-       name." 
-  (interactive) 
-  (switch-to-buffer (generate-new-buffer-name "scratchbuffer")) 
-  (json-mode))
-(global-set-key  (kbd "C-c b") 'generate-scratch-buffer )
-
-;; Check startup time
-(defun efs/display-startup-time () 
-  (message "Emacs loaded in %s with %d garbage collections." (format "%.2f seconds" (float-time
-										     (time-subtract
-										      after-init-time
-										      before-init-time)))
-	   gcs-done))
-
-(add-hook 'emacs-startup-hook 
-	  (setq gc-cons-threshold 16777216 gc-cons-percentage 0.1 file-name-handler-alist
-		last-file-name-handler-alist) 
-	  (efs/display-startup-time))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
