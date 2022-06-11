@@ -3,8 +3,6 @@
 (defvar last-file-name-handler-alist file-name-handler-alist)
 (setq gc-cons-threshold 402653184 gc-cons-percentage 0.6 file-name-handler-alist nil)
 
-(eval-when-compile
-  (require 'use-package))
 
 ;; From Melpa
 (let* ((no-ssl (and (memq system-type '(windows-nt ms-dos)) 
@@ -22,6 +20,9 @@
   (package-install 'use-package))
 (eval-and-compile 
   (setq use-package-expand-minimally t))
+
+(eval-when-compile
+  (require 'use-package))
 
 (use-package esup
   :ensure t
@@ -42,6 +43,7 @@
 (use-package 
   super-save 
   :ensure t 
+  :demand
   :config 
   (setq super-save-idle-duration .75)
   (setq super-save-auto-save-when-idle t) 
@@ -442,7 +444,8 @@
   :hook (elpy-mode-hook . py-autopep8-enable-on-save))
 
 (use-package 
-  magit 
+  magit
+  :demand
   :ensure t 
   :commands magit
   :config (global-unset-key (kbd "C-c M-g")) 
@@ -558,20 +561,6 @@
   exec-path-from-shell 
   :commands exec-path-from-shell
   :ensure t
-  :config
-  ;; Add to Path
-  (setq exec-path (append exec-path '("/usr/local/bin")))
-
-  ;; On OS X, an Emacs instance started from the graphical user
-  ;; interface will have a different environment than a shell in a
-  ;; terminal window, because OS X does not run a shell during the
-  ;; login. Obviously this will lead to unexpected results when
-  ;; calling external utilities like make from Emacs.
-  ;; This library works around this problem by copying important
-  ;; environment variables from the user's shell.
-  ;; https://github.com/purcell/exec-path-from-shell
-  (when (memq window-system '(mac ns x)) 
-    (exec-path-from-shell-initialize))
 )
 
 
@@ -711,6 +700,21 @@
 
 ;; Desktop mode
 (desktop-save-mode 1)
+
+;; Add to Path
+(setq exec-path (append exec-path '("/usr/local/bin")))
+
+;; On OS X, an Emacs instance started from the graphical user
+;; interface will have a different environment than a shell in a
+;; terminal window, because OS X does not run a shell during the
+;; login. Obviously this will lead to unexpected results when
+;; calling external utilities like make from Emacs.
+;; This library works around this problem by copying important
+;; environment variables from the user's shell.
+;; https://github.com/purcell/exec-path-from-shell
+(when (memq window-system '(mac ns x)) 
+  (exec-path-from-shell-initialize))
+
 
 ;; full path in title bar and in mode line
 ;; (setq-default frame-title-format "%b (%f)")
