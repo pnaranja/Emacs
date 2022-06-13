@@ -335,6 +335,7 @@
 (use-package 
   lsp-mode 
   :ensure t 
+  :demand
   :commands lsp-mode
   :config
   ;; LSP shortcuts
