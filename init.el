@@ -51,6 +51,16 @@
   (super-save-mode +1) 
   (setq auto-save-default nil)
 
+  ;; To emulate '.' in VIM
+  ;; sneak in a setting for repeat
+  (global-set-key (kbd "C-.") 'repeat)
+
+  ;; Easier keys for macros
+  (global-set-key (kbd "M-9") 'kmacro-start-macro)
+  (global-set-key (kbd "M-0") 'kmacro-stop-macro)
+  (global-set-key (kbd "M--") 'kmacro-end-and-call-macro)
+
+
   ;; https://batsov.com/articles/2012/03/08/emacs-tip-number-5-save-buffers-automatically-on-buffer-or-window-switch/
   ;; automatically save buffers associated with files on buffer switch
   ;; and on windows switch
@@ -124,13 +134,6 @@
   :config (define-key company-active-map (kbd "C-c h") #'company-quickhelp-manual-begin) 
   (company-quickhelp-mode))
 
-
-;; To emulate '.' in VIM
-(use-package 
-  dot-mode 
-  :ensure t 
-  :hook (find-file-hooks . dot-mode-on) 
-  :config (global-dot-mode t))
 
 ;; Shows key bindings for incomplete commands
 (use-package 
