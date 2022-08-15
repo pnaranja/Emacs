@@ -781,6 +781,17 @@
   (while (search-forward "\n" nil t) 
     (replace-match "" nil t)))
 
+(defun copy-end-of-line()
+ "Copy to end of line into kill ring"
+ (interactive)
+ (push-mark nil nil 1)
+ (end-of-visual-line)
+ (copy-region-as-kill nil nil (buffer-substring (mark) (point)))
+ (pop-to-mark-command)
+)
+
+(global-set-key (kbd "M-k") 'copy-end-of-line)
+
 (global-set-key (kbd "C-c m") 'minify-buffer-contents)
 
 (global-set-key (kbd "C-c i") 'string-rectangle)

@@ -2,7 +2,13 @@
 ;;; This format is meant to be slightly human-readable;
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
-(("study-next-web"
+(("digital-pricing-bff"
+ (filename . "~/chegg/digital-pricing-bff/")
+ (front-context-string . "..\n  -rw-r--r-- ")
+ (rear-context-string . "84 Jul 18 15:37 ")
+ (position . 156)
+ (last-modified 25329 52668 698385 0))
+("study-next-web"
  (filename . "~/chegg/study-next-web/")
  (front-context-string . "..\n  -rw-r--r--@")
  (rear-context-string . "96 Mar  2 17:43 ")
@@ -98,10 +104,11 @@
  (rear-context-string . "+Test+Reports]]\n")
  (position . 1265))
 ("org-capture-last-stored"
- (filename . "~/journal/org-roam/20220705200236-podcast_episode_1.org")
- (front-context-string . "\n[[id:4D812B71-4")
- (rear-context-string . "dcast Episode 1\n")
- (position . 95))
+ (filename . "~/journal/org-roam/20220814195234-podcast_episode_3.org")
+ (front-context-string . "\n[[id:A9CE7178-7")
+ (rear-context-string . "dcast Episode 3\n")
+ (position . 95)
+ (last-modified 25337 51926 996323 0))
 ("verb_examples.org"
  (filename . "~/REST_files/verb_examples.org")
  (front-context-string . "* Quick Start fo")
