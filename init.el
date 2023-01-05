@@ -250,59 +250,7 @@
   ;; not sure what mode you want here. You could default to 'fundamental-mode
   (replace-alist-mode auto-mode-alist 'verilog-mode 'v-mode))
 
-(use-package 
-  org-roam 
-  :ensure t 
-  :config 
-  (setq org-roam-v2-ack t) 
-  (global-set-key (kbd "C-c n l") 'org-roam-capture) 
-  (global-set-key (kbd "C-c n f") 'org-roam-node-find) 
-  (global-set-key (kbd "C-c n i") 'org-roam-node-insert) 
-  (global-set-key (kbd "C-c n b") 'org-roam-buffer-display-dedicated) 
-  (global-set-key (kbd "C-c n g") 'org-roam-graph) 
-  (setq org-roam-directory "~/journal/org-roam") 
-  (org-roam-db-autosync-mode) 
-  (add-to-list 'display-buffer-alist '("\\*org-roam\\*" (display-buffer-in-direction) 
-				       (direction . right) 
-				       (window-width . 0.33) 
-				       (window-height . fit-window-to-buffer)))
-
-   ;; Org Capture and Agenda settings - http://pragmaticemacs.com/emacs/org-mode-basics-vi-a-simple-todo-list/
-   ;; set key for agenda
-   (global-set-key (kbd "C-'") 'org-agenda)
-
-  ;;file to save todo items
-  (setq org-agenda-files '("~/.notes")) 
-  (setq org-agenda-window-setup (quote current-window))
-  ;;capture todo items using C-c c t
-  (global-set-key (kbd "C-c c") 'org-capture) 
-  (setq org-capture-templates '(("t" "todo" entry (file+headline "~/.notes/todo.org" "Tasks")
-				 "* TODO [#A] %?")))
-
-  ;; Org mode settings
-  (setq org-startup-indented t org-hide-leading-stars t org-hide-emphasis-markers t
-	org-odd-levels-only t)
-
-  ;; Calendar shortcut
-  (global-set-key (kbd "C-x c") 'calendar)
-  
-  					; Allow to resize images
-  (setq org-image-actual-width nil)
-  
-  (defun replace_underscores_with_spaces () 
-    "Replace those 'underscores' from gmail to spaces" 
-    (interactive) 
-    (while (search-forward " " nil t) 
-      (replace-match " " nil t)))
-  
-  (global-set-key (kbd "C-c r") 'replace_underscores_with_spaces)
-
-  ;; Cycle through ordered lists
-  (global-set-key (kbd "C-c l") 'org-cycle-list-bullet)
-  
-  (setq org-hide-block-startup t)
-  
-)
+ 
 
 
 ;; https://zzamboni.org/post/how-to-insert-screenshots-in-org-documents-on-macos/
@@ -342,10 +290,7 @@
   :commands lsp-mode
   :config
   ;; LSP shortcuts
-  (global-unset-key (kbd "C-c l")) 
-  (global-set-key (kbd "C-c l p") 'lsp-describe-thing-at-point) 
-  (global-set-key (kbd "C-c l d") 'lsp-find-definition) 
-  (global-set-key (kbd "C-c l r") 'lsp-find-references)
+  (global-set-key (kbd "C-c l p") 'lsp-ui-peek-find-references) 
 
   ;; LSP settings
   (setq lsp-headerline-breadcrumb-enable 1) 
@@ -356,7 +301,8 @@
   (add-hook 'js-mode-hook #'lsp) 
   (add-hook 'typescript-mode-hook #'lsp) 
   (add-hook 'rustic-mode-hook #'lsp) 
-  (add-hook 'nim-mode-hook #'lsp))
+  (add-hook 'nim-mode-hook #'lsp)
+)
 
 (use-package 
   tide 
@@ -448,20 +394,6 @@
   :hook (elpy-mode-hook . py-autopep8-enable-on-save))
 
 (use-package 
-  magit
-  :demand
-  :ensure t 
-  :commands magit
-  :config (global-unset-key (kbd "C-c M-g")) 
-  (global-set-key (kbd "C-c g") 'magit-file-dispatch) 
-  (global-set-key (kbd "C-c F") 'magit-pull) 
-  (global-set-key (kbd "C-c B") 'magit-branch) 
-  (global-set-key (kbd "C-x g") 'magit)
-  ;; From https://scripter.co/narrowing-the-author-column-in-magit/
-  (setq magit-log-margin '(t "%Y-%m-%d %H:%M" magit-log-margin-width 
-			     :author 18)))
-
-(use-package 
   avy 
   :ensure t 
   :init (global-set-key (kbd "C-j") 'avy-goto-char-timer) 
@@ -537,13 +469,6 @@
   (global-set-key (kbd "M-z") #'zap-up-to-char)
   
 )
-
-;; Access files in a docker container
-(use-package 
-  docker-tramp 
-  :ensure t 
-  :commands docker-tramp
-  )
 
 (use-package 
   deadgrep 
@@ -699,6 +624,39 @@
 
 
 
+(use-package 
+  magit
+  :demand
+  :ensure t 
+  :commands magit
+  :config (global-unset-key (kbd "C-c M-g")) 
+  (global-set-key (kbd "C-c g") 'magit-file-dispatch) 
+  (global-set-key (kbd "C-c F") 'magit-pull) 
+  (global-set-key (kbd "C-c B") 'magit-branch) 
+  (global-set-key (kbd "C-x g") 'magit)
+  ;; From https://scripter.co/narrowing-the-author-column-in-magit/
+  (setq magit-log-margin '(t "%Y-%m-%d %H:%M" magit-log-margin-width 
+			     :author 18)))
+
+
+(use-package 
+  org-roam 
+  :ensure t 
+  :config 
+  (setq org-roam-v2-ack t) 
+  (global-set-key (kbd "C-c n l") 'org-roam-capture) 
+  (global-set-key (kbd "C-c n f") 'org-roam-node-find) 
+  (global-set-key (kbd "C-c n i") 'org-roam-node-insert) 
+  (global-set-key (kbd "C-c n b") 'org-roam-buffer-display-dedicated) 
+  (global-set-key (kbd "C-c n g") 'org-roam-graph) 
+  (setq org-roam-directory "~/journal/org-roam") 
+  (org-roam-db-autosync-mode) 
+  (add-to-list 'display-buffer-alist '("\\*org-roam\\*" (display-buffer-in-direction) 
+				       (direction . right) 
+				       (window-width . 0.33) 
+				       (window-height . fit-window-to-buffer)))
+
+
 ;; Enable Auto revert mode
 (global-auto-revert-mode 1)
 
@@ -804,6 +762,39 @@
 (global-set-key  (kbd "C-c y") 'copy-to-register )
 (global-set-key  (kbd "C-c p") 'insert-register )
 
+   ;; Org Capture and Agenda settings - http://pragmaticemacs.com/emacs/org-mode-basics-vi-a-simple-todo-list/
+   ;; set key for agenda
+   (global-set-key (kbd "C-'") 'org-agenda)
+
+  ;;file to save todo items
+  (setq org-agenda-files '("~/.notes")) 
+  (setq org-agenda-window-setup (quote current-window))
+  ;;capture todo items using C-c c t
+  (global-set-key (kbd "C-c c") 'org-capture) 
+  (setq org-capture-templates '(("t" "todo" entry (file+headline "~/.notes/todo.org" "Tasks")
+				 "* TODO [#A] %?")))
+
+  ;; Org mode settings
+  (setq org-startup-indented t org-hide-leading-stars t org-hide-emphasis-markers t
+	org-odd-levels-only t)
+
+  ;; Calendar shortcut
+  (global-set-key (kbd "C-x c") 'calendar)
+  
+  					; Allow to resize images
+  (setq org-image-actual-width nil)
+  
+  (defun replace_underscores_with_spaces () 
+    "Replace those 'underscores' from gmail to spaces" 
+    (interactive) 
+    (while (search-forward " " nil t) 
+      (replace-match " " nil t)))
+  
+  (global-set-key (kbd "C-c r") 'replace_underscores_with_spaces)
+  
+  (setq org-hide-block-startup t)
+  
+)
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -811,7 +802,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(dired-x yaml-mode whole-line-or-region which-key vterm verb vc-msg v-mode use-package tide super-save smex rustic rg restart-emacs real-auto-save py-autopep8 projectile org-roam org-journal olivetti nim-mode move-text magit lsp-ui lsp-python-ms lsp-pyright linum-relative json-mode js2-mode ivy-rich ido-completing-read+ helpful groovy-mode find-file-in-project fd-dired exec-path-from-shell esup emacsql-sqlite3 elpy dot-mode dockerfile-mode docker-tramp dimmer deadgrep dash-functional counsel company-quickhelp company-lsp company-jedi color-theme-sanityinc-tomorrow avy async amx))
+   '(0blayout dired-x yaml-mode whole-line-or-region which-key vterm verb vc-msg v-mode use-package tide super-save smex rustic rg restart-emacs real-auto-save py-autopep8 projectile org-roam org-journal olivetti nim-mode move-text magit lsp-ui lsp-python-ms lsp-pyright linum-relative json-mode js2-mode ivy-rich ido-completing-read+ helpful groovy-mode find-file-in-project fd-dired exec-path-from-shell esup emacsql-sqlite3 elpy dot-mode dimmer deadgrep dash-functional counsel company-quickhelp company-lsp company-jedi color-theme-sanityinc-tomorrow avy async amx))
  '(warning-suppress-types '((comp) (comp))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

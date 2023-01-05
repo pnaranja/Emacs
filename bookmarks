@@ -104,11 +104,11 @@
  (rear-context-string . "+Test+Reports]]\n")
  (position . 1265))
 ("org-capture-last-stored"
- (filename . "~/journal/org-roam/20220814195234-podcast_episode_3.org")
+ (filename . "~/journal/org-roam/20220910150627-adding_elements_of_1962_missal_into_novus_ordo.org")
  (front-context-string . "\n[[id:A9CE7178-7")
- (rear-context-string . "dcast Episode 3\n")
- (position . 95)
- (last-modified 25337 51926 996323 0))
+ (rear-context-string . "vus Ordo Masses\n")
+ (position . 119)
+ (last-modified 25373 3676 83391 0))
 ("verb_examples.org"
  (filename . "~/REST_files/verb_examples.org")
  (front-context-string . "* Quick Start fo")
