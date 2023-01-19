@@ -304,6 +304,10 @@
   (add-hook 'nim-mode-hook #'lsp)
 )
 
+(use-package
+  lsp-ivy
+  :ensure t)
+
 (use-package 
   tide 
   :ensure t 
@@ -483,7 +487,9 @@
 (use-package 
   org 
   :mode ("\\.org\\'" . org-mode) 
-  :config (define-key org-mode-map (kbd "C-c C-r") verb-command-map))
+  :config (define-key org-mode-map (kbd "C-c C-r") verb-command-map)
+  (setq org-startup-folded t)
+)
 
 ;; Get env vars from shell
 (use-package 
