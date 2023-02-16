@@ -627,37 +627,7 @@
 
 
 
-(use-package 
-  magit
-  :demand
-  :ensure t 
-  :commands magit
-  :config (global-unset-key (kbd "C-c M-g")) 
-  (global-set-key (kbd "C-c g") 'magit-file-dispatch) 
-  (global-set-key (kbd "C-c F") 'magit-pull) 
-  (global-set-key (kbd "C-c B") 'magit-branch) 
-  (global-set-key (kbd "C-x g") 'magit)
-  ;; From https://scripter.co/narrowing-the-author-column-in-magit/
-  (setq magit-log-margin '(t "%Y-%m-%d %H:%M" magit-log-margin-width 
-			     :author 18)))
-
-
-(use-package 
-  org-roam 
-  :ensure t 
-  :config 
-  (setq org-roam-v2-ack t) 
-  (global-set-key (kbd "C-c n l") 'org-roam-capture) 
-  (global-set-key (kbd "C-c n f") 'org-roam-node-find) 
-  (global-set-key (kbd "C-c n i") 'org-roam-node-insert) 
-  (global-set-key (kbd "C-c n b") 'org-roam-buffer-display-dedicated) 
-  (global-set-key (kbd "C-c n g") 'org-roam-graph) 
-  (setq org-roam-directory "~/journal/org-roam") 
-  (org-roam-db-autosync-mode) 
-  (add-to-list 'display-buffer-alist '("\\*org-roam\\*" (display-buffer-in-direction) 
-				       (direction . right) 
-				       (window-width . 0.33) 
-				       (window-height . fit-window-to-buffer)))
+ 
 
 
 ;; Enable Auto revert mode
@@ -799,8 +769,42 @@
   
   (global-set-key (kbd "C-c r") 'replace_underscores_with_spaces)
   
-  (setq org-hide-block-startup t)
+  (setq org-cycle-hide-block-startup t)
   
+
+
+(use-package 
+  magit
+  :demand
+  :ensure t 
+  :commands magit
+  :config (global-unset-key (kbd "C-c M-g")) 
+  (global-set-key (kbd "C-c g") 'magit-file-dispatch) 
+  (global-set-key (kbd "C-c F") 'magit-pull) 
+  (global-set-key (kbd "C-c B") 'magit-branch) 
+  (global-set-key (kbd "C-x g") 'magit)
+  ;; From https://scripter.co/narrowing-the-author-column-in-magit/
+  (setq magit-log-margin '(t "%Y-%m-%d %H:%M" magit-log-margin-width 
+			     :author 18)))
+
+
+
+(use-package 
+  org-roam 
+  :ensure t 
+  :config 
+  (setq org-roam-v2-ack t) 
+  (global-set-key (kbd "C-c n l") 'org-roam-capture) 
+  (global-set-key (kbd "C-c n f") 'org-roam-node-find) 
+  (global-set-key (kbd "C-c n i") 'org-roam-node-insert) 
+  (global-set-key (kbd "C-c n b") 'org-roam-buffer-display-dedicated) 
+  (global-set-key (kbd "C-c n g") 'org-roam-graph) 
+  (setq org-roam-directory "~/journal/org-roam") 
+  (org-roam-db-autosync-mode) 
+  (add-to-list 'display-buffer-alist '("\\*org-roam\\*" (display-buffer-in-direction) 
+				       (direction . right) 
+				       (window-width . 0.33) 
+				       (window-height . fit-window-to-buffer)))
 )
 
 (custom-set-variables
