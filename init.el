@@ -155,7 +155,7 @@
   :config (ivy-mode 1) 
   (setq ivy-use-virtual-buffers t) 
   (setq ivy-count-format "(%d/%d) ") 
-  (global-set-key (kbd "C-s") 'swiper-isearch) 
+  (global-set-key (kbd "C-s") 'swiper) 
   (setq ivy-use-selectable-prompt t))
 
 (use-package 
@@ -175,12 +175,14 @@
   counsel 
   :ensure t 
   :config
-  ;; Replace M-x (execute-extended-command)
   (global-set-key (kbd "M-x") #'counsel-M-x) 
   (global-set-key (kbd "C-x C-f") 'counsel-find-file) 
+  (global-set-key (kbd "C-x r b") 'counsel-bookmark) 
+  (global-set-key (kbd "C-M-y") 'counsel-yank-pop) 
   (setq counsel-grep-base-command "rg -i -M 120 --no-heading --line-number --color never %s %s") 
   (setq counsel-describe-function-function #'helpful-callable) 
   (setq counsel-describe-variable-function #'helpful-variable)
+
 
   ;; Display relative line numbers
   (global-display-line-numbers-mode)
@@ -265,7 +267,6 @@
   (org-download-timestamp "%Y%m%d-%H%M%S_") 
   (org-image-actual-width 300) 
   (org-download-screenshot-method "/usr/local/bin/pngpaste %s") 
-  :bind ("C-M-y" . org-download-screenshot) 
   :config 
   (require 'org-download)
 

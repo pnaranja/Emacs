@@ -2,7 +2,19 @@
 ;;; This format is meant to be slightly human-readable;
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
-(("digital-pricing-bff"
+(("address-validation-dgs"
+ (filename . "~/chegg/address-validation-dgs/")
+ (front-context-string . ".git\n  -rw-r--r-")
+ (rear-context-string . "84 Mar  8 14:12 ")
+ (position . 419)
+ (last-modified 25609 2149 378594 0))
+("checkout-components"
+ (filename . "~/chegg/checkout-components/")
+ (front-context-string . ".git\n  -rw-r--r-")
+ (rear-context-string . "48 Feb 23 19:37 ")
+ (position . 420)
+ (last-modified 25593 933 943503 0))
+("digital-pricing-bff"
  (filename . "~/chegg/digital-pricing-bff/")
  (front-context-string . "..\n  -rw-r--r-- ")
  (rear-context-string . "84 Jul 18 15:37 ")
@@ -43,41 +55,28 @@
  (front-context-string . "..\n  -rw-r--r-- ")
  (rear-context-string . "84 Dec 20 09:57 ")
  (position . 159))
-("ce"
- (filename . "~/chegg/gne/ce/")
- (front-context-string . "it\n  -rw-r--r-- ")
- (rear-context-string . " May 18 18:40 .g")
- (position . 227))
 ("robot-for-chegg-com"
  (filename . "~/chegg/robot-for-chegg-com/")
  (front-context-string . ".git\n  -rw-r--r-")
  (rear-context-string . "80 Mar 30 16:54 ")
  (position . 240))
 ("geolocation"
- (filename . "~/chegg/gne/geolocation/")
+ (filename . "~/chegg/geolocation/")
  (front-context-string . ".dockerignore\n  ")
- (rear-context-string . "22 Feb 10 11:19 ")
- (position . 244))
-("brand-partnership"
- (filename . "~/chegg/gne/brand-partnership/")
- (front-context-string . ".browserstack\n  ")
- (rear-context-string . "96 Feb 16 10:36 ")
- (position . 256))
-("checkout-components"
- (filename . "~/chegg/gne/checkout-components/")
- (front-context-string . ".browserstack\n  ")
- (rear-context-string . "96 Oct 29 01:14 ")
- (position . 258))
+ (rear-context-string . "18 Mar 15 13:22 ")
+ (position . 205)
+ (last-modified 25618 10555 817002 0))
 ("growth-enablement-robot-tests"
  (filename . "~/chegg/growth-enablement-robot-tests/")
  (front-context-string . ".git\n  -rw-r--r-")
  (rear-context-string . "12 Jan 28 09:50 ")
  (position . 265))
 ("robot-for-ecom"
- (filename . "~/chegg/gne/robot-for-ecom/")
+ (filename . "~/chegg/robot-for-ecom/")
  (front-context-string . ".git\n  -rw-r--r-")
  (rear-context-string . "48 Jan 23 11:01 ")
- (position . 247))
+ (position . 247)
+ (last-modified 25609 75 911910 0))
 ("drop-in-payment"
  (filename . "~/chegg/drop-in-payment/")
  (front-context-string . "..\n  -rw-r--r-- ")
@@ -104,11 +103,11 @@
  (rear-context-string . "+Test+Reports]]\n")
  (position . 1265))
 ("org-capture-last-stored"
- (filename . "~/journal/org-roam/20220910150627-adding_elements_of_1962_missal_into_novus_ordo.org")
- (front-context-string . "\n[[id:A9CE7178-7")
- (rear-context-string . "vus Ordo Masses\n")
- (position . 119)
- (last-modified 25373 3676 83391 0))
+ (filename . "~/journal/org-roam/20230305231110-introduction_to_the_sacred_liturgy_class_4.org")
+ (front-context-string . "[[id:A9CE7178-76")
+ (rear-context-string . "turgy - Class 4\n")
+ (position . 122)
+ (last-modified 25605 37406 522067 0))
 ("verb_examples.org"
  (filename . "~/REST_files/verb_examples.org")
  (front-context-string . "* Quick Start fo")
@@ -119,11 +118,6 @@
  (front-context-string . "* 10/14/2019\n** ")
  (rear-context-string . "e not updated**\n")
  (position . 2980))
-("Todo.org"
- (filename . "~/ICloud_beorg/Documents/Todo.org")
- (front-context-string . "* TODO See how w")
- (rear-context-string . "ns to ask David\n")
- (position . 75))
 ("init.el"
  (filename . "~/.emacs.d/init.el")
  (front-context-string . ";; Define packag")
