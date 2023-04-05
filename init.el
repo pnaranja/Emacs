@@ -116,6 +116,11 @@
   ;; Enable fd with find-file-in-project
   (setq ffip-use-rust-fd t)
 
+  ;; Enable projectile outside of projects
+  (setq projectile-require-project-root nil)
+
+  (setq projectile-enable-caching nil)
+
 )
 
 
@@ -292,6 +297,8 @@
   :config
   ;; LSP shortcuts
   (global-set-key (kbd "C-c l p") 'lsp-ui-peek-find-references) 
+  (global-set-key (kbd "C-c l d") 'lsp-describe-thing-at-point)
+  (global-set-key (kbd "C-c l f") 'lsp-find-definition)
 
   ;; LSP settings
   (setq lsp-headerline-breadcrumb-enable 1) 
