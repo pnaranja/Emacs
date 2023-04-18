@@ -4,16 +4,21 @@
 (setq gc-cons-threshold 402653184 gc-cons-percentage 0.6 file-name-handler-alist nil)
 
 
+(require 'use-package)
 ;; From Melpa
-(let* ((no-ssl (and (memq system-type '(windows-nt ms-dos)) 
-		    (not (gnutls-available-p)))) 
-       (proto (if no-ssl "http" "https")))
-  ;; Comment/uncomment these two lines to enable/disable MELPA and MELPA Stable as desired
-  (add-to-list 'package-archives (cons "melpa" (concat proto "://melpa.org/packages/")) t)
-  ;;(add-to-list 'package-archives (cons "melpa-stable" (concat proto "://stable.melpa.org/packages/")) t)
-  (when (< emacs-major-version 24)
-    ;; For important compatibility libraries like cl-lib
-    (add-to-list 'package-archives '("gnu" . (concat proto "://elpa.gnu.org/packages/")))))
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+(add-to-list 'package-archives '("gnu" . (concat proto "://elpa.gnu.org/packages/")))
+(package-initialize)
+
+;(let* ((no-ssl (and (memq system-type '(windows-nt ms-dos)) 
+;		    (not (gnutls-available-p)))) 
+;       (proto (if no-ssl "http" "https")))
+;  ;; Comment/uncomment these two lines to enable/disable MELPA and MELPA Stable as desired
+;  (add-to-list 'package-archives (cons "melpa" (concat proto "://melpa.org/packages/")) t)
+;  ;;(add-to-list 'package-archives (cons "melpa-stable" (concat proto "://stable.melpa.org/packages/")) t)
+;  (when (< emacs-major-version 24)
+;    ;; For important compatibility libraries like cl-lib
+;    (add-to-list 'package-archives '("gnu" . (concat proto "://elpa.gnu.org/packages/")))))
 
 (unless (package-installed-p 'use-package) 
   (package-refresh-contents) 
@@ -21,18 +26,15 @@
 (eval-and-compile 
   (setq use-package-expand-minimally t))
 
-(eval-when-compile
-  (require 'use-package))
-
-(use-package esup
-  :ensure t
-  ;; To use MELPA Stable use ":pin melpa-stable",
-  :pin melpa
-  :config
-  ;; Work around a bug where esup tries to step into the byte-compiled
-  ;; version of `cl-lib', and fails horribly.
-  (setq esup-depth 0)
-)
+;(use-package esup
+;  :ensure t
+;  ;; To use MELPA Stable use ":pin melpa-stable",
+;  :pin melpa
+;  :config
+;  ;; Work around a bug where esup tries to step into the byte-compiled
+;  ;; version of `cl-lib', and fails horribly.
+;  (setq esup-depth 0)
+;)
 
 (use-package 
   elisp-format 
