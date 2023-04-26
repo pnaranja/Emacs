@@ -139,12 +139,29 @@
   :config (define-key company-active-map (kbd "C-c h") #'company-quickhelp-manual-begin) 
   (company-quickhelp-mode))
 
+;; Move mini-buffer to top mini frame
+(use-package
+  mini-frame
+  :ensure t
+  :config
+  (mini-frame-mode 1)
+  (custom-set-variables
+  '(mini-frame-show-parameters
+   '((top . 10)
+     (width . 0.7)
+     (left . 0.5))))
+)
+
 
 ;; Shows key bindings for incomplete commands
 (use-package 
   which-key 
   :ensure t 
-  :config (which-key-mode))
+  :config 
+  (which-key-mode)
+  (which-key-setup-minibuffer)
+  (setq which-key-popup-type 'minibuffer)
+)
 
 ;; Dim other windows
 (use-package 
@@ -256,8 +273,6 @@
 
   ;; not sure what mode you want here. You could default to 'fundamental-mode
   (replace-alist-mode auto-mode-alist 'verilog-mode 'v-mode))
-
- 
 
 
 ;; https://zzamboni.org/post/how-to-insert-screenshots-in-org-documents-on-macos/
@@ -634,10 +649,6 @@
   )
 
 
-
- 
-
-
 ;; Enable Auto revert mode
 (global-auto-revert-mode 1)
 
@@ -795,6 +806,13 @@
   (setq magit-log-margin '(t "%Y-%m-%d %H:%M" magit-log-margin-width 
 			     :author 18)))
 
+(use-package 
+  diff-hl
+  :demand
+  :ensure t 
+  :config
+  (global-diff-hl-mode)
+)
 
 
 (use-package 
@@ -820,6 +838,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(mini-frame-show-parameters '((top . 10) (width . 0.7) (left . 0.5)))
  '(package-selected-packages
    '(0blayout dired-x yaml-mode whole-line-or-region which-key vterm verb vc-msg v-mode use-package tide super-save smex rustic rg restart-emacs real-auto-save py-autopep8 projectile org-roam org-journal olivetti nim-mode move-text magit lsp-ui lsp-python-ms lsp-pyright linum-relative json-mode js2-mode ivy-rich ido-completing-read+ helpful groovy-mode find-file-in-project fd-dired exec-path-from-shell esup emacsql-sqlite3 dot-mode dimmer deadgrep dash-functional counsel company-quickhelp company-lsp company-jedi color-theme-sanityinc-tomorrow avy async amx))
  '(warning-suppress-types '((comp) (comp))))
