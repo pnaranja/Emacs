@@ -171,27 +171,6 @@
   (dimmer-mode t) 
   (setq dimmer-fraction 0.4))
 
-(use-package 
-  ivy 
-  :ensure t 
-  :config (ivy-mode 1) 
-  (setq ivy-use-virtual-buffers t) 
-  (setq ivy-count-format "(%d/%d) ") 
-  (global-set-key (kbd "C-s") 'swiper-isearch) 
-  (setq ivy-use-selectable-prompt t))
-
-(use-package 
-  ivy-rich 
-  :ensure t 
-  :config (ivy-rich-mode 1) 
-  (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line))
-
-
-(use-package 
-  all-the-icons-ivy-rich 
-  :ensure t 
-  :init (all-the-icons-ivy-rich-mode 1))
-
 
 (use-package 
   counsel 
@@ -216,6 +195,30 @@
   (remove-hook 'file-name-at-point-functions 'ffap-guess-file-name-at-point)
 
 )
+
+(use-package 
+  ivy 
+  :ensure t 
+  :config (ivy-mode 1) 
+  (setq ivy-use-virtual-buffers t) 
+  (setq ivy-count-format "(%d/%d) ") 
+  (global-set-key (kbd "C-s") 'swiper-isearch) 
+  (setq ivy-use-selectable-prompt t))
+
+(use-package 
+  ivy-rich 
+  :ensure t 
+  :config (ivy-rich-mode 1) 
+  (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line))
+
+
+(use-package 
+  all-the-icons-ivy-rich 
+  :ensure t 
+  :init (all-the-icons-ivy-rich-mode 1))
+
+
+
 
 
 (use-package 
@@ -303,6 +306,19 @@
   :hook (nim-mode . rainbow-delimiters-mode) 
   (nim-mode . subword-mode) 
   (nim-mode . nimsuggest-mode))
+
+
+
+(use-package 
+  lsp-ui 
+  :requires lsp-mode 
+  flycheck 
+  :config (setq lsp-ui-doc-enable t lsp-ui-doc-use-childframe t lsp-ui-doc-position 'top
+		lsp-ui-doc-include-signature t lsp-ui-sideline-enable nil lsp-ui-flycheck-enable t
+		lsp-ui-flycheck-list-position 'right lsp-ui-flycheck-live-reporting t
+		lsp-ui-peek-enable t lsp-ui-peek-list-width 60 lsp-ui-peek-peek-height 25) 
+  (add-hook 'lsp-mode-hook 'lsp-ui-mode))
+
 
 (use-package 
   lsp-mode 
@@ -394,16 +410,6 @@
   :commands rustic
   :ensure t)
 
-(use-package 
-  lsp-ui 
-  :requires lsp-mode 
-  flycheck 
-  :config (setq lsp-ui-doc-enable t lsp-ui-doc-use-childframe t lsp-ui-doc-position 'top
-		lsp-ui-doc-include-signature t lsp-ui-sideline-enable nil lsp-ui-flycheck-enable t
-		lsp-ui-flycheck-list-position 'right lsp-ui-flycheck-live-reporting t
-		lsp-ui-peek-enable t lsp-ui-peek-list-width 60 lsp-ui-peek-peek-height 25) 
-  (add-hook 'lsp-mode-hook 'lsp-ui-mode))
-
 
 ;; Python specific
 (use-package lsp-pyright
@@ -493,6 +499,15 @@
   (global-set-key (kbd "M-z") #'zap-up-to-char)
   
 )
+
+(use-package 
+  avy-zap 
+  :ensure t
+  :config 
+  (global-set-key (kbd "M-Z") 'avy-zap-to-char-dwim)
+  (global-set-key (kbd "M-z") 'avy-zap-up-to-char-dwim)
+)
+
 
 (use-package 
   deadgrep 
