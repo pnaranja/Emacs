@@ -423,6 +423,12 @@
   :commands py-autopep8
   )
 
+(use-package robot-mode
+  :ensure t
+  :config
+  (add-to-list 'auto-mode-alist '("\\.robot\\'" . robot-mode))
+)
+
 (use-package 
   avy 
   :ensure t 
