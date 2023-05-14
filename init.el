@@ -105,6 +105,15 @@
   (setq doom-modeline-window-width-limit 3) 
   (setq doom-modeline-lsp t))
 
+(use-package nerd-icons
+  :ensure t
+  :custom
+  ;; The Nerd Font you want to use in GUI
+  ;; "Symbols Nerd Font Mono" is the default and is recommended
+  ;; but you can use any other Nerd Font if you want
+  (nerd-icons-font-family "Symbols Nerd Font Mono")
+)
+
 (use-package 
   projectile 
   :ensure t 
@@ -212,13 +221,17 @@
   (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line))
 
 
-(use-package 
-  all-the-icons-ivy-rich 
-  :ensure t 
-  :init (all-the-icons-ivy-rich-mode 1))
+(use-package nerd-icons-ivy-rich
+  :ensure t
+  :init
+  (nerd-icons-ivy-rich-mode 1)
+  (ivy-rich-mode 1))
 
 
-
+(use-package nerd-icons-completion
+  :ensure t
+  :config
+  (nerd-icons-completion-mode))
 
 
 (use-package 
@@ -427,6 +440,8 @@
   :ensure t
   :config
   (add-to-list 'auto-mode-alist '("\\.robot\\'" . robot-mode))
+  (global-set-key (kbd "C-c TAB") 'robot-mode-add-argument) 
+  
 )
 
 (use-package 
@@ -861,7 +876,7 @@
  ;; If there is more than one, they won't work right.
  '(mini-frame-show-parameters '((top . 10) (width . 0.7) (left . 0.5)))
  '(package-selected-packages
-   '(0blayout dired-x yaml-mode whole-line-or-region which-key vterm verb vc-msg v-mode use-package tide super-save smex rustic rg restart-emacs real-auto-save py-autopep8 projectile org-roam org-journal olivetti nim-mode move-text magit lsp-ui lsp-python-ms lsp-pyright linum-relative json-mode js2-mode ivy-rich ido-completing-read+ helpful groovy-mode find-file-in-project fd-dired exec-path-from-shell esup emacsql-sqlite3 dot-mode dimmer deadgrep dash-functional counsel company-quickhelp company-lsp company-jedi color-theme-sanityinc-tomorrow avy async amx))
+   '(nerd-icons 0blayout dired-x yaml-mode whole-line-or-region which-key vterm verb vc-msg v-mode use-package tide super-save smex rustic rg restart-emacs real-auto-save py-autopep8 projectile org-roam org-journal olivetti nim-mode move-text magit lsp-ui lsp-python-ms lsp-pyright linum-relative json-mode js2-mode ivy-rich ido-completing-read+ helpful groovy-mode find-file-in-project fd-dired exec-path-from-shell esup emacsql-sqlite3 dot-mode dimmer deadgrep dash-functional counsel company-quickhelp company-lsp company-jedi color-theme-sanityinc-tomorrow avy async amx))
  '(warning-suppress-types '((comp) (comp))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
