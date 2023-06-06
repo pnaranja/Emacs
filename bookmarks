@@ -2,7 +2,19 @@
 ;;; This format is meant to be slightly human-readable;
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
-(("address-validation-dgs"
+(("notes.org"
+ (filename . "~/iCloud Drive (Archive)/beorg/notes.org")
+ (front-context-string . "* Current Sprint")
+ (rear-context-string . "8246][this MR]]\n")
+ (position . 1150040)
+ (last-modified 25718 28724 376834 0))
+("commerceweb-automation"
+ (filename . "~/chegg/commerceweb-automation/")
+ (front-context-string . "..\n  drwxr-xr-x@")
+ (rear-context-string . "56 May 12 15:45 ")
+ (position . 159)
+ (last-modified 25710 39284 30959 0))
+("address-validation-dgs"
  (filename . "~/chegg/address-validation-dgs/")
  (front-context-string . ".git\n  -rw-r--r-")
  (rear-context-string . "84 Mar  8 14:12 ")
@@ -113,11 +125,6 @@
  (front-context-string . "* Quick Start fo")
  (rear-context-string)
  (position . 1))
-("notes.org"
- (filename . "~/Library/Mobile Documents/iCloud~com~appsonthemove~beorg/Documents/notes.org")
- (front-context-string . "* 10/14/2019\n** ")
- (rear-context-string . "e not updated**\n")
- (position . 2980))
 ("init.el"
  (filename . "~/.emacs.d/init.el")
  (front-context-string . ";; Define packag")

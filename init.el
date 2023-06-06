@@ -1,7 +1,34 @@
+;;; early-init.el --- early bird  -*- no-byte-compile: t -*-
 ;;; package -- Summary
 ;;; Commentary:
-(defvar last-file-name-handler-alist file-name-handler-alist)
-(setq gc-cons-threshold 402653184 gc-cons-percentage 0.6 file-name-handler-alist nil)
+
+;; On OS X, an Emacs instance started from the graphical user
+;; interface will have a different environment than a shell in a
+;; terminal window, because OS X does not run a shell during the
+;; login. Obviously this will lead to unexpected results when
+;; calling external utilities like make from Emacs.
+;; This library works around this problem by copying important
+;; environment variables from the user's shell.
+;; https://github.com/purcell/exec-path-from-shell
+(when (memq window-system '(mac ns x)) 
+  (exec-path-from-shell-initialize)
+
+  ;; OSX: Use mdfind for locate
+  (setq locate-command "mdfind")
+
+)
+
+;; Add to Path
+(setq exec-path (append exec-path '("/usr/local/bin")))
+
+ ;; Set whole line or region mode
+(whole-line-or-region-global-mode)
+
+;; Add another command to set-mark
+(global-set-key (kbd "M-SPC") 'set-mark-command)
+
+;; Calendar shortcut
+(global-set-key (kbd "C-x c") 'calendar)
 
 
 ;; From Melpa
@@ -25,6 +52,7 @@
   (require 'use-package))
 
 (use-package esup
+  :defer
   :ensure t
   ;; To use MELPA Stable use ":pin melpa-stable",
   :pin melpa
@@ -36,6 +64,7 @@
 
 (use-package 
   elisp-format 
+  :defer
   :ensure t 
   :config (require 'elisp-format))
 
@@ -97,6 +126,15 @@
 )
 
 (use-package 
+ auto-compile
+ :ensure t 
+ :config
+ ;(setq load-prefer-newer t)
+ (auto-compile-on-load-mode)
+ (auto-compile-on-save-mode)
+)
+
+(use-package 
   doom-modeline 
   :ensure t 
   :hook (after-init . doom-modeline-mode) 
@@ -117,6 +155,7 @@
 (use-package 
   projectile 
   :ensure t 
+  :defer
   :init (projectile-mode +1) 
   :bind (:map projectile-mode-map
 	      ("C-c p" . projectile-command-map) 
@@ -237,6 +276,7 @@
 (use-package 
   flycheck 
   :ensure t 
+  :defer
   :commands flycheck
   :config (add-hook 'after-init-hook 'flycheck-mode)
 
@@ -249,6 +289,7 @@
 ;; Activate pos-tip
 (use-package 
   pos-tip 
+  :defer
   )
 
 ;; Copy or Delete a whole line on cursor
@@ -264,6 +305,7 @@
 (use-package 
   org-journal 
   :ensure t 
+  :defer
   :commands org-journal
   :config (setq org-journal-dir "~/journal/emacs_journal") 
   (setq org-journal-date-format "%A, %d %B %Y") 
@@ -273,12 +315,14 @@
 (use-package 
   olivetti 
   :ensure t 
+  :defer
   :hook (olivetti-mode . org-journal-mode-hook))
 
 ;; Vlang
 (use-package 
   v-mode 
   :ensure t 
+  :defer
   :commands v-mode
   :config
   ;; Remove verilog mode since it's covers *.v files which I now want to refer to Vlang
@@ -295,6 +339,7 @@
 (use-package 
   org-download 
   :after org 
+  :defer
   :ensure t 
   :defer nil 
   :custom (org-download-method 'directory) 
@@ -315,6 +360,7 @@
 (use-package 
   nim-mode 
   :ensure t 
+  :defer
   :commands nim-mode
   :hook (nim-mode . rainbow-delimiters-mode) 
   (nim-mode . subword-mode) 
@@ -336,7 +382,7 @@
 (use-package 
   lsp-mode 
   :ensure t 
-  :demand
+  :defer
   :commands lsp-mode
   :config
   ;; LSP shortcuts
@@ -348,6 +394,9 @@
   (setq lsp-headerline-breadcrumb-enable 1) 
   (setq read-process-output-max (* 1024 1024)) 
   (setq lsp-rust-server 'rust-analyzer) 
+
+  (setq lsp-enable-snippet nil)
+
   (add-hook 'c-mode-hook #'lsp) 
   (add-hook 'c++-mode-hook #'lsp) 
   (add-hook 'js-mode-hook #'lsp) 
@@ -358,11 +407,14 @@
 
 (use-package
   lsp-ivy
-  :ensure t)
+  :ensure t
+  :requires lsp-mode 
+)
 
 (use-package 
   tide 
   :ensure t 
+  :defer
   :commands tide
   :config (defun setup-tide-mode () 
 	    (interactive) 
@@ -383,6 +435,7 @@
 (use-package 
   web-mode 
   :ensure t 
+  :defer
   :commands web-mode
   :config (add-to-list 'auto-mode-alist '("\\.tsx\\'" . web-mode)) 
   (add-hook 'web-mode-hook (lambda () 
@@ -393,6 +446,7 @@
 (use-package 
   js2-mode 
   :ensure t 
+  :defer
   :commands js2-mode
   :config
   ;; Use js2-mode for JS files
@@ -401,43 +455,63 @@
 (use-package 
   typescript-mode 
   :commands typescript-mode
-  :ensure t)
+  :ensure t
+  :defer
+)
+
 (use-package 
   yaml-mode 
+  :defer
   :commands yaml-mode
-  :ensure t)
+  :ensure t
+)
+
 (use-package 
   dockerfile-mode 
+  :defer
   :commands dockerfile-mode
-  :ensure t)
+  :ensure t
+)
+
 (use-package 
   groovy-mode 
+  :defer
   :commands groovy-mode
-  :ensure t)
+  :ensure t
+)
+
 (use-package 
   json-mode 
+  :defer
   :commands json-mode
-  :ensure t)
+  :ensure t
+)
+
 (use-package 
   rustic 
+  :defer
   :commands rustic
-  :ensure t)
+  :ensure t
+)
 
 
 ;; Python specific
 (use-package lsp-pyright
   :ensure t
+  :defer
   :hook (python-mode . (lambda ()
                           (require 'lsp-pyright)
                           (lsp))))  ; or lsp-deferred
 (use-package 
   py-autopep8 
   :ensure t 
+  :defer
   :commands py-autopep8
   )
 
 (use-package robot-mode
   :ensure t
+  :defer
   :config
   (add-to-list 'auto-mode-alist '("\\.robot\\'" . robot-mode))
   (global-set-key (kbd "C-c TAB") 'robot-mode-add-argument) 
@@ -539,6 +613,7 @@
 (use-package 
   verb 
   :commands verb
+  :defer
   :ensure t)
 (use-package 
   org 
@@ -566,6 +641,7 @@
 (use-package 
   helpful 
   :ensure t 
+  :defer
   :commands helpful
   :config (global-set-key (kbd "C-h f") #'helpful-callable) 
   (global-set-key (kbd "C-h v") #'helpful-variable) 
@@ -582,6 +658,7 @@
 (use-package 
   vc-msg 
   :ensure t 
+  :defer
   :init (defun vc-msg-hook-setup (vcs-type commit-info)
 	  ;; copy commit id to clipboard
 	  (message (format "%s\n%s\n%s\n%s" (plist-get commit-info 
@@ -661,19 +738,6 @@
   restart-emacs 
   :ensure t
   :config
-  ;; Check startup time
-  (defun efs/display-startup-time () 
-    (message "Emacs loaded in %s with %d garbage collections." (format "%.2f seconds" (float-time
-  										     (time-subtract
-  										      after-init-time
-  										      before-init-time)))
-  	   gcs-done))
-  
-  (add-hook 'emacs-startup-hook 
-  	  (setq gc-cons-threshold 16777216 gc-cons-percentage 0.1 file-name-handler-alist
-  		last-file-name-handler-alist) 
-  	  (efs/display-startup-time))
-  
 )
 
 
@@ -685,9 +749,6 @@
   )
 
 
-;; Enable Auto revert mode
-(global-auto-revert-mode 1)
-
 ;; Enable line and column number mode
 (setq column-number-mode 1)
 (setq line-number-mode 1)
@@ -695,68 +756,12 @@
 ;; Desktop mode
 (desktop-save-mode 1)
 
-;; Add to Path
-(setq exec-path (append exec-path '("/usr/local/bin")))
-
-;; On OS X, an Emacs instance started from the graphical user
-;; interface will have a different environment than a shell in a
-;; terminal window, because OS X does not run a shell during the
-;; login. Obviously this will lead to unexpected results when
-;; calling external utilities like make from Emacs.
-;; This library works around this problem by copying important
-;; environment variables from the user's shell.
-;; https://github.com/purcell/exec-path-from-shell
-(when (memq window-system '(mac ns x)) 
-  (exec-path-from-shell-initialize))
-
-
-;; full path in title bar and in mode line
-;; (setq-default frame-title-format "%b (%f)")
 
 ;; (setq-default mode-line-format
 ;;    (quote
 ;;     ("%f     " mode-line-position
 ;;      (vc-mode vc-mode)
 ;;      "  " mode-line-modes mode-line-misc-info mode-line-end-spaces)))
-
-;; Turn off the tool bar
-(tool-bar-mode -1)
-
-;; Changes all yes/no questions to y/n type
-(fset 'yes-or-no-p 'y-or-n-p)
-
-;; Go straight to scratch buffer on startup
-(setq inhibit-startup-message t)
-
-;; Highlights matching parenthesis
-(show-paren-mode 1)
-
-;; Highlight current line
-(global-hl-line-mode 1)
-
-;; Turn off electric mode so no auto indenting
-(setq electric-indent-mode nil)
-
-;; Turn on delete selection mode
-(delete-selection-mode 1)
-
-;; Auto-follow symlinks
-(setq vc-follow-symlinks t)
-
-;; Set whole line or region mode
-(whole-line-or-region-global-mode)
-
-;; Add another command to set-mark
-(global-set-key (kbd "M-SPC") 'set-mark-command)
-
-(put 'narrow-to-region 'disabled nil)
-
-;; OSX: Use mdfind for locate
-(setq locate-command "mdfind")
-
-
-;; Turn off org adapt indentation to not include an extra white space for the heading
-(setq org-adapt-indentation nil)
 
 
 ;; https://gist.github.com/leavesofgrass/23cf0f61e0092e36dbbaa3f33e4dd060
@@ -794,44 +799,39 @@
 (global-set-key  (kbd "C-c y") 'copy-to-register )
 (global-set-key  (kbd "C-c p") 'insert-register )
 
-   ;; Org Capture and Agenda settings - http://pragmaticemacs.com/emacs/org-mode-basics-vi-a-simple-todo-list/
-   ;; set key for agenda
-   (global-set-key (kbd "C-'") 'org-agenda)
+ ;; Org Capture and Agenda settings - http://pragmaticemacs.com/emacs/org-mode-basics-vi-a-simple-todo-list/
+ ;; set key for agenda
+ (global-set-key (kbd "C-'") 'org-agenda)
 
-  ;;file to save todo items
-  (setq org-agenda-files '("~/.notes")) 
-  (setq org-agenda-window-setup (quote current-window))
-  ;;capture todo items using C-c c t
-  (global-set-key (kbd "C-c c") 'org-capture) 
-  (setq org-capture-templates '(("t" "todo" entry (file+headline "~/.notes/todo.org" "Tasks")
+;;file to save todo items
+(setq org-agenda-files '("~/.notes")) 
+(setq org-agenda-window-setup (quote current-window))
+;;capture todo items using C-c c t
+(global-set-key (kbd "C-c c") 'org-capture) 
+(setq org-capture-templates '(("t" "todo" entry (file+headline "~/.notes/todo.org" "Tasks")
 				 "* TODO [#A] %?")))
 
-  ;; Org mode settings
-  (setq org-startup-indented t org-hide-leading-stars t org-hide-emphasis-markers t
+;; Org mode settings
+(setq org-startup-indented t org-hide-leading-stars t org-hide-emphasis-markers t
 	org-odd-levels-only t)
 
-  ;; Calendar shortcut
-  (global-set-key (kbd "C-x c") 'calendar)
-  
-  					; Allow to resize images
-  (setq org-image-actual-width nil)
-  
-  (defun replace_underscores_with_spaces () 
-    "Replace those 'underscores' from gmail to spaces" 
-    (interactive) 
-    (while (search-forward " " nil t) 
-      (replace-match " " nil t)))
-  
-  (global-set-key (kbd "C-c r") 'replace_underscores_with_spaces)
-  
-  (setq org-cycle-hide-block-startup t)
-  
+
+(defun replace_underscores_with_spaces () 
+  "Replace those 'underscores' from gmail to spaces" 
+  (interactive) 
+  (while (search-forward " " nil t) 
+    (replace-match " " nil t)))
+
+(global-set-key (kbd "C-c r") 'replace_underscores_with_spaces)
+
+(setq org-cycle-hide-block-startup t)
+
 
 
 (use-package 
   magit
-  :demand
   :ensure t 
+  :defer
   :commands magit
   :config (global-unset-key (kbd "C-c M-g")) 
   (global-set-key (kbd "C-c g") 'magit-file-dispatch) 
@@ -844,8 +844,8 @@
 
 (use-package 
   diff-hl
-  :demand
   :ensure t 
+  :defer
   :config
   (global-diff-hl-mode)
 )
@@ -854,6 +854,7 @@
 (use-package 
   org-roam 
   :ensure t 
+  :defer
   :config 
   (setq org-roam-v2-ack t) 
   (global-set-key (kbd "C-c n l") 'org-roam-capture) 
@@ -869,14 +870,121 @@
 				       (window-height . fit-window-to-buffer)))
 )
 
+(defun efs/display-startup-time () 
+  (message "Emacs loaded in %s with %d garbage collections." 
+	   (format "%.2f seconds" (float-time
+		(time-subtract
+		 after-init-time
+		 before-init-time)))
+	         gcs-done))
+
+;; Restore after startup
+(add-hook 'emacs-startup-hook
+          (lambda ()
+            (setq gc-cons-threshold (* 20 1024 1024)
+                  file-name-handler-alist file-name-handler-alist-original))
+	  (efs/display-startup-time)
+)
+
+;; Previous suggestion
+;; (add-hook 'emacs-startup-hook 
+;; 	  (setq gc-cons-threshold 16777216 gc-cons-percentage 0.1 file-name-handler-alist
+;; 		last-file-name-handler-alist) 
+;; 	  (efs/display-startup-time))
+
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(connection-local-criteria-alist
+   '(((:application tramp :protocol "flatpak")
+      tramp-container-connection-local-default-flatpak-profile)
+     ((:application tramp :machine "localhost")
+      tramp-connection-local-darwin-ps-profile)
+     ((:application tramp :machine "C02FF3YEMD6P")
+      tramp-connection-local-darwin-ps-profile)
+     ((:application tramp)
+      tramp-connection-local-default-system-profile tramp-connection-local-default-shell-profile)))
+ '(connection-local-profile-alist
+   '((tramp-container-connection-local-default-flatpak-profile
+      (tramp-remote-path "/app/bin" tramp-default-remote-path "/bin" "/usr/bin" "/sbin" "/usr/sbin" "/usr/local/bin" "/usr/local/sbin" "/local/bin" "/local/freeware/bin" "/local/gnu/bin" "/usr/freeware/bin" "/usr/pkg/bin" "/usr/contrib/bin" "/opt/bin" "/opt/sbin" "/opt/local/bin"))
+     (tramp-connection-local-darwin-ps-profile
+      (tramp-process-attributes-ps-args "-acxww" "-o" "pid,uid,user,gid,comm=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" "-o" "state=abcde" "-o" "ppid,pgid,sess,tty,tpgid,minflt,majflt,time,pri,nice,vsz,rss,etime,pcpu,pmem,args")
+      (tramp-process-attributes-ps-format
+       (pid . number)
+       (euid . number)
+       (user . string)
+       (egid . number)
+       (comm . 52)
+       (state . 5)
+       (ppid . number)
+       (pgrp . number)
+       (sess . number)
+       (ttname . string)
+       (tpgid . number)
+       (minflt . number)
+       (majflt . number)
+       (time . tramp-ps-time)
+       (pri . number)
+       (nice . number)
+       (vsize . number)
+       (rss . number)
+       (etime . tramp-ps-time)
+       (pcpu . number)
+       (pmem . number)
+       (args)))
+     (tramp-connection-local-busybox-ps-profile
+      (tramp-process-attributes-ps-args "-o" "pid,user,group,comm=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" "-o" "stat=abcde" "-o" "ppid,pgid,tty,time,nice,etime,args")
+      (tramp-process-attributes-ps-format
+       (pid . number)
+       (user . string)
+       (group . string)
+       (comm . 52)
+       (state . 5)
+       (ppid . number)
+       (pgrp . number)
+       (ttname . string)
+       (time . tramp-ps-time)
+       (nice . number)
+       (etime . tramp-ps-time)
+       (args)))
+     (tramp-connection-local-bsd-ps-profile
+      (tramp-process-attributes-ps-args "-acxww" "-o" "pid,euid,user,egid,egroup,comm=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" "-o" "state,ppid,pgid,sid,tty,tpgid,minflt,majflt,time,pri,nice,vsz,rss,etimes,pcpu,pmem,args")
+      (tramp-process-attributes-ps-format
+       (pid . number)
+       (euid . number)
+       (user . string)
+       (egid . number)
+       (group . string)
+       (comm . 52)
+       (state . string)
+       (ppid . number)
+       (pgrp . number)
+       (sess . number)
+       (ttname . string)
+       (tpgid . number)
+       (minflt . number)
+       (majflt . number)
+       (time . tramp-ps-time)
+       (pri . number)
+       (nice . number)
+       (vsize . number)
+       (rss . number)
+       (etime . number)
+       (pcpu . number)
+       (pmem . number)
+       (args)))
+     (tramp-connection-local-default-shell-profile
+      (shell-file-name . "/bin/sh")
+      (shell-command-switch . "-c"))
+     (tramp-connection-local-default-system-profile
+      (path-separator . ":")
+      (null-device . "/dev/null"))))
  '(mini-frame-show-parameters '((top . 10) (width . 0.7) (left . 0.5)))
  '(package-selected-packages
-   '(nerd-icons 0blayout dired-x yaml-mode whole-line-or-region which-key vterm verb vc-msg v-mode use-package tide super-save smex rustic rg restart-emacs real-auto-save py-autopep8 projectile org-roam org-journal olivetti nim-mode move-text magit lsp-ui lsp-python-ms lsp-pyright linum-relative json-mode js2-mode ivy-rich ido-completing-read+ helpful groovy-mode find-file-in-project fd-dired exec-path-from-shell esup emacsql-sqlite3 dot-mode dimmer deadgrep dash-functional counsel company-quickhelp company-lsp company-jedi color-theme-sanityinc-tomorrow avy async amx))
+   '(auto-compile nerd-icons 0blayout dired-x yaml-mode whole-line-or-region which-key vterm verb vc-msg v-mode use-package tide super-save smex rustic rg restart-emacs real-auto-save py-autopep8 projectile org-roam org-journal olivetti nim-mode move-text magit lsp-ui lsp-python-ms lsp-pyright linum-relative json-mode js2-mode ivy-rich ido-completing-read+ helpful groovy-mode find-file-in-project fd-dired exec-path-from-shell esup emacsql-sqlite3 dot-mode dimmer deadgrep dash-functional counsel company-quickhelp company-lsp company-jedi color-theme-sanityinc-tomorrow avy async amx))
  '(warning-suppress-types '((comp) (comp))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
