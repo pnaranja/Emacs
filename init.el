@@ -52,6 +52,13 @@
 	      (point-max)) 
     (scroll-up n)))
 
+(defun scroll-down-in-place (n) 
+  (interactive "p") 
+  (previous-line n) 
+  (unless (eq (window-start) 
+	      (point-min)) 
+    (scroll-down n)))
+
 (global-set-key "\M-n" 'scroll-up-in-place)
 (global-set-key "\M-p" 'scroll-down-in-place)
 
