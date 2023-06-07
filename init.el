@@ -2,25 +2,6 @@
 ;;; package -- Summary
 ;;; Commentary:
 
-;; On OS X, an Emacs instance started from the graphical user
-;; interface will have a different environment than a shell in a
-;; terminal window, because OS X does not run a shell during the
-;; login. Obviously this will lead to unexpected results when
-;; calling external utilities like make from Emacs.
-;; This library works around this problem by copying important
-;; environment variables from the user's shell.
-;; https://github.com/purcell/exec-path-from-shell
-(when (memq window-system '(mac ns x)) 
-  (exec-path-from-shell-initialize)
-
-  ;; OSX: Use mdfind for locate
-  (setq locate-command "mdfind")
-
-)
-
-;; Add to Path
-(setq exec-path (append exec-path '("/usr/local/bin")))
-
  ;; Set whole line or region mode
 (whole-line-or-region-global-mode)
 
@@ -29,6 +10,124 @@
 
 ;; Calendar shortcut
 (global-set-key (kbd "C-x c") 'calendar)
+
+;; https://batsov.com/articles/2012/03/08/emacs-tip-number-5-save-buffers-automatically-on-buffer-or-window-switch/
+;; automatically save buffers associated with files on buffer switch
+;; and on windows switch
+(defadvice switch-to-buffer (before save-buffer-now activate) 
+  (when buffer-file-name (save-buffer)))
+(defadvice other-window (before other-window-now activate) 
+  (when buffer-file-name (save-buffer)))
+(defadvice windmove-up (before other-window-now activate) 
+  (when buffer-file-name (save-buffer)))
+(defadvice windmove-down (before other-window-now activate) 
+  (when buffer-file-name (save-buffer)))
+(defadvice windmove-left (before other-window-now activate) 
+  (when buffer-file-name (save-buffer)))
+(defadvice windmove-right (before other-window-now activate) 
+  (when buffer-file-name (save-buffer)))
+
+
+;; create the autosave dir if necessary, since emacs won't.
+(make-directory "~/emacs/autosaves/" t)
+
+;; Put autosave files (ie #foo#) and backup files (ie foo~) in ~/.emacs.d/.
+(setq-default backup-directory-alist (quote ((".*" . "~/emacs/backups/"))))
+
+;; Easily create scratch buffers
+(defun generate-scratch-buffer () 
+  "Create and switch to a temporary scratch buffer with a random
+       name." 
+  (interactive) 
+  (switch-to-buffer (generate-new-buffer-name "scratchbuffer")) 
+  (json-mode))
+(global-set-key  (kbd "C-c b") 'generate-scratch-buffer )
+  
+;; Scrolling in place (M-n and M-p)
+;; Has a parameter to pass if you want scroll >1 lines (C-u <number>)
+(defun scroll-up-in-place (n) 
+  (interactive "p") 
+  (next-line n) 
+  (unless (eq (window-end) 
+	      (point-max)) 
+    (scroll-up n)))
+
+(global-set-key "\M-n" 'scroll-up-in-place)
+(global-set-key "\M-p" 'scroll-down-in-place)
+
+;; Always turn on line wrap from screen
+(global-visual-line-mode 1)
+
+;; Enable line and column number mode
+(setq column-number-mode 1)
+(setq line-number-mode 1)
+
+;; Desktop mode
+(desktop-save-mode 1)
+
+;; https://gist.github.com/leavesofgrass/23cf0f61e0092e36dbbaa3f33e4dd060
+;; Minify buffer contents
+(defun minify-buffer-contents() 
+  "Minifies the buffer contents by removing whitespaces." 
+  (interactive) 
+  (delete-whitespace-rectangle (point-min) 
+			       (point-max)) 
+  (mark-whole-buffer) 
+  (goto-char (point-min)) 
+  (while (search-forward "\n" nil t) 
+    (replace-match "" nil t)))
+
+(defun copy-end-of-line()
+ "Copy to end of line into kill ring"
+ (interactive)
+ (push-mark nil nil 1)
+ (end-of-visual-line)
+ (copy-region-as-kill nil nil (buffer-substring (mark) (point)))
+ (pop-to-mark-command)
+)
+
+(global-set-key (kbd "M-k") 'copy-end-of-line)
+
+(global-set-key (kbd "C-c m") 'minify-buffer-contents)
+
+(global-set-key (kbd "C-c i") 'string-rectangle)
+
+
+;; Go back to global mark shortcut
+(global-set-key (kbd "C-`") 'pop-global-mark)
+
+;; Shortcuts for registers
+(global-set-key  (kbd "C-c y") 'copy-to-register )
+(global-set-key  (kbd "C-c p") 'insert-register )
+
+;; Org mode settings
+(setq org-startup-indented t org-hide-leading-stars t org-hide-emphasis-markers t
+	org-odd-levels-only t)
+
+;; Fold all org blocks when opening org files
+(setq org-cycle-hide-block-startup t)
+
+;; Org Capture and Agenda settings - http://pragmaticemacs.com/emacs/org-mode-basics-vi-a-simple-todo-list/
+;; set key for agenda
+(global-set-key (kbd "C-'") 'org-agenda)
+
+;;file to save todo items
+(setq org-agenda-files '("~/.notes")) 
+(setq org-agenda-window-setup (quote current-window))
+;;capture todo items using C-c c t
+(global-set-key (kbd "C-c c") 'org-capture) 
+(setq org-capture-templates '(("t" "todo" entry (file+headline "~/.notes/todo.org" "Tasks")
+				 "* TODO [#A] %?")))
+
+(defun replace_underscores_with_spaces () 
+  "Replace those 'underscores' from gmail to spaces" 
+  (interactive) 
+  (while (search-forward " " nil t) 
+    (replace-match " " nil t)))
+
+(global-set-key (kbd "C-c r") 'replace_underscores_with_spaces)
+
+
 
 
 ;; From Melpa
@@ -62,6 +161,32 @@
   (setq esup-depth 0)
 )
 
+(when (memq window-system '(mac ns x)) 
+
+  ;; On OS X, an Emacs instance started from the graphical user
+  ;; interface will have a different environment than a shell in a
+  ;; terminal window, because OS X does not run a shell during the
+  ;; login. Obviously this will lead to unexpected results when
+  ;; calling external utilities like make from Emacs.
+  ;; This library works around this problem by copying important
+  ;; environment variables from the user's shell.
+  ;; https://github.com/purcell/exec-path-from-shell
+  (use-package 
+    exec-path-from-shell 
+    :commands exec-path-from-shell
+    :ensure t
+    :demand
+    :config
+    (exec-path-from-shell-initialize)
+  )
+
+  ;; OSX: Use mdfind for locate
+  (setq locate-command "mdfind")
+
+)
+
+
+
 (use-package 
   elisp-format 
   :defer
@@ -88,40 +213,6 @@
   (global-set-key (kbd "M-9") 'kmacro-start-macro)
   (global-set-key (kbd "M-0") 'kmacro-stop-macro)
   (global-set-key (kbd "M--") 'kmacro-end-and-call-macro)
-
-
-  ;; https://batsov.com/articles/2012/03/08/emacs-tip-number-5-save-buffers-automatically-on-buffer-or-window-switch/
-  ;; automatically save buffers associated with files on buffer switch
-  ;; and on windows switch
-  (defadvice switch-to-buffer (before save-buffer-now activate) 
-    (when buffer-file-name (save-buffer)))
-  (defadvice other-window (before other-window-now activate) 
-    (when buffer-file-name (save-buffer)))
-  (defadvice windmove-up (before other-window-now activate) 
-    (when buffer-file-name (save-buffer)))
-  (defadvice windmove-down (before other-window-now activate) 
-    (when buffer-file-name (save-buffer)))
-  (defadvice windmove-left (before other-window-now activate) 
-    (when buffer-file-name (save-buffer)))
-  (defadvice windmove-right (before other-window-now activate) 
-    (when buffer-file-name (save-buffer)))
-  
-  
-  ;; create the autosave dir if necessary, since emacs won't.
-  (make-directory "~/emacs/autosaves/" t)
-  
-  ;; Put autosave files (ie #foo#) and backup files (ie foo~) in ~/.emacs.d/.
-  (setq-default backup-directory-alist (quote ((".*" . "~/emacs/backups/"))))
-  
-  ;; Easily create scratch buffers
-  (defun generate-scratch-buffer () 
-    "Create and switch to a temporary scratch buffer with a random
-         name." 
-    (interactive) 
-    (switch-to-buffer (generate-new-buffer-name "scratchbuffer")) 
-    (json-mode))
-  (global-set-key  (kbd "C-c b") 'generate-scratch-buffer )
-  
 
 )
 
@@ -564,35 +655,6 @@
   (setf (alist-get ?N avy-dispatch-alist) 'avy-action-copy-whole-line (alist-get ?K
 										 avy-dispatch-alist)
 	'avy-action-kill-whole-line)
-
-  ;; Scrolling in place (M-n and M-p)
-  ;; Has a parameter to pass if you want scroll >1 lines (C-u <number>)
-  (defun scroll-down-in-place (n) 
-    (interactive "p") 
-    (previous-line n) 
-    (unless (eq (window-start) 
-  	      (point-min)) 
-      (scroll-down n)))
-  
-  ;; Scrolling in place (M-n and M-p)
-  ;; Has a parameter to pass if you want scroll >1 lines (C-u <number>)
-  (defun scroll-up-in-place (n) 
-    (interactive "p") 
-    (next-line n) 
-    (unless (eq (window-end) 
-  	      (point-max)) 
-      (scroll-up n)))
-  
-  (global-set-key "\M-n" 'scroll-up-in-place)
-  (global-set-key "\M-p" 'scroll-down-in-place)
-
-  ;; Always turn on line wrap from screen
-  (global-visual-line-mode 1)
-  
-  ;; shortcut to zap up to char
-  (global-unset-key (kbd "M-z"))
-  (global-set-key (kbd "M-z") #'zap-up-to-char)
-  
 )
 
 (use-package 
@@ -601,6 +663,7 @@
   :config 
   (global-set-key (kbd "M-Z") 'avy-zap-to-char-dwim)
   (global-set-key (kbd "M-z") 'avy-zap-up-to-char-dwim)
+
 )
 
 
@@ -609,12 +672,6 @@
   :ensure t
   :config (global-set-key (kbd "C-c s") #'deadgrep))
 
-;; Verb - For sending HTTP Requests
-(use-package 
-  verb 
-  :commands verb
-  :defer
-  :ensure t)
 (use-package 
   org 
   :mode ("\\.org\\'" . org-mode) 
@@ -622,20 +679,18 @@
   (setq org-startup-folded t)
 )
 
-;; Get env vars from shell
+;; Verb - For sending HTTP Requests
 (use-package 
-  exec-path-from-shell 
-  :commands exec-path-from-shell
-  :ensure t
-)
-
+  verb 
+  :commands verb
+  :defer
+  :ensure t)
 
 ;; Use fd for dired
 (use-package 
   fd-dired 
   :commands fd-dired
   :ensure t)
-
 
 
 (use-package 
@@ -747,85 +802,6 @@
   :ensure t 
   :commands vterm
   )
-
-
-;; Enable line and column number mode
-(setq column-number-mode 1)
-(setq line-number-mode 1)
-
-;; Desktop mode
-(desktop-save-mode 1)
-
-
-;; (setq-default mode-line-format
-;;    (quote
-;;     ("%f     " mode-line-position
-;;      (vc-mode vc-mode)
-;;      "  " mode-line-modes mode-line-misc-info mode-line-end-spaces)))
-
-
-;; https://gist.github.com/leavesofgrass/23cf0f61e0092e36dbbaa3f33e4dd060
-;; Minify buffer contents
-(defun minify-buffer-contents() 
-  "Minifies the buffer contents by removing whitespaces." 
-  (interactive) 
-  (delete-whitespace-rectangle (point-min) 
-			       (point-max)) 
-  (mark-whole-buffer) 
-  (goto-char (point-min)) 
-  (while (search-forward "\n" nil t) 
-    (replace-match "" nil t)))
-
-(defun copy-end-of-line()
- "Copy to end of line into kill ring"
- (interactive)
- (push-mark nil nil 1)
- (end-of-visual-line)
- (copy-region-as-kill nil nil (buffer-substring (mark) (point)))
- (pop-to-mark-command)
-)
-
-(global-set-key (kbd "M-k") 'copy-end-of-line)
-
-(global-set-key (kbd "C-c m") 'minify-buffer-contents)
-
-(global-set-key (kbd "C-c i") 'string-rectangle)
-
-
-;; Go back to global mark shortcut
-(global-set-key (kbd "C-`") 'pop-global-mark)
-
-;; Shortcuts for registers
-(global-set-key  (kbd "C-c y") 'copy-to-register )
-(global-set-key  (kbd "C-c p") 'insert-register )
-
- ;; Org Capture and Agenda settings - http://pragmaticemacs.com/emacs/org-mode-basics-vi-a-simple-todo-list/
- ;; set key for agenda
- (global-set-key (kbd "C-'") 'org-agenda)
-
-;;file to save todo items
-(setq org-agenda-files '("~/.notes")) 
-(setq org-agenda-window-setup (quote current-window))
-;;capture todo items using C-c c t
-(global-set-key (kbd "C-c c") 'org-capture) 
-(setq org-capture-templates '(("t" "todo" entry (file+headline "~/.notes/todo.org" "Tasks")
-				 "* TODO [#A] %?")))
-
-;; Org mode settings
-(setq org-startup-indented t org-hide-leading-stars t org-hide-emphasis-markers t
-	org-odd-levels-only t)
-
-
-(defun replace_underscores_with_spaces () 
-  "Replace those 'underscores' from gmail to spaces" 
-  (interactive) 
-  (while (search-forward " " nil t) 
-    (replace-match " " nil t)))
-
-(global-set-key (kbd "C-c r") 'replace_underscores_with_spaces)
-
-(setq org-cycle-hide-block-startup t)
-
 
 
 (use-package 
