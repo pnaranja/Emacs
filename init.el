@@ -134,7 +134,18 @@
 
 (global-set-key (kbd "C-c r") 'replace_underscores_with_spaces)
 
+(defun kill-file-and-directory-buffers ()
+  "Kill all buffers that are visiting files or directories."
+  (interactive)
+  (mapc 'kill-buffer
+        (delq (current-buffer)
+              (seq-filter
+               (lambda (x)
+                 (or (buffer-file-name x)
+                     (eq 'dired-mode (buffer-local-value 'major-mode x))))
+               (buffer-list)))))
 
+(global-set-key  (kbd "C-x M-d") 'kill-file-and-directory-buffers)
 
 
 ;; From Melpa
