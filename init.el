@@ -5,8 +5,16 @@
  ;; Set whole line or region mode
 (whole-line-or-region-global-mode)
 
+;; Go back to global mark shortcut
+;; This traverses buffers.
+(global-set-key (kbd "C-`") 'pop-global-mark)
+
 ;; Add another command to set-mark
-(global-set-key (kbd "M-SPC") 'set-mark-command)
+(global-set-key (kbd "C-<return>") 'set-mark-command)
+
+;; Can press C-u set-mark-command to go back to last position in the buffer
+;; Then press subsequent set-mark-command to go back to the next last position
+(setq set-mark-command-repeat-pop 1)
 
 ;; Calendar shortcut
 (global-set-key (kbd "C-x c") 'calendar)
@@ -98,10 +106,6 @@
 (global-set-key (kbd "C-c m") 'minify-buffer-contents)
 
 (global-set-key (kbd "C-c i") 'string-rectangle)
-
-
-;; Go back to global mark shortcut
-(global-set-key (kbd "C-`") 'pop-global-mark)
 
 ;; Shortcuts for registers
 (global-set-key  (kbd "C-c y") 'copy-to-register )
