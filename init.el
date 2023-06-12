@@ -2,156 +2,6 @@
 ;;; package -- Summary
 ;;; Commentary:
 
- ;; Set whole line or region mode
-(whole-line-or-region-global-mode)
-
-;; Go back to global mark shortcut
-;; This traverses buffers.
-(global-set-key (kbd "C-`") 'pop-global-mark)
-
-;; Add another command to set-mark
-(global-set-key (kbd "C-<return>") 'set-mark-command)
-
-;; Can press C-u set-mark-command to go back to last position in the buffer
-;; Then press subsequent set-mark-command to go back to the next last position
-(setq set-mark-command-repeat-pop 1)
-
-;; Calendar shortcut
-(global-set-key (kbd "C-x c") 'calendar)
-
-;; https://batsov.com/articles/2012/03/08/emacs-tip-number-5-save-buffers-automatically-on-buffer-or-window-switch/
-;; automatically save buffers associated with files on buffer switch
-;; and on windows switch
-(defadvice switch-to-buffer (before save-buffer-now activate) 
-  (when buffer-file-name (save-buffer)))
-(defadvice other-window (before other-window-now activate) 
-  (when buffer-file-name (save-buffer)))
-(defadvice windmove-up (before other-window-now activate) 
-  (when buffer-file-name (save-buffer)))
-(defadvice windmove-down (before other-window-now activate) 
-  (when buffer-file-name (save-buffer)))
-(defadvice windmove-left (before other-window-now activate) 
-  (when buffer-file-name (save-buffer)))
-(defadvice windmove-right (before other-window-now activate) 
-  (when buffer-file-name (save-buffer)))
-
-
-;; create the autosave dir if necessary, since emacs won't.
-(make-directory "~/emacs/autosaves/" t)
-
-;; Put autosave files (ie #foo#) and backup files (ie foo~) in ~/.emacs.d/.
-(setq-default backup-directory-alist (quote ((".*" . "~/emacs/backups/"))))
-
-;; Easily create scratch buffers
-(defun generate-scratch-buffer () 
-  "Create and switch to a temporary scratch buffer with a random
-       name." 
-  (interactive) 
-  (switch-to-buffer (generate-new-buffer-name "scratchbuffer")) 
-  (json-mode))
-(global-set-key  (kbd "C-c b") 'generate-scratch-buffer )
-  
-;; Scrolling in place (M-n and M-p)
-;; Has a parameter to pass if you want scroll >1 lines (C-u <number>)
-(defun scroll-up-in-place (n) 
-  (interactive "p") 
-  (next-line n) 
-  (unless (eq (window-end) 
-	      (point-max)) 
-    (scroll-up n)))
-
-(defun scroll-down-in-place (n) 
-  (interactive "p") 
-  (previous-line n) 
-  (unless (eq (window-start) 
-	      (point-min)) 
-    (scroll-down n)))
-
-(global-set-key "\M-n" 'scroll-up-in-place)
-(global-set-key "\M-p" 'scroll-down-in-place)
-
-;; Always turn on line wrap from screen
-(global-visual-line-mode 1)
-
-;; Enable line and column number mode
-(setq column-number-mode 1)
-(setq line-number-mode 1)
-
-;; Desktop mode
-(desktop-save-mode 1)
-
-;; https://gist.github.com/leavesofgrass/23cf0f61e0092e36dbbaa3f33e4dd060
-;; Minify buffer contents
-(defun minify-buffer-contents() 
-  "Minifies the buffer contents by removing whitespaces." 
-  (interactive) 
-  (delete-whitespace-rectangle (point-min) 
-			       (point-max)) 
-  (mark-whole-buffer) 
-  (goto-char (point-min)) 
-  (while (search-forward "\n" nil t) 
-    (replace-match "" nil t)))
-
-(defun copy-end-of-line()
- "Copy to end of line into kill ring"
- (interactive)
- (push-mark nil nil 1)
- (end-of-visual-line)
- (copy-region-as-kill nil nil (buffer-substring (mark) (point)))
- (pop-to-mark-command)
-)
-
-(global-set-key (kbd "M-k") 'copy-end-of-line)
-
-(global-set-key (kbd "C-c m") 'minify-buffer-contents)
-
-(global-set-key (kbd "C-c i") 'string-rectangle)
-
-;; Shortcuts for registers
-(global-set-key  (kbd "C-c y") 'copy-to-register )
-(global-set-key  (kbd "C-c p") 'insert-register )
-
-;; Org mode settings
-(setq org-startup-indented t org-hide-leading-stars t org-hide-emphasis-markers t
-	org-odd-levels-only t)
-
-;; Fold all org blocks when opening org files
-(setq org-cycle-hide-block-startup t)
-
-;; Org Capture and Agenda settings - http://pragmaticemacs.com/emacs/org-mode-basics-vi-a-simple-todo-list/
-;; set key for agenda
-(global-set-key (kbd "C-'") 'org-agenda)
-
-;;file to save todo items
-(setq org-agenda-files '("~/.notes")) 
-(setq org-agenda-window-setup (quote current-window))
-;;capture todo items using C-c c t
-(global-set-key (kbd "C-c c") 'org-capture) 
-(setq org-capture-templates '(("t" "todo" entry (file+headline "~/.notes/todo.org" "Tasks")
-				 "* TODO [#A] %?")))
-
-(defun replace_underscores_with_spaces () 
-  "Replace those 'underscores' from gmail to spaces" 
-  (interactive) 
-  (while (search-forward " " nil t) 
-    (replace-match " " nil t)))
-
-(global-set-key (kbd "C-c r") 'replace_underscores_with_spaces)
-
-(defun kill-file-and-directory-buffers ()
-  "Kill all buffers that are visiting files or directories."
-  (interactive)
-  (mapc 'kill-buffer
-        (delq (current-buffer)
-              (seq-filter
-               (lambda (x)
-                 (or (buffer-file-name x)
-                     (eq 'dired-mode (buffer-local-value 'major-mode x))))
-               (buffer-list)))))
-
-(global-set-key  (kbd "C-x M-d") 'kill-file-and-directory-buffers)
-
-
 ;; From Melpa
 (let* ((no-ssl (and (memq system-type '(windows-nt ms-dos)) 
 		    (not (gnutls-available-p)))) 
@@ -697,7 +547,8 @@
 (use-package 
   org 
   :mode ("\\.org\\'" . org-mode) 
-  :config (define-key org-mode-map (kbd "C-c C-r") verb-command-map)
+  :config 
+  (define-key org-mode-map (kbd "C-c C-r") verb-command-map)
   (setq org-startup-folded t)
 )
 
@@ -867,6 +718,164 @@
 				       (window-width . 0.33) 
 				       (window-height . fit-window-to-buffer)))
 )
+
+
+
+;; ***********************
+;; Miscellaneous Settings
+;; **********************
+
+ ;; Set whole line or region mode
+(whole-line-or-region-global-mode)
+
+;; Go back to global mark shortcut
+;; This traverses buffers.
+(global-set-key (kbd "C-`") 'pop-global-mark)
+
+;; Add another command to set-mark
+(global-set-key (kbd "s-SPC") 'set-mark-command)
+
+;; Can press C-u set-mark-command to go back to last position in the buffer
+;; Then press subsequent set-mark-command to go back to the next last position
+(setq set-mark-command-repeat-pop 1)
+
+;; Calendar shortcut
+(global-set-key (kbd "C-x c") 'calendar)
+
+;; https://batsov.com/articles/2012/03/08/emacs-tip-number-5-save-buffers-automatically-on-buffer-or-window-switch/
+;; automatically save buffers associated with files on buffer switch
+;; and on windows switch
+(defadvice switch-to-buffer (before save-buffer-now activate) 
+  (when buffer-file-name (save-buffer)))
+(defadvice other-window (before other-window-now activate) 
+  (when buffer-file-name (save-buffer)))
+(defadvice windmove-up (before other-window-now activate) 
+  (when buffer-file-name (save-buffer)))
+(defadvice windmove-down (before other-window-now activate) 
+  (when buffer-file-name (save-buffer)))
+(defadvice windmove-left (before other-window-now activate) 
+  (when buffer-file-name (save-buffer)))
+(defadvice windmove-right (before other-window-now activate) 
+  (when buffer-file-name (save-buffer)))
+
+
+;; create the autosave dir if necessary, since emacs won't.
+(make-directory "~/emacs/autosaves/" t)
+
+;; Put autosave files (ie #foo#) and backup files (ie foo~) in ~/.emacs.d/.
+(setq-default backup-directory-alist (quote ((".*" . "~/emacs/backups/"))))
+
+;; Easily create scratch buffers
+(defun generate-scratch-buffer () 
+  "Create and switch to a temporary scratch buffer with a random
+       name." 
+  (interactive) 
+  (switch-to-buffer (generate-new-buffer-name "scratchbuffer")) 
+  (json-mode))
+(global-set-key  (kbd "C-c b") 'generate-scratch-buffer )
+  
+;; Scrolling in place (M-n and M-p)
+;; Has a parameter to pass if you want scroll >1 lines (C-u <number>)
+(defun scroll-up-in-place (n) 
+  (interactive "p") 
+  (next-line n) 
+  (unless (eq (window-end) 
+	      (point-max)) 
+    (scroll-up n)))
+
+(defun scroll-down-in-place (n) 
+  (interactive "p") 
+  (previous-line n) 
+  (unless (eq (window-start) 
+	      (point-min)) 
+    (scroll-down n)))
+
+(global-set-key "\M-n" 'scroll-up-in-place)
+(global-set-key "\M-p" 'scroll-down-in-place)
+
+;; Always turn on line wrap from screen
+(global-visual-line-mode 1)
+
+;; Enable line and column number mode
+(setq column-number-mode 1)
+(setq line-number-mode 1)
+
+;; Desktop mode
+(desktop-save-mode 1)
+
+;; https://gist.github.com/leavesofgrass/23cf0f61e0092e36dbbaa3f33e4dd060
+;; Minify buffer contents
+(defun minify-buffer-contents() 
+  "Minifies the buffer contents by removing whitespaces." 
+  (interactive) 
+  (delete-whitespace-rectangle (point-min) 
+			       (point-max)) 
+  (mark-whole-buffer) 
+  (goto-char (point-min)) 
+  (while (search-forward "\n" nil t) 
+    (replace-match "" nil t)))
+
+(defun copy-end-of-line()
+ "Copy to end of line into kill ring"
+ (interactive)
+ (push-mark nil nil 1)
+ (end-of-visual-line)
+ (copy-region-as-kill nil nil (buffer-substring (mark) (point)))
+ (pop-to-mark-command)
+)
+
+(global-set-key (kbd "M-k") 'copy-end-of-line)
+
+(global-set-key (kbd "C-c m") 'minify-buffer-contents)
+
+(global-set-key (kbd "C-c i") 'string-rectangle)
+
+;; Shortcuts for registers
+(global-set-key  (kbd "C-c y") 'copy-to-register )
+(global-set-key  (kbd "C-c p") 'insert-register )
+
+;; Org mode settings
+(setq org-startup-indented t org-hide-leading-stars t org-hide-emphasis-markers t
+	org-odd-levels-only t)
+
+;; Fold all org blocks when opening org files
+(setq org-cycle-hide-block-startup t)
+
+;; Org Capture and Agenda settings - http://pragmaticemacs.com/emacs/org-mode-basics-vi-a-simple-todo-list/
+;; set key for agenda
+(global-set-key (kbd "C-'") 'org-agenda)
+
+;;file to save todo items
+(setq org-agenda-files '("~/.notes")) 
+(setq org-agenda-window-setup (quote current-window))
+;;capture todo items using C-c c t
+(global-set-key (kbd "C-c c") 'org-capture) 
+(setq org-capture-templates '(("t" "todo" entry (file+headline "~/.notes/todo.org" "Tasks")
+				 "* TODO [#A] %?")))
+
+(defun replace_underscores_with_spaces () 
+  "Replace those 'underscores' from gmail to spaces" 
+  (interactive) 
+  (while (search-forward " " nil t) 
+    (replace-match " " nil t)))
+
+(global-set-key (kbd "C-c r") 'replace_underscores_with_spaces)
+
+(defun kill-file-and-directory-buffers ()
+  "Kill all buffers that are visiting files or directories."
+  (interactive)
+  (mapc 'kill-buffer
+        (delq (current-buffer)
+              (seq-filter
+               (lambda (x)
+                 (or (buffer-file-name x)
+                     (eq 'dired-mode (buffer-local-value 'major-mode x))))
+               (buffer-list)))))
+
+(global-set-key  (kbd "C-x M-d") 'kill-file-and-directory-buffers)
+
+
+
 
 (defun efs/display-startup-time () 
   (message "Emacs loaded in %s with %d garbage collections." 
