@@ -2,18 +2,18 @@
 ;;; This format is meant to be slightly human-readable;
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
-(("checkout-bff"
+(("notes"
+ (filename . "~/Library/Mobile Documents/iCloud~com~appsonthemove~beorg/Documents/notes.org")
+ (front-context-string . "ent Sprint Retro")
+ (rear-context-string . "mation?\n\n\n* Curr")
+ (position . 1165944)
+ (last-modified 25736 55781 924621 0))
+("checkout-bff"
  (filename . "~/chegg/checkout-bff/")
  (front-context-string . "..\n  -rw-r--r-- ")
  (rear-context-string . "88 Jun  1 20:11 ")
  (position . 153)
  (last-modified 25730 18086 601164 0))
-("notes.org"
- (filename . "~/iCloud Drive/beorg/notes.org")
- (front-context-string . "* Current Sprint")
- (rear-context-string . "nt time zone\n\n\n\n")
- (position . 1158230)
- (last-modified 25730 4610 977325 0))
 ("commerceweb-automation"
  (filename . "~/chegg/commerceweb-automation/")
  (front-context-string . "..\n  drwxr-xr-x@")
