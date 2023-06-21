@@ -835,7 +835,16 @@
  (pop-to-mark-command)
 )
 
+(defun mark-whole-line()
+  (interactive)
+  (beginning-of-visual-line)
+  (set-mark-command nil)
+  (end-of-visual-line)
+) 
+
 (global-set-key (kbd "M-k") 'copy-end-of-line)
+
+(global-set-key (kbd "M-s-v") 'mark-whole-line)
 
 (global-set-key (kbd "C-c m") 'minify-buffer-contents)
 
