@@ -349,7 +349,8 @@
 
 (use-package 
   lsp-mode 
-  :ensure t 
+  :ensure t
+  :demand
   :commands lsp-mode
   :config
   ;; LSP shortcuts
@@ -416,7 +417,7 @@
 (use-package 
   js2-mode 
   :ensure t 
-  :defer
+  :demand
   :commands js2-mode
   :config
   ;; Use js2-mode for JS files
@@ -426,7 +427,7 @@
   typescript-mode 
   :commands typescript-mode
   :ensure t
-  :defer
+  :demand
 )
 
 (use-package 
@@ -889,7 +890,10 @@
               (seq-filter
                (lambda (x)
                  (or (buffer-file-name x)
-                     (eq 'dired-mode (buffer-local-value 'major-mode x))))
+                     (eq 'dired-mode (buffer-local-value 'major-mode x))
+                     (eq 'magit-status-mode (buffer-local-value 'major-mode x))
+		 )
+	       )
                (buffer-list)))))
 
 (global-set-key  (kbd "C-x M-d") 'kill-file-and-directory-buffers)
