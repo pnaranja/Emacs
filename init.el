@@ -892,6 +892,8 @@
                  (or (buffer-file-name x)
                      (eq 'dired-mode (buffer-local-value 'major-mode x))
                      (eq 'magit-status-mode (buffer-local-value 'major-mode x))
+                     (eq 'magit-diff-mode (buffer-local-value 'major-mode x))
+                     (eq 'magit-process-mode (buffer-local-value 'major-mode x))
 		 )
 	       )
                (buffer-list)))))
