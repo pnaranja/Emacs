@@ -894,6 +894,7 @@
                      (eq 'magit-status-mode (buffer-local-value 'major-mode x))
                      (eq 'magit-diff-mode (buffer-local-value 'major-mode x))
                      (eq 'magit-process-mode (buffer-local-value 'major-mode x))
+                     (eq 'magit-log-mode (buffer-local-value 'major-mode x))
 		 )
 	       )
                (buffer-list)))))
