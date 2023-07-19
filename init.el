@@ -334,7 +334,17 @@
   (nim-mode . subword-mode) 
   (nim-mode . nimsuggest-mode))
 
+(use-package 
+  graphql
+  :ensure t
+  :defer
+)
 
+(use-package 
+  graphql-mode
+  :ensure t 
+  :requires lsp-mode 
+)
 
 (use-package 
   lsp-ui 
@@ -372,8 +382,7 @@
   (add-hook 'typescript-mode-hook #'lsp) 
   (add-hook 'rustic-mode-hook #'lsp) 
   (add-hook 'nim-mode-hook #'lsp)
-
-
+  (add-hook 'graphql-mode-hook #'lsp)
 )
 
 (use-package
@@ -890,11 +899,15 @@
               (seq-filter
                (lambda (x)
                  (or (buffer-file-name x)
+                     (eq 'emacs-lisp-mode (buffer-local-value 'major-mode x))
                      (eq 'dired-mode (buffer-local-value 'major-mode x))
                      (eq 'magit-status-mode (buffer-local-value 'major-mode x))
                      (eq 'magit-diff-mode (buffer-local-value 'major-mode x))
                      (eq 'magit-process-mode (buffer-local-value 'major-mode x))
                      (eq 'magit-log-mode (buffer-local-value 'major-mode x))
+                     (eq 'js-mode (buffer-local-value 'major-mode x))
+                     (eq 'js-ts-mode (buffer-local-value 'major-mode x))
+                     (eq 'xref--xref-buffer-mode (buffer-local-value 'major-mode x))
 		 )
 	       )
                (buffer-list)))))
