@@ -18,17 +18,18 @@
     ;; For important compatibility libraries like cl-lib
     (add-to-list 'package-archives '("gnu" . (concat proto "://elpa.gnu.org/packages/")))))
 
+
 (unless (package-installed-p 'use-package) 
   (package-refresh-contents) 
   (package-install 'use-package))
-(eval-and-compile 
-  (setq use-package-expand-minimally t))
 
-(eval-when-compile
-  (require 'use-package))
+(eval-when-compile 
+  (setq use-package-expand-minimally t)
+  (require 'use-package)
+)
 
 (use-package esup
-  :defer
+  :defer t
   :ensure t
   ;; To use MELPA Stable use ":pin melpa-stable",
   :pin melpa
@@ -66,7 +67,7 @@
 
 (use-package 
   elisp-format 
-  :defer
+  :defer t
   :ensure t 
   :config (require 'elisp-format))
 
@@ -96,6 +97,7 @@
 (use-package 
  auto-compile
  :ensure t 
+ :defer t
  :config
  ;(setq load-prefer-newer t)
  (auto-compile-on-load-mode)
@@ -123,7 +125,7 @@
 (use-package 
   projectile 
   :ensure t 
-  :defer
+  :defer t
   :init (projectile-mode +1) 
   :bind (:map projectile-mode-map
 	      ("C-c p" . projectile-command-map) 
@@ -134,6 +136,8 @@
 
   ;; Enable projectile outside of projects
   (setq projectile-require-project-root nil)
+
+  (setq projectile-completion-system 'ivy)
 
   (setq projectile-enable-caching nil)
 
@@ -244,7 +248,7 @@
 (use-package 
   flycheck 
   :ensure t 
-  :defer
+  :defer t
   :commands flycheck
   :config (add-hook 'after-init-hook 'flycheck-mode)
 
@@ -257,7 +261,7 @@
 ;; Activate pos-tip
 (use-package 
   pos-tip 
-  :defer
+  :defer t
   )
 
 ;; Copy or Delete a whole line on cursor
@@ -273,7 +277,7 @@
 (use-package 
   org-journal 
   :ensure t 
-  :defer
+  :defer t
   :commands org-journal
   :config (setq org-journal-dir "~/journal/emacs_journal") 
   (setq org-journal-date-format "%A, %d %B %Y") 
@@ -283,14 +287,14 @@
 (use-package 
   olivetti 
   :ensure t 
-  :defer
+  :defer t
   :hook (olivetti-mode . org-journal-mode-hook))
 
 ;; Vlang
 (use-package 
   v-mode 
   :ensure t 
-  :defer
+  :defer t
   :commands v-mode
   :config
   ;; Remove verilog mode since it's covers *.v files which I now want to refer to Vlang
@@ -307,9 +311,9 @@
 (use-package 
   org-download 
   :after org 
-  :defer
+  :defer t
   :ensure t 
-  :defer nil 
+  :defer t
   :custom (org-download-method 'directory) 
   (org-download-image-dir "images") 
   (org-download-heading-lvl nil) 
@@ -328,7 +332,7 @@
 (use-package 
   nim-mode 
   :ensure t 
-  :defer
+  :defer t
   :commands nim-mode
   :hook (nim-mode . rainbow-delimiters-mode) 
   (nim-mode . subword-mode) 
@@ -337,7 +341,7 @@
 (use-package 
   graphql
   :ensure t
-  :defer
+  :defer t
 )
 
 (use-package 
@@ -394,7 +398,7 @@
 (use-package 
   tide 
   :ensure t 
-  :defer
+  :defer t
   :commands tide
   :config (defun setup-tide-mode () 
 	    (interactive) 
@@ -415,7 +419,7 @@
 (use-package 
   web-mode 
   :ensure t 
-  :defer
+  :defer t
   :commands web-mode
   :config (add-to-list 'auto-mode-alist '("\\.tsx\\'" . web-mode)) 
   (add-hook 'web-mode-hook (lambda () 
@@ -441,35 +445,35 @@
 
 (use-package 
   yaml-mode 
-  :defer
+  :defer t
   :commands yaml-mode
   :ensure t
 )
 
 (use-package 
   dockerfile-mode 
-  :defer
+  :defer t
   :commands dockerfile-mode
   :ensure t
 )
 
 (use-package 
   groovy-mode 
-  :defer
+  :defer t
   :commands groovy-mode
   :ensure t
 )
 
 (use-package 
   json-mode 
-  :defer
+  :defer t
   :commands json-mode
   :ensure t
 )
 
 (use-package 
   rustic 
-  :defer
+  :defer t
   :commands rustic
   :ensure t
 )
@@ -478,20 +482,20 @@
 ;; Python specific
 (use-package lsp-pyright
   :ensure t
-  :defer
+  :defer t
   :hook (python-mode . (lambda ()
                           (require 'lsp-pyright)
                           (lsp))))  ; or lsp-deferred
 (use-package 
   py-autopep8 
   :ensure t 
-  :defer
+  :defer t
   :commands py-autopep8
   )
 
 (use-package robot-mode
   :ensure t
-  :defer
+  :defer t
   :config
   (add-to-list 'auto-mode-alist '("\\.robot\\'" . robot-mode))
   (global-set-key (kbd "C-c TAB") 'robot-mode-add-argument) 
@@ -573,7 +577,7 @@
 (use-package 
   verb 
   :commands verb
-  :defer
+  :defer t
   :ensure t)
 
 ;; Use fd for dired
@@ -586,7 +590,7 @@
 (use-package 
   helpful 
   :ensure t 
-  :defer
+  :defer t
   :commands helpful
   :config (global-set-key (kbd "C-h f") #'helpful-callable) 
   (global-set-key (kbd "C-h v") #'helpful-variable) 
@@ -603,7 +607,7 @@
 (use-package 
   vc-msg 
   :ensure t 
-  :defer
+  :defer t
   :init (defun vc-msg-hook-setup (vcs-type commit-info)
 	  ;; copy commit id to clipboard
 	  (message (format "%s\n%s\n%s\n%s" (plist-get commit-info 
@@ -697,7 +701,7 @@
 (use-package 
   magit
   :ensure t 
-  :defer
+  :defer t
   :commands magit
   :config (global-unset-key (kbd "C-c M-g")) 
   (global-set-key (kbd "C-c g") 'magit-file-dispatch) 
@@ -711,7 +715,7 @@
 (use-package 
   diff-hl
   :ensure t 
-  :defer
+  :defer t
   :config
   (global-diff-hl-mode)
 )
@@ -720,7 +724,7 @@
 (use-package 
   org-roam 
   :ensure t 
-  :defer
+  :defer t
   :config 
   (setq org-roam-v2-ack t) 
   (global-set-key (kbd "C-c n l") 'org-roam-capture) 
@@ -735,7 +739,6 @@
 				       (window-width . 0.33) 
 				       (window-height . fit-window-to-buffer)))
 )
-
 
 
 ;; ***********************
@@ -753,12 +756,14 @@
 ;; This traverses buffers.
 (global-set-key (kbd "C-`") 'pop-global-mark)
 
+
 ;; Add another command to set-mark
 (global-set-key (kbd "s-SPC") 'set-mark-command)
 
 ;; Can press C-u set-mark-command to go back to last position in the buffer
 ;; Then press subsequent set-mark-command to go back to the next last position
 (setq set-mark-command-repeat-pop 1)
+(global-set-key (kbd "M-`") (kbd "C-u C-SPC"))
 
 ;; Calendar shortcut
 (global-set-key (kbd "C-x c") 'calendar)
@@ -891,6 +896,7 @@
 
 (global-set-key (kbd "C-c r") 'replace_underscores_with_spaces)
 
+
 (defun kill-file-and-directory-buffers ()
   "Kill all buffers that are visiting files or directories."
   (interactive)
@@ -908,6 +914,7 @@
                      (eq 'js-mode (buffer-local-value 'major-mode x))
                      (eq 'js-ts-mode (buffer-local-value 'major-mode x))
                      (eq 'xref--xref-buffer-mode (buffer-local-value 'major-mode x))
+                     (eq 'calendar-mode (buffer-local-value 'major-mode x))
 		 )
 	       )
                (buffer-list)))))
