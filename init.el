@@ -578,7 +578,15 @@
   verb 
   :commands verb
   :defer t
-  :ensure t)
+  :ensure t
+  :config
+  (defun  graphql-to-json (rs)
+  ;; Modify RS and return it (RS is a request specification, type `verb-request-spec')
+  (oset rs body (replace-regexp-in-string "\n" " " (oref rs body)))
+  (oset rs body (format "{\"query\": \"%s\"}" (oref rs body)) )  
+  rs)
+
+)
 
 ;; Use fd for dired
 (use-package 
