@@ -580,8 +580,19 @@
   :defer t
   :ensure t
   :config
+
+  (defun replace-double-quotes-in-string-no-prompt (str)
+  "From Bing AI: Replace all double quotes with a backslash and double quotes in the given string without prompting the user."
+  (with-temp-buffer
+    (insert str)
+    (goto-char (point-min))
+    (while (search-forward "\"" nil t)
+      (replace-match "\\\\\""))
+    (buffer-string)))
+
   (defun  graphql-to-json (rs)
   ;; Modify RS and return it (RS is a request specification, type `verb-request-spec')
+  (oset rs body (replace-double-quotes-in-string-no-prompt (oref rs body)))
   (oset rs body (replace-regexp-in-string "\n" " " (oref rs body)))
   (oset rs body (format "{\"query\": \"%s\"}" (oref rs body)) )  
   rs)
@@ -928,8 +939,6 @@
                (buffer-list)))))
 
 (global-set-key  (kbd "C-x M-d") 'kill-file-and-directory-buffers)
-
-
 
 
 (defun efs/display-startup-time () 
