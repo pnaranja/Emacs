@@ -528,13 +528,14 @@
 	       (when (= (mod N per-row) 0) 
 		 (push "\n" display-strings))) 
       (message "%s" (apply #'concat (nreverse display-strings))))) 
+
   (defun avy-action-copy-whole-line (pt) 
     (save-excursion (goto-char pt) 
 		    (cl-destructuring-bind (start . end) 
 			(bounds-of-thing-at-point 'line) 
 		      (copy-region-as-kill start end))) 
-    (select-window (cdr (ring-ref avy-ring 0)))
-    t)
+    (select-window (cdr (ring-ref avy-ring 0))) t
+  )
 
   (defun avy-action-kill-whole-line (pt) 
     (save-excursion (goto-char pt) 
@@ -544,10 +545,23 @@
   :config (add-hook 'org-mode-hook 'change-cycle-agenda-files-key) 
   (add-hook 'v-mode-hook 'change-cycle-agenda-files-key)
 
-  ;; Add option to copy whole line
-  (setf (alist-get ?N avy-dispatch-alist) 'avy-action-copy-whole-line (alist-get ?K
-										 avy-dispatch-alist)
-	'avy-action-kill-whole-line)
+  (defun avy-action-copy-sexp (pt)
+    "Copy the sexp at PT and yank it at the current point"
+    (interactive)
+    (let ((orig-point (point))
+          (sexp-text (save-excursion
+                       (goto-char pt)
+                       (thing-at-point 'sexp))))
+      (kill-new sexp-text)
+      (goto-char orig-point)
+    )
+  )
+
+  ;; Add option to dispatch list
+  (setf (alist-get ?N avy-dispatch-alist) 'avy-action-copy-whole-line 
+	(alist-get ?K avy-dispatch-alist) 'avy-action-kill-whole-line
+	(alist-get ?c avy-dispatch-alist) 'avy-action-copy-sexp
+  )
 )
 
 (use-package 
@@ -876,9 +890,22 @@
   (end-of-visual-line)
 ) 
 
+
+(defun copy-sexp-on-point ()
+  "Copy the sexp on point to the kill ring.  From Bing AI"
+  (interactive)
+  (save-excursion
+    (let ((start (progn (backward-sexp) (point)))
+          (end (progn (forward-sexp) (point))))
+      (copy-region-as-kill start end)
+)))
+
+
+(global-set-key (kbd "M-s") 'copy-sexp-on-point)
+
 (global-set-key (kbd "M-k") 'copy-end-of-line)
 
-(global-set-key (kbd "M-s-v") 'mark-whole-line)
+(global-set-key (kbd "M-g v") 'mark-whole-line)
 
 (global-set-key (kbd "C-c m") 'minify-buffer-contents)
 
