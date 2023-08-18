@@ -505,6 +505,8 @@
 (use-package 
   avy 
   :ensure t 
+
+
   :init (global-set-key (kbd "C-j") 'avy-goto-char-timer) 
   (defun change-cycle-agenda-files-key () 
     (local-set-key (kbd "C-j") 'avy-goto-char-timer) 
@@ -529,6 +531,11 @@
 		 (push "\n" display-strings))) 
       (message "%s" (apply #'concat (nreverse display-strings))))) 
 
+  :config 
+  (add-hook 'org-mode-hook 'change-cycle-agenda-files-key) 
+  (add-hook 'v-mode-hook 'change-cycle-agenda-files-key)
+
+
   (defun avy-action-copy-whole-line (pt) 
     (save-excursion (goto-char pt) 
 		    (cl-destructuring-bind (start . end) 
@@ -542,8 +549,7 @@
 		    (kill-whole-line)) 
     (select-window (cdr (ring-ref avy-ring 0)))
     t)
-  :config (add-hook 'org-mode-hook 'change-cycle-agenda-files-key) 
-  (add-hook 'v-mode-hook 'change-cycle-agenda-files-key)
+
 
   (defun avy-action-copy-sexp (pt)
     "Copy the sexp at PT and yank it at the current point"
@@ -553,16 +559,23 @@
                        (goto-char pt)
                        (thing-at-point 'sexp))))
       (kill-new sexp-text)
-      (goto-char orig-point)
     )
+  )
+
+  (defun avy-action-copy-end-of-line (pt)
+    (save-excursion (goto-char pt) 
+		    (copy-end-of-line)) 
+    (select-window (cdr (ring-ref avy-ring 0))) t
   )
 
   ;; Add option to dispatch list
   (setf (alist-get ?N avy-dispatch-alist) 'avy-action-copy-whole-line 
-	(alist-get ?K avy-dispatch-alist) 'avy-action-kill-whole-line
+	(alist-get ?D avy-dispatch-alist) 'avy-action-kill-whole-line
+	(alist-get ?K avy-dispatch-alist) 'avy-action-copy-end-of-line
 	(alist-get ?c avy-dispatch-alist) 'avy-action-copy-sexp
   )
 )
+
 
 (use-package 
   avy-zap 
