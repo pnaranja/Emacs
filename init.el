@@ -189,8 +189,16 @@
   :ensure t 
   :config (dimmer-configure-which-key) 
   (dimmer-mode t) 
-  (setq dimmer-fraction 0.4))
+  (setq dimmer-fraction 0.6))
 
+;; Accent selected window
+(use-package selected-window-accent-mode
+ :ensure t
+ :custom
+ (selected-window-accent-fringe-thickness 6)
+ (selected-window-accent-custom-color nil)
+ (selected-window-accent-mode-style 'tiling)
+)
 
 (use-package 
   counsel 
@@ -359,6 +367,7 @@
 		lsp-ui-flycheck-list-position 'right lsp-ui-flycheck-live-reporting t
 		lsp-ui-peek-enable t lsp-ui-peek-list-width 60 lsp-ui-peek-peek-height 25) 
   (add-hook 'lsp-mode-hook 'lsp-ui-mode))
+
 
 
 (use-package 
@@ -621,7 +630,14 @@
   ;; Modify RS and return it (RS is a request specification, type `verb-request-spec')
   (oset rs body (replace-double-quotes-in-string-no-prompt (oref rs body)))
   (oset rs body (replace-regexp-in-string "\n" " " (oref rs body)))
-  (oset rs body (format "{\"query\": \"%s\"}" (oref rs body)) )  
+  (oset rs body (format "{\"query\": \"%s \"}" (oref rs body)) )  
+  rs)
+
+  (defun  graphql-mutation-to-json (rs)
+  ;; Modify RS and return it (RS is a request specification, type `verb-request-spec')
+  (oset rs body (replace-double-quotes-in-string-no-prompt (oref rs body)))
+  (oset rs body (replace-regexp-in-string "\n" " " (oref rs body)))
+  (oset rs body (format "{\"query\": \"mutation { %s } \"}" (oref rs body)) )  
   rs)
 
 )
@@ -785,7 +801,6 @@
 				       (window-width . 0.33) 
 				       (window-height . fit-window-to-buffer)))
 )
-
 
 ;; ***********************
 ;; Miscellaneous Settings
@@ -974,12 +989,44 @@
                      (eq 'js-ts-mode (buffer-local-value 'major-mode x))
                      (eq 'xref--xref-buffer-mode (buffer-local-value 'major-mode x))
                      (eq 'calendar-mode (buffer-local-value 'major-mode x))
+                     (eq 'lsp-help-mode (buffer-local-value 'major-mode x))
 		 )
 	       )
                (buffer-list)))))
 
 (global-set-key  (kbd "C-x M-d") 'kill-file-and-directory-buffers)
 
+
+;; For lsp booster
+;; Make sure lsp booster binary is installed on system - https://github.com/blahgeek/emacs-lsp-booster?tab=readme-ov-file#obtain-or-build-emacs-lsp-booster
+(defun lsp-booster--advice-json-parse (old-fn &rest args)
+  "Try to parse bytecode instead of json."
+  (or
+   (when (equal (following-char) ?#)
+     (let ((bytecode (read (current-buffer))))
+       (when (byte-code-function-p bytecode)
+         (funcall bytecode))))
+   (apply old-fn args)))
+(advice-add (if (progn (require 'json)
+                       (fboundp 'json-parse-buffer))
+                'json-parse-buffer
+              'json-read)
+            :around
+            #'lsp-booster--advice-json-parse)
+
+(defun lsp-booster--advice-final-command (old-fn cmd &optional test?)
+  "Prepend emacs-lsp-booster command to lsp CMD."
+  (let ((orig-result (funcall old-fn cmd test?)))
+    (if (and (not test?)                             ;; for check lsp-server-present?
+             (not (file-remote-p default-directory)) ;; see lsp-resolve-final-command, it would add extra shell wrapper
+             lsp-use-plists
+             (not (functionp 'json-rpc-connection))  ;; native json-rpc
+             (executable-find "emacs-lsp-booster"))
+        (progn
+          (message "Using emacs-lsp-booster for %s!" orig-result)
+          (cons "emacs-lsp-booster" orig-result))
+      orig-result)))
+(advice-add 'lsp-resolve-final-command :around #'lsp-booster--advice-final-command)
 
 (defun efs/display-startup-time () 
   (message "Emacs loaded in %s with %d garbage collections." 
@@ -989,7 +1036,7 @@
 		 before-init-time)))
 	         gcs-done))
 
-;; Restore after startup
+;; Restore garbage collector settings after startup
 (add-hook 'emacs-startup-hook
           (lambda ()
             (setq gc-cons-threshold (* 20 1024 1024)

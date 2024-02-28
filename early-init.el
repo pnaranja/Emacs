@@ -51,4 +51,7 @@
 ;; Allow to resize images
 (setq org-image-actual-width nil)
 
+;; For emacs lsp booster - https://github.com/blahgeek/emacs-lsp-booster?tab=readme-ov-file#configure-lsp-mode
+(setenv "LSP_USE_PLISTS" "true")
+
 (put 'narrow-to-region 'disabled nil)
