@@ -568,7 +568,9 @@
                        (goto-char pt)
                        (thing-at-point 'sexp))))
       (kill-new sexp-text)
+      (message "Copied: %s" sexp-text)
     )
+    (select-window (cdr (ring-ref avy-ring 0))) t
   )
 
   (defun avy-action-copy-end-of-line (pt)

@@ -114,7 +114,20 @@
      (tramp-connection-local-default-system-profile
       (path-separator . ":") (null-device . "/dev/null"))))
  '(mini-frame-show-parameters '((top . 10) (width . 0.7) (left . 0.5)))
- '(package-selected-packages nil)
+ '(package-selected-packages
+   '(0blayout 0x0 all-the-icons-ivy-rich amx auto-compile avy-zap
+	      color-theme-sanityinc-tomorrow company-jedi
+	      company-quickhelp counsel deadgrep diff-hl dimmer
+	      dockerfile-mode doom-modeline elisp-format esup
+	      exec-path-from-shell fd-dired graphql graphql-mode
+	      groovy-mode helpful js2-mode json-mode lsp-ivy
+	      lsp-pyright magit mini-frame move-text
+	      nerd-icons-completion nerd-icons-ivy-rich nim-mode
+	      olivetti org-download org-journal org-roam pkg-info
+	      projectile py-autopep8 restart-emacs robot-mode rustic
+	      selected-window-accent-mode super-save tide tsc
+	      typescript-mode use-package v-mode vc-msg verb vterm
+	      web-mode which-key whole-line-or-region yaml-mode))
  '(warning-suppress-types '((comp) (comp))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
