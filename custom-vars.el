@@ -122,9 +122,9 @@
 	      exec-path-from-shell fd-dired graphql graphql-mode
 	      groovy-mode helpful js2-mode json-mode lsp-ivy
 	      lsp-pyright magit mini-frame move-text
-	      nerd-icons-completion nerd-icons-ivy-rich nim-mode
-	      olivetti org-download org-journal org-roam pkg-info
-	      projectile py-autopep8 restart-emacs robot-mode rustic
+	      nerd-icons-completion nerd-icons-ivy-rich olivetti
+	      org-download org-journal org-roam pkg-info projectile
+	      py-autopep8 restart-emacs robot-mode rustic
 	      selected-window-accent-mode super-save tide tsc
 	      typescript-mode use-package v-mode vc-msg verb vterm
 	      web-mode which-key whole-line-or-region yaml-mode))

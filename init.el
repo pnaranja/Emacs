@@ -83,6 +83,10 @@
   (super-save-mode +1) 
   (setq auto-save-default nil)
 
+  ;; LSP issues when saving edits in files in node_modules.  Turn off auto save in those files
+  (setq super-save-exclude '("/node_modules/"))
+
+
   ;; To emulate '.' in VIM
   ;; sneak in a setting for repeat
   (global-set-key (kbd "C-.") 'repeat)
@@ -336,16 +340,6 @@
 )
 
 
-
-(use-package 
-  nim-mode 
-  :ensure t 
-  :defer t
-  :commands nim-mode
-  :hook (nim-mode . rainbow-delimiters-mode) 
-  (nim-mode . subword-mode) 
-  (nim-mode . nimsuggest-mode))
-
 (use-package 
   graphql
   :ensure t
@@ -579,10 +573,22 @@
     (select-window (cdr (ring-ref avy-ring 0))) t
   )
 
+(defun avy-action-kill-end-of-line (pt)
+    (save-excursion (goto-char pt) 
+		    (kill-visual-line)) 
+    (select-window (cdr (ring-ref avy-ring 0))) t
+  )
+
+  (defun avy-action-mark-from-current-pt (pt)
+  (activate-mark)
+  (goto-char pt))
+
   ;; Add option to dispatch list
-  (setf (alist-get ?N avy-dispatch-alist) 'avy-action-copy-whole-line 
+  (setf (alist-get ?C avy-dispatch-alist) 'avy-action-copy-whole-line 
+	(alist-get ?M avy-dispatch-alist) 'avy-action-mark-from-current-pt
 	(alist-get ?D avy-dispatch-alist) 'avy-action-kill-whole-line
-	(alist-get ?K avy-dispatch-alist) 'avy-action-copy-end-of-line
+	(alist-get ?N avy-dispatch-alist) 'avy-action-copy-end-of-line
+	(alist-get ?K avy-dispatch-alist) 'avy-action-kill-end-of-line
 	(alist-get ?c avy-dispatch-alist) 'avy-action-copy-sexp
   )
 )
@@ -904,6 +910,16 @@
   (while (search-forward "\n" nil t) 
     (replace-match "" nil t)))
 
+(defun minify-buffer-region (start end)
+  "Remove newline and space characters in the region."
+  (interactive "r")
+  (save-restriction
+    (narrow-to-region start end)
+    (goto-char (point-min))
+    (while (search-forward-regexp "[\n ]" nil t)
+      (replace-match ""))))
+
+
 (defun copy-end-of-line()
  "Copy to end of line into kill ring"
  (interactive)
@@ -937,7 +953,8 @@
 
 (global-set-key (kbd "M-g v") 'mark-whole-line)
 
-(global-set-key (kbd "C-c m") 'minify-buffer-contents)
+(global-set-key (kbd "C-x m") 'minify-buffer-contents)
+(global-set-key (kbd "C-c m") 'minify-buffer-region)
 
 (global-set-key (kbd "C-c i") 'string-rectangle)
 
@@ -1037,6 +1054,21 @@
 		 after-init-time
 		 before-init-time)))
 	         gcs-done))
+
+
+;; Get filename (not including absolute page)
+(defun get-buffer-filename ()
+  "Get the filename of the current buffer not including the absolute path and copy it to clipboard/kill-ring."
+  (interactive)
+  (if (buffer-file-name)
+      (progn
+      (message "Buffer file name: %s" (file-name-nondirectory (buffer-file-name)))
+      (kill-new (file-name-nondirectory (buffer-file-name)))
+      )
+    (message "This buffer does not have a file name.")))
+
+(global-set-key  (kbd "s-f") 'get-buffer-filename)
+
 
 ;; Restore garbage collector settings after startup
 (add-hook 'emacs-startup-hook
