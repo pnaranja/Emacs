@@ -1040,6 +1040,13 @@
 
 (global-set-key (kbd "s-f") 'get-buffer-filename)
 
+(defun run-prettier-on-file ()
+  (interactive)
+  "Run prettier on current file.  This assumes your JS project has prettier installed"
+  (setq absolute-path (shell-quote-argument (expand-file-name (buffer-file-name))))
+  (setq formatted-command (format "npx prettier --write %s" absolute-path))
+  (shell-command formatted-command)
+)
 
 ;; Restore garbage collector settings after startup
 (add-hook

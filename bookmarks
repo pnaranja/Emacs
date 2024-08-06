@@ -2,7 +2,11 @@
 ;;; This format is meant to be slightly human-readable;
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
-(("create_canceled_user.org"
+(("recurly_csp_user.org"
+ (filename . "~/REST_files/recurly_csp_user.org")
+ (front-context-string . "* Create Recurly") (rear-context-string)
+ (position . 1) (last-modified 26252 12252 754212 0))
+("create_canceled_user.org"
  (filename . "~/REST_files/create_canceled_user.org")
  (front-context-string . "* Create Cancel ") (rear-context-string)
  (position . 1) (last-modified 26050 45834 896899 0))
@@ -16,8 +20,8 @@
  (front-context-string . "* Create Cancel ") (rear-context-string)
  (position . 1) (last-modified 25893 38333 680886 0))
 ("notes"
- (filename .
-	   "~/Library/Mobile Documents/iCloud~com~appsonthemove~beorg/Documents/notes.org")
+ (filename
+  . "~/Library/Mobile Documents/iCloud~com~appsonthemove~beorg/Documents/notes.org")
  (front-context-string . "ent Sprint Retro")
  (rear-context-string . "mation?\n\n\n* Curr") (position . 1165944)
  (last-modified 25736 55781 924621 0))
@@ -97,8 +101,8 @@
  (front-context-string . "*** TODO \n  [202")
  (rear-context-string . "+Test+Reports]]\n") (position . 1265))
 ("org-capture-last-stored"
- (filename .
-	   "~/journal/org-roam/20230305231110-introduction_to_the_sacred_liturgy_class_4.org")
+ (filename
+  . "~/journal/org-roam/20230305231110-introduction_to_the_sacred_liturgy_class_4.org")
  (front-context-string . "[[id:A9CE7178-76")
  (rear-context-string . "turgy - Class 4\n") (position . 122)
  (last-modified 25605 37406 522067 0))
