@@ -35,6 +35,8 @@
   (setq use-package-expand-minimally t)
   (require 'use-package))
 
+(setq package-install-upgrade-built-in t)
+
 (use-package
  esup
  :defer t
@@ -764,6 +766,12 @@
  :defer t
  :commands (elisp-autofmt-mode elisp-autofmt-buffer)
  :hook (emacs-lisp-mode . elisp-autofmt-mode))
+
+
+(use-package casual-symbol-overlay
+  :ensure t
+  :config
+  (global-set-key (kbd "C-c o") 'casual-symbol-overlay-tmenu))
 
 ;; ***********************
 ;; Miscellaneous Settings
