@@ -18,13 +18,8 @@
   ;; Comment/uncomment these two lines to enable/disable MELPA and MELPA Stable as desired
   (add-to-list 'package-archives
                (cons "melpa" (concat proto "://melpa.org/packages/"))
-               t)
+               t))
   ;;(add-to-list 'package-archives (cons "melpa-stable" (concat proto "://stable.melpa.org/packages/")) t)
-  (when (< emacs-major-version 24)
-    ;; For important compatibility libraries like cl-lib
-    (add-to-list
-     'package-archives
-     '("gnu" . (concat proto "://elpa.gnu.org/packages/")))))
 
 
 (unless (package-installed-p 'use-package)
@@ -141,8 +136,49 @@
  (setq projectile-enable-caching nil))
 
 
+(defun gptel-company-backend (command &optional arg &rest ignored)
+  "Company backend for GPTel using Google Gemini."
+  (interactive (list 'interactive))
+  (cl-case command
+    (interactive (company-begin-backend 'gptel-company-backend))
+    (prefix (and (eq major-mode 'prog-mode)
+                 (company-grab-symbol)))
+    (candidates
+     (let ((completion (gptel-complete arg)))
+       (if completion
+           (list completion)
+         nil)))))
+
 ;; Company Packages
-(use-package company :ensure t)
+(use-package company
+  :ensure t
+  :hook (after-init . global-company-mode)
+  :config
+  (setq company-idle-delay 0.2
+        company-minimum-prefix-length 1)
+
+    (add-to-list 'company-backends 'gptel-company-backend)
+)
+
+
+
+
+(defun gptel-complete (prefix)
+  "Get completion from GPTel for PREFIX."
+  (let ((response (gptel-request prefix)))
+    (when response
+      (cdr (assoc 'completion response)))))
+
+(defun gptel-request (input)
+  "Send a request to GPTel with INPUT."
+  (let ((url-request-method "POST")
+        (url-request-data (json-encode `(("input" . ,input))))
+        (url (concat "https://api.google.com/gemini/v1/completions?key=" gptel-api-key)))
+    (with-current-buffer (url-retrieve-synchronously url)
+      (goto-char url-http-end-of-headers)
+      (buffer-substring-no-properties (point) (point-max)))))
+
+
 (use-package company-jedi :commands company-jedi :ensure t)
 (use-package
  company-quickhelp
@@ -300,8 +336,9 @@
      (if (eq (cdr aitem) oldmode)
          (setcdr aitem newmode))))
 
- ;; not sure what mode you want here. You could default to 'fundamental-mode
- (replace-alist-mode auto-mode-alist 'verilog-mode 'v-mode))
+ (replace-alist-mode auto-mode-alist 'verilog-mode 'v-mode)
+
+)
 
 
 ;; https://zzamboni.org/post/how-to-insert-screenshots-in-org-documents-on-macos/
@@ -772,6 +809,17 @@
   :ensure t
   :config
   (global-set-key (kbd "C-c o") 'casual-symbol-overlay-tmenu))
+
+
+(use-package gptel
+  :ensure t
+  :config
+  (setq
+   gptel-model "gemini-1.5-flash"
+   gptel-backend (gptel-make-gemini "Gemini"
+                 :key ""
+                 :stream t))
+)
 
 ;; ***********************
 ;; Miscellaneous Settings

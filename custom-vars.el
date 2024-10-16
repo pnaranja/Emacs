@@ -4,7 +4,9 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(connection-local-criteria-alist
-   '(((:application tramp :protocol "kubernetes")
+   '(((:application vc-git) vc-git-connection-default-profile)
+     ((:application eshell) eshell-connection-default-profile)
+     ((:application tramp :protocol "kubernetes")
       tramp-kubernetes-connection-local-default-profile)
      ((:application tramp :protocol "flatpak")
       tramp-container-connection-local-default-flatpak-profile
@@ -17,7 +19,9 @@
       tramp-connection-local-default-system-profile
       tramp-connection-local-default-shell-profile)))
  '(connection-local-profile-alist
-   '((tramp-flatpak-connection-local-default-profile
+   '((vc-git-connection-default-profile (vc-git--program-version))
+     (eshell-connection-default-profile (eshell-path-env-list))
+     (tramp-flatpak-connection-local-default-profile
       (tramp-remote-path "/app/bin" tramp-default-remote-path "/bin"
 			 "/usr/bin" "/sbin" "/usr/sbin"
 			 "/usr/local/bin" "/usr/local/sbin"
@@ -114,7 +118,19 @@
      (tramp-connection-local-default-system-profile
       (path-separator . ":") (null-device . "/dev/null"))))
  '(mini-frame-show-parameters '((top . 10) (width . 0.7) (left . 0.5)))
- '(package-selected-packages nil)
+ '(package-selected-packages
+   '(amx auto-compile avy-zap casual-symbol-overlay
+	 color-theme-sanityinc-tomorrow company-jedi company-quickhelp
+	 counsel deadgrep diff-hl dimmer dockerfile-mode doom-modeline
+	 editorconfig elisp-autofmt esup exec-path-from-shell faceup
+	 fd-dired gptel graphql graphql-mode groovy-mode helpful
+	 idlwave js2-mode json-mode lsp-ivy lsp-pyright magit
+	 mini-frame move-text nerd-icons-completion
+	 nerd-icons-ivy-rich olivetti org-download org-journal
+	 org-roam projectile py-autopep8 restart-emacs robot-mode
+	 rustic selected-window-accent-mode super-save tide
+	 typescript-mode use-package v-mode vc-msg verb verilog-mode
+	 vterm web-mode which-key whole-line-or-region yaml-mode))
  '(warning-suppress-types '((comp) (comp))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
