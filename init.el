@@ -136,18 +136,6 @@
  (setq projectile-enable-caching nil))
 
 
-(defun gptel-company-backend (command &optional arg &rest ignored)
-  "Company backend for GPTel using Google Gemini."
-  (interactive (list 'interactive))
-  (cl-case command
-    (interactive (company-begin-backend 'gptel-company-backend))
-    (prefix (and (eq major-mode 'prog-mode)
-                 (company-grab-symbol)))
-    (candidates
-     (let ((completion (gptel-complete arg)))
-       (if completion
-           (list completion)
-         nil)))))
 
 ;; Company Packages
 (use-package company
@@ -157,26 +145,41 @@
   (setq company-idle-delay 0.2
         company-minimum-prefix-length 1)
 
-    (add-to-list 'company-backends 'gptel-company-backend)
+  (add-to-list 'company-backends 'company-gptel)
+
+  ;; (defun gptel-complete (prefix)
+  ;; "Get completion from GPTel for PREFIX."
+  ;; (message "gptel-complete called with prefix: %s" prefix)
+  ;; (let ((response (gptel-request prefix)))
+  ;;   (when response
+  ;;     (cdr (assoc 'completion response)))))
+
+  ;; (defun gptel-request (input)
+  ;; "Send a request to GPTel with INPUT."
+  ;; (message "gptel-request has been called with input: %s" input)
+  ;; (let ((url-request-method "POST")
+  ;;       (url-request-data (json-encode `(("input" . ,input))))
+  ;;       (url (concat "https://api.google.com/gemini/v1/completions?key=" gptel-api-key)))
+  ;;   (with-current-buffer (url-retrieve-synchronously url)
+  ;;     (goto-char url-http-end-of-headers)
+  ;;     (buffer-substring-no-properties (point) (point-max)))))
+
+  ;; (defun gptel-company-backend (command &optional arg &rest ignored)
+  ;; "Company backend for GPTel using Google Gemini."
+  ;; (message "gptel-company-backend has been called with command %s" command)
+  ;; (interactive (list 'interactive))
+  ;; (cl-case command
+  ;;   (interactive (company-begin-backend 'gptel-company-backend))
+  ;;   (prefix (and (eq major-mode 'prog-mode)
+  ;;                (company-grab-symbol)))
+  ;;   (candidates
+  ;;    (let ((completion (gptel-complete arg)))
+  ;;      (if completion
+  ;;          (list completion)
+  ;;        nil)))))
+
+  ;; (add-to-list 'company-backends 'gptel-company-backend)
 )
-
-
-
-
-(defun gptel-complete (prefix)
-  "Get completion from GPTel for PREFIX."
-  (let ((response (gptel-request prefix)))
-    (when response
-      (cdr (assoc 'completion response)))))
-
-(defun gptel-request (input)
-  "Send a request to GPTel with INPUT."
-  (let ((url-request-method "POST")
-        (url-request-data (json-encode `(("input" . ,input))))
-        (url (concat "https://api.google.com/gemini/v1/completions?key=" gptel-api-key)))
-    (with-current-buffer (url-retrieve-synchronously url)
-      (goto-char url-http-end-of-headers)
-      (buffer-substring-no-properties (point) (point-max)))))
 
 
 (use-package company-jedi :commands company-jedi :ensure t)
