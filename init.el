@@ -7,6 +7,8 @@
 (setq custom-file (locate-user-emacs-file "custom-vars.el"))
 (load custom-file 'noerror 'nomessage)
 
+(setq package-archives nil)
+
 ;; From Melpa
 (let* ((no-ssl
         (and (memq system-type '(windows-nt ms-dos))
@@ -18,7 +20,12 @@
   ;; Comment/uncomment these two lines to enable/disable MELPA and MELPA Stable as desired
   (add-to-list 'package-archives
                (cons "melpa" (concat proto "://melpa.org/packages/"))
-               t))
+               t)
+  (add-to-list 'package-archives
+               (cons "gnu" (concat proto "://elpa.gnu.org/packages/"))
+               t)
+
+)
   ;;(add-to-list 'package-archives (cons "melpa-stable" (concat proto "://stable.melpa.org/packages/")) t)
 
 
@@ -365,6 +372,11 @@
 
 
 (use-package graphql :ensure t :defer t)
+
+;; Required for lsp-mode
+(use-package spinner
+  :ensure t
+)
 
 (use-package graphql-mode :ensure t :requires lsp-mode)
 
