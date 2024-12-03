@@ -173,7 +173,7 @@
 
   ;; (defun gptel-company-backend (command &optional arg &rest ignored)
   ;; "Company backend for GPTel using Google Gemini."
-  ;; (message "gptel-company-backend has been called with command %s" command)
+  ;; (message "gptel-company-backend has been called with command: %s" command)
   ;; (interactive (list 'interactive))
   ;; (cl-case command
   ;;   (interactive (company-begin-backend 'gptel-company-backend))
@@ -686,6 +686,9 @@
 
 ;; Use fd for dired
 (use-package fd-dired :commands fd-dired :ensure t)
+
+;; Have only 1 buffer for dired
+(setq dired-kill-when-opening-new-dired-buffer t)
 
 
 (use-package
