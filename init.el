@@ -143,6 +143,15 @@
  (setq projectile-enable-caching nil))
 
 
+(use-package gptel
+  :ensure t
+  :config
+  (setq
+   gptel-model "gemini-1.5-flash"
+   gptel-backend (gptel-make-gemini "Gemini"
+                 :key gptel-api-key
+                 :stream t))
+)
 
 ;; Company Packages
 (use-package company
@@ -324,14 +333,27 @@
  :config
  (setq org-journal-dir "~/journal/emacs_journal")
  (setq org-journal-date-format "%A, %d %B %Y")
- (setq org-journal-file-format "%Y-%m-%d.org"))
+ (setq org-journal-file-format "%Y-%m-%d.org")
+)
 
 ;; Distraction Free writing
 (use-package
- olivetti
+ writeroom-mode
  :ensure t
- :defer t
- :hook (olivetti-mode . org-journal-mode-hook))
+ :hook org-journal
+ :init
+ (defcustom writeroom-fullscreen-effect 'maximized
+  "Effect applied when enabling fullscreen.
+  The value can be `fullboth', in which case fullscreen is
+  activated, or `maximized', in which case the relevant frame is
+  maximized but window decorations are still available."
+   :group 'writeroom
+   :type '(choice (const :tag "Fullscreen" fullboth)
+		  (const :tag "Maximized" maximized)))
+ :config
+ (advice-add 'text-scale-adjust :after
+   #'visual-fill-column-adjust)
+)
 
 ;; Vlang
 (use-package
@@ -726,47 +748,60 @@
 ;; move text easily up and down
 (use-package move-text :ensure t :config (move-text-default-bindings))
 
-(use-package
- color-theme-sanityinc-tomorrow
- :ensure t
- :config
- ;; Set color theme
- (load-theme 'sanityinc-tomorrow-bright t)
+;; Trying Prot's settings
+;; https://protesilaos.com/codelog/2024-11-28-basic-emacs-configuration/#h:8d8c57cc-04c9-408f-aca1-6493bc5d8f0d
+(let ((mono-spaced-font "Monaco")
+      (proportionately-spaced-font "Sans"))
+  (set-face-attribute 'default nil :family mono-spaced-font :height 260)
+  (set-face-attribute 'fixed-pitch nil :family mono-spaced-font :height 1.0)
+  (set-face-attribute 'variable-pitch nil :family proportionately-spaced-font :height 1.0))
 
- ;; Cursor color
- (set-cursor-color "blue")
+(use-package modus-themes
+  :ensure t
+  :config
+  (load-theme 'modus-vivendi-tritanopia :no-confirm-loading))
 
- ;; Set region color
- (set-face-attribute 'region nil
-                     :background "yellow"
-                     :foreground "brown")
+;; (use-package
+;;  color-theme-sanityinc-tomorrow
+;;  :ensure t
+;;  :config
+;;  ;; Set color theme
+;;  (load-theme 'sanityinc-tomorrow-bright t)
 
- ;;https://explog.in/notes/writingsetup.html
- (set-face-attribute 'default nil :family "Menlo" :height 200)
- (set-face-attribute 'fixed-pitch nil :family "Menlo" :height 200)
- (set-face-attribute 'variable-pitch nil :family "Menlo" :height 200)
- (set-face-attribute 'line-number nil :family "Menlo" :height 200)
- (set-face-attribute 'line-number-current-line nil
-                     :family "Menlo"
-                     :height 200)
- (add-hook 'text-mode-hook 'variable-pitch-mode)
+;;  ;; Cursor color
+;;  (set-cursor-color "blue")
 
- ;; Set Menlo font in the buffer
- ;; https://stackoverflow.com/questions/20866169/change-the-font-of-current-buffer-in-emacs
- (defun set-menlo-in-buffer ()
-   (interactive "sFont Family: ")
-   (defface tmp-buffer-local-face '((t :family "Menlo"))
-     "Temporary buffer-local face")
-   (buffer-face-set 'tmp-buffer-local-face))
+;;  ;; Set region color
+;;  (set-face-attribute 'region nil
+;;                      :background "yellow"
+;;                      :foreground "brown")
 
- ;; Menlo font for the calendar so it's misaligned
- (add-hook 'calendar-mode-hook 'set-menlo-in-buffer)
+;;  ;;https://explog.in/notes/writingsetup.html
+;;  (set-face-attribute 'default nil :family "Menlo" :height 200)
+;;  (set-face-attribute 'fixed-pitch nil :family "Menlo" :height 200)
+;;  (set-face-attribute 'variable-pitch nil :family "Menlo" :height 200)
+;;  (set-face-attribute 'line-number nil :family "Menlo" :height 200)
+;;  (set-face-attribute 'line-number-current-line nil
+;;                      :family "Menlo"
+;;                      :height 200)
+;;  (add-hook 'text-mode-hook 'variable-pitch-mode)
 
- ;;set colours for priorities
- (setq org-priority-faces
-       '((?A . (:foreground "#F0DFAF" :weight bold))
-         (?B . (:foreground "LightSteelBlue"))
-         (?C . (:foreground "OliveDrab")))))
+;;  ;; Set Menlo font in the buffer
+;;  ;; https://stackoverflow.com/questions/20866169/change-the-font-of-current-buffer-in-emacs
+;;  (defun set-menlo-in-buffer ()
+;;    (interactive "sFont Family: ")
+;;    (defface tmp-buffer-local-face '((t :family "Menlo"))
+;;      "Temporary buffer-local face")
+;;    (buffer-face-set 'tmp-buffer-local-face))
+
+;;  ;; Menlo font for the calendar so it's misaligned
+;;  (add-hook 'calendar-mode-hook 'set-menlo-in-buffer)
+
+;;  ;;set colours for priorities
+;;  (setq org-priority-faces
+;;        '((?A . (:foreground "#F0DFAF" :weight bold))
+;;          (?B . (:foreground "LightSteelBlue"))
+;;          (?C . (:foreground "OliveDrab")))))
 
 (use-package restart-emacs :ensure t :config)
 
@@ -828,16 +863,6 @@
   :config
   (global-set-key (kbd "C-c o") 'casual-symbol-overlay-tmenu))
 
-
-(use-package gptel
-  :ensure t
-  :config
-  (setq
-   gptel-model "gemini-1.5-flash"
-   gptel-backend (gptel-make-gemini "Gemini"
-                 :key ""
-                 :stream t))
-)
 
 ;; ***********************
 ;; Miscellaneous Settings
