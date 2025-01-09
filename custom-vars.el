@@ -131,8 +131,11 @@
 	 nerd-icons-ivy-rich org-download org-journal org-roam
 	 projectile py-autopep8 restart-emacs robot-mode rustic
 	 selected-window-accent-mode super-save tide typescript-mode
-	 v-mode vc-msg verb vterm web-mode which-key
-	 whole-line-or-region writeroom-mode yaml-mode))
+	 ultra-scroll v-mode vc-msg verb verilog-mode vterm web-mode
+	 which-key whole-line-or-region writeroom-mode yaml-mode))
+ '(package-vc-selected-packages
+   '((ultra-scroll :vc-backend Git :url
+		   "https://github.com/jdtsmith/ultra-scroll")))
  '(warning-suppress-types '((comp) (comp))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

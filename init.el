@@ -145,23 +145,13 @@
 
 (use-package gptel
   :ensure t
+  :demand
   :config
   (setq
-   gptel-model "gemini-1.5-flash"
+   gptel-model 'gemini-1.5-flash
    gptel-backend (gptel-make-gemini "Gemini"
                  :key gptel-api-key
                  :stream t))
-)
-
-;; Company Packages
-(use-package company
-  :ensure t
-  :hook (after-init . global-company-mode)
-  :config
-  (setq company-idle-delay 0.2
-        company-minimum-prefix-length 1)
-
-  (add-to-list 'company-backends 'company-gptel)
 
   ;; (defun gptel-complete (prefix)
   ;; "Get completion from GPTel for PREFIX."
@@ -180,7 +170,7 @@
   ;;     (goto-char url-http-end-of-headers)
   ;;     (buffer-substring-no-properties (point) (point-max)))))
 
-  ;; (defun gptel-company-backend (command &optional arg &rest ignored)
+  ;; (defun company-gptel (command &optional arg &rest ignored)
   ;; "Company backend for GPTel using Google Gemini."
   ;; (message "gptel-company-backend has been called with command: %s" command)
   ;; (interactive (list 'interactive))
@@ -193,8 +183,18 @@
   ;;      (if completion
   ;;          (list completion)
   ;;        nil)))))
+)
 
-  ;; (add-to-list 'company-backends 'gptel-company-backend)
+;; Company Packages
+(use-package company
+  :ensure t
+  :after gptel
+  :hook (after-init . global-company-mode)
+  :config
+  (setq company-idle-delay 0.2
+        company-minimum-prefix-length 1)
+
+  ;;(add-to-list 'company-backends 'company-gptel)
 )
 
 
@@ -328,8 +328,7 @@
 (use-package
  org-journal
  :ensure t
- :defer t
- :commands org-journal
+ :hook (org-journal-mode . writeroom-mode)
  :config
  (setq org-journal-dir "~/journal/emacs_journal")
  (setq org-journal-date-format "%A, %d %B %Y")
@@ -340,7 +339,6 @@
 (use-package
  writeroom-mode
  :ensure t
- :hook org-journal
  :init
  (defcustom writeroom-fullscreen-effect 'maximized
   "Effect applied when enabling fullscreen.
@@ -809,6 +807,14 @@
 ;; Terminal emulator
 (use-package vterm :ensure t :commands vterm)
 
+;; Better scrolling
+;; Had to manually call package-vc-install - https://github.com/jdtsmith/ultra-scroll?tab=readme-ov-file#installation
+(use-package ultra-scroll
+  :init
+  (setq scroll-conservatively 101 ; important!
+        scroll-margin 0) 
+  :config
+  (ultra-scroll-mode 1))
 
 (use-package
  magit
