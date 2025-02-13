@@ -124,15 +124,16 @@
    '(amx auto-compile avy-zap casual-symbol-overlay
 	 color-theme-sanityinc-tomorrow company-jedi company-quickhelp
 	 counsel deadgrep diff-hl dimmer dockerfile-mode doom-modeline
-	 editorconfig elisp-autofmt esup exec-path-from-shell faceup
-	 fd-dired gptel graphql graphql-mode groovy-mode helpful
-	 js2-mode json-mode lsp-ivy lsp-pyright magit mini-frame
-	 modus-themes move-text nerd-icons-completion
+	 editorconfig eglot elisp-autofmt esup exec-path-from-shell
+	 faceup fd-dired gptel graphql graphql-mode groovy-mode
+	 helpful js2-mode json-mode lsp-ivy lsp-pyright magit
+	 mini-frame modus-themes move-text nerd-icons-completion
 	 nerd-icons-ivy-rich org-download org-journal org-roam
 	 projectile py-autopep8 restart-emacs robot-mode rustic
 	 selected-window-accent-mode super-save tide typescript-mode
 	 ultra-scroll v-mode vc-msg verb verilog-mode vterm web-mode
-	 which-key whole-line-or-region writeroom-mode yaml-mode))
+	 which-key whole-line-or-region window-tool-bar writeroom-mode
+	 yaml-mode))
  '(package-vc-selected-packages
    '((ultra-scroll :vc-backend Git :url
 		   "https://github.com/jdtsmith/ultra-scroll")))

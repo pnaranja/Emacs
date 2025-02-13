@@ -142,6 +142,51 @@
  (setq projectile-completion-system 'ivy)
  (setq projectile-enable-caching nil))
 
+;; Make Sure This Key Is Not Committed For Security Reasons
+(setenv "GEMINI_API_KEY" "AIzaSyDRalgdiWT8gXwKqVPCPibjsqsAC_9xrh8")
+(setq gptel-api-key (getenv "GEMINI_API_KEY"))
+
+;; (use-package minuet
+;;    :ensure t
+;;    :demand
+;;    :bind
+;;    (("M-y" . #'minuet-complete-with-minibuffer) ;; use minibuffer for completion
+;;     ("M-i" . #'minuet-show-suggestion) ;; use overlay for completion
+
+;;     :map minuet-active-mode-map
+;;     ;; These keymaps activate only when a minuet suggestion is displayed in the current buffer
+;;     ("M-p" . #'minuet-previous-suggestion) ;; invoke completion or cycle to next completion
+;;     ("M-n" . #'minuet-next-suggestion) ;; invoke completion or cycle to previous completion
+;;     ("M-A" . #'minuet-accept-suggestion) ;; accept whole completion
+;;     ;; Accept the first line of completion, or N lines with a numeric-prefix:
+;;     ;; e.g. C-u 2 M-a will accepts 2 lines of completion.
+;;     ("M-a" . #'minuet-accept-suggestion-line)
+;;     ("M-e" . #'minuet-dismiss-suggestion))
+
+;;    :init
+;;    ;; if you want to enable auto suggestion.
+;;    ;; Note that you can manually invoke completions without enable minuet-auto-suggestion-mode
+;;    (add-hook 'prog-mode-hook #'minuet-auto-suggestion-mode)
+
+;;    :config
+;;    (plist-put minuet-openai-compatible-options :api-key "GEMINI_API_KEY")
+;;    (setq minuet-provider 'gemini)
+
+;;    (minuet-set-optional-options minuet-gemini-options
+;; 				 :generationConfig
+;; 				 '(:maxOutputTokens 256
+;; 				   :topP 0.9))
+;;    (minuet-set-optional-options minuet-gemini-options
+;; 				 :safetySettings
+;; 				 [(:category "HARM_CATEGORY_DANGEROUS_CONTENT"
+;; 				   :threshold "BLOCK_NONE")
+;; 				  (:category "HARM_CATEGORY_HATE_SPEECH"
+;; 				   :threshold "BLOCK_NONE")
+;; 				  (:category "HARM_CATEGORY_HARASSMENT"
+;; 				   :threshold "BLOCK_NONE")
+;; 				  (:category "HARM_CATEGORY_SEXUALLY_EXPLICIT"
+;; 				   :threshold "BLOCK_NONE")])
+;; )
 
 (use-package gptel
   :ensure t
