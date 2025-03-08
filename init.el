@@ -852,15 +852,6 @@
 ;; Terminal emulator
 (use-package vterm :ensure t :commands vterm)
 
-;; Better scrolling
-;; Had to manually call package-vc-install - https://github.com/jdtsmith/ultra-scroll?tab=readme-ov-file#installation
-(use-package ultra-scroll
-  :init
-  (setq scroll-conservatively 101 ; important!
-        scroll-margin 0) 
-  :config
-  (ultra-scroll-mode 1))
-
 (use-package
  magit
  :ensure t
@@ -914,6 +905,14 @@
   :config
   (global-set-key (kbd "C-c o") 'casual-symbol-overlay-tmenu))
 
+;; Better scrolling
+;; Had to manually call package-vc-install - https://github.com/jdtsmith/ultra-scroll?tab=readme-ov-file#installation
+(use-package ultra-scroll
+  :init
+  (setq scroll-conservatively 101 ; important!
+        scroll-margin 0) 
+  :config
+  (ultra-scroll-mode 1))
 
 ;; ***********************
 ;; Miscellaneous Settings
