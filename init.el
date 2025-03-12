@@ -230,6 +230,7 @@
   ;;        nil)))))
 )
 
+
 ;; Company Packages
 (use-package company
   :ensure t
@@ -373,6 +374,7 @@
 (use-package
  org-journal
  :ensure t
+ :demand
  :hook (org-journal-mode . writeroom-mode)
  :config
  (setq org-journal-dir "~/journal/emacs_journal")
@@ -850,7 +852,10 @@
 
 
 ;; Terminal emulator
-(use-package vterm :ensure t :commands vterm)
+(use-package vterm 
+ :ensure t 
+ :demand
+ :commands vterm)
 
 (use-package
  magit
@@ -914,9 +919,25 @@
   :config
   (ultra-scroll-mode 1))
 
+(use-package aidermacs
+  :ensure t
+  :demand
+  :bind (("C-c a" . aidermacs-transient-menu))
+  :config
+  (setq aidermacs-backend 'vterm)
+  :custom
+  ; See the Configuration section below
+  (aidermacs-default-model "gemini"))
+
 ;; ***********************
 ;; Miscellaneous Settings
 ;; **********************
+
+;; hide toolbar
+(tool-bar-mode -1)
+
+;; always follow symlinks
+(setq find-file-visit-truename t)
 
 ;; Set kill current buffer to need an extra more characters
 (global-unset-key (kbd "s-k"))
