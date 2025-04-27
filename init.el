@@ -193,7 +193,7 @@
   :demand
   :config
   (setq
-   gptel-model 'gemini-1.5-flash
+   gptel-model 'gemini-2.0-flash
    gptel-backend (gptel-make-gemini "Gemini"
                  :key gptel-api-key
                  :stream t))
@@ -1234,3 +1234,4 @@
 ;; 	  (setq gc-cons-threshold 16777216 gc-cons-percentage 0.1 file-name-handler-alist
 ;; 		last-file-name-handler-alist)
 ;; 	  (efs/display-startup-time))
+(put 'upcase-region 'disabled nil)
