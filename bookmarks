@@ -2,7 +2,13 @@
 ;;; This format is meant to be slightly human-readable;
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
-(("notes.org"
+(("TraditionWithCatholicT"
+ (filename . "~/TraditionWithCatholicT/")
+ (front-context-string . ".\n  drwxr-x---+ ")
+ (rear-context-string . "20 Mar  8 13:52 ")
+ (position . 102)
+ (last-modified 26659 42712 921494 0))
+("notes.org"
  (filename . "~/Notes_Todos/notes.org")
  (front-context-string . "* SAFE GeoServic")
  (rear-context-string . "1GgwuPBZszpxs4L\n")
@@ -37,11 +43,11 @@
  (rear-context-string . "+Test+Reports]]\n")
  (position . 1265))
 ("org-capture-last-stored"
- (filename . "~/journal/org-roam/20230305231110-introduction_to_the_sacred_liturgy_class_4.org")
- (front-context-string . "[[id:A9CE7178-76")
- (rear-context-string . "turgy - Class 4\n")
- (position . 122)
- (last-modified 25605 37406 522067 0))
+ (filename . "~/journal/org-roam/20250710114419-podcast_episode_7.org")
+ (front-context-string . "\n[[id:A9CE7178-7")
+ (rear-context-string . "dcast Episode 7\n")
+ (position . 95)
+ (last-modified 26736 2614 915545 0))
 ("verb_examples.org"
  (filename . "~/REST_files/verb_examples.org")
  (front-context-string . "* Quick Start fo")

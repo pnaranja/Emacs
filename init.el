@@ -193,7 +193,7 @@
   :demand
   :config
   (setq
-   gptel-model 'gemini-2.0-flash
+   gptel-model 'gemini-2.5-flash
    gptel-backend (gptel-make-gemini "Gemini"
                  :key gptel-api-key
                  :stream t))
@@ -230,6 +230,12 @@
   ;;        nil)))))
 )
 
+(use-package gptel-commit
+  :ensure t
+  :after (gptel magit)
+  :custom
+  (gptel-commit-stream t)
+)
 
 ;; Company Packages
 (use-package company
@@ -474,7 +480,7 @@
  :demand
  :commands lsp-mode
  :config
- ;; LSP shortcuts
+ ;; lsp shortcuts
  (global-unset-key (kbd "s-l"))
  (global-set-key (kbd "s-l l") 'lsp-find-references)
  (global-set-key (kbd "s-l d") 'lsp-describe-thing-at-point)
@@ -708,11 +714,37 @@
 
 (use-package
  org
+ :defer t
  :mode ("\\.org\\'" . org-mode)
  :config
  (define-key
   org-mode-map (kbd "C-c C-r") verb-command-map)
- (setq org-startup-folded t))
+ (setq org-startup-folded t)
+)
+
+(use-package
+ org-roam
+ :ensure t
+ :after org
+ :defer t
+ :hook (org-mode . org-roam-db-autosync-enable)
+ :config
+ (setq org-roam-v2-ack t)
+ (global-set-key (kbd "C-c n l") 'org-roam-capture)
+ (global-set-key (kbd "C-c n f") 'org-roam-node-find)
+ (global-set-key (kbd "C-c n i") 'org-roam-node-insert)
+ (global-set-key (kbd "C-c n b") 'org-roam-buffer-display-dedicated)
+ (global-set-key (kbd "C-c n g") 'org-roam-graph)
+ (setq org-roam-directory "~/journal/org-roam")
+ (org-roam-db-autosync-mode)
+ (add-to-list
+  'display-buffer-alist
+  '("\\*org-roam\\*"
+    (display-buffer-in-direction)
+    (direction . right)
+    (window-width . 0.33)
+    (window-height . fit-window-to-buffer)))
+)
 
 ;; Verb - For sending HTTP Requests
 (use-package
@@ -793,6 +825,7 @@
 ;; move text easily up and down
 (use-package move-text :ensure t :config (move-text-default-bindings))
 
+
 ;; Trying Prot's settings
 ;; https://protesilaos.com/codelog/2024-11-28-basic-emacs-configuration/#h:8d8c57cc-04c9-408f-aca1-6493bc5d8f0d
 (let ((mono-spaced-font "Monaco")
@@ -801,10 +834,28 @@
   (set-face-attribute 'fixed-pitch nil :family mono-spaced-font :height 1.0)
   (set-face-attribute 'variable-pitch nil :family proportionately-spaced-font :height 1.0))
 
+
 (use-package modus-themes
   :ensure t
   :config
   (load-theme 'modus-vivendi-tritanopia :no-confirm-loading))
+
+
+(use-package
+ magit
+ :ensure t
+ :defer t
+ :commands magit
+ :config
+ (global-unset-key (kbd "C-c M-g"))
+ (global-set-key (kbd "C-c g") 'magit-file-dispatch)
+ (global-set-key (kbd "C-c F") 'magit-pull)
+ (global-set-key (kbd "C-c B") 'magit-branch)
+ (global-set-key (kbd "C-x g") 'magit)
+ ;; From https://scripter.co/narrowing-the-author-column-in-magit/
+ (setq magit-log-margin
+       '(t "%Y-%m-%d %H:%M" magit-log-margin-width :author 18)))
+
 
 ;; (use-package
 ;;  color-theme-sanityinc-tomorrow
@@ -848,8 +899,6 @@
 ;;          (?B . (:foreground "LightSteelBlue"))
 ;;          (?C . (:foreground "OliveDrab")))))
 
-(use-package restart-emacs :ensure t :config)
-
 
 ;; Terminal emulator
 (use-package vterm 
@@ -857,45 +906,9 @@
  :demand
  :commands vterm)
 
-(use-package
- magit
- :ensure t
- :defer t
- :commands magit
- :config
- (global-unset-key (kbd "C-c M-g"))
- (global-set-key (kbd "C-c g") 'magit-file-dispatch)
- (global-set-key (kbd "C-c F") 'magit-pull)
- (global-set-key (kbd "C-c B") 'magit-branch)
- (global-set-key (kbd "C-x g") 'magit)
- ;; From https://scripter.co/narrowing-the-author-column-in-magit/
- (setq magit-log-margin
-       '(t "%Y-%m-%d %H:%M" magit-log-margin-width :author 18)))
-
 (use-package diff-hl :ensure t :defer t :config (global-diff-hl-mode))
 
-
-(use-package
- org-roam
- :ensure t
- :defer t
- :config
- (setq org-roam-v2-ack t)
- (global-set-key (kbd "C-c n l") 'org-roam-capture)
- (global-set-key (kbd "C-c n f") 'org-roam-node-find)
- (global-set-key (kbd "C-c n i") 'org-roam-node-insert)
- (global-set-key (kbd "C-c n b") 'org-roam-buffer-display-dedicated)
- (global-set-key (kbd "C-c n g") 'org-roam-graph)
- (setq org-roam-directory "~/journal/org-roam")
- (org-roam-db-autosync-mode)
- (add-to-list
-  'display-buffer-alist
-  '("\\*org-roam\\*"
-    (display-buffer-in-direction)
-    (direction . right)
-    (window-width . 0.33)
-    (window-height . fit-window-to-buffer))))
-
+(use-package restart-emacs :ensure t :config)
 
 (use-package
  elisp-autofmt
