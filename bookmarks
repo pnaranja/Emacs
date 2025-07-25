@@ -43,11 +43,11 @@
  (rear-context-string . "+Test+Reports]]\n")
  (position . 1265))
 ("org-capture-last-stored"
- (filename . "~/journal/org-roam/20250710114419-podcast_episode_7.org")
- (front-context-string . "\n[[id:A9CE7178-7")
- (rear-context-string . "dcast Episode 7\n")
- (position . 95)
- (last-modified 26736 2614 915545 0))
+ (filename . "~/journal/org-roam/20250723142707-jean_letter_07232025.org")
+ (front-context-string . "\n[[id:3B08A42F-D")
+ (rear-context-string . "Letter_07232025\n")
+ (position . 98)
+ (last-modified 26753 21642 677268 0))
 ("verb_examples.org"
  (filename . "~/REST_files/verb_examples.org")
  (front-context-string . "* Quick Start fo")
