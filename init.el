@@ -358,13 +358,18 @@
  :ensure t
  :defer t
  :commands flycheck
- :config (add-hook 'after-init-hook 'flycheck-mode)
+ :config 
+ (add-hook 'after-init-hook 'flycheck-mode)
+)
 
+(use-package
+  flyspell
+  :config
  ;; Always turn on flyspell in org mode
  (add-hook 'org-mode-hook 'flyspell-mode)
  (customize-set-variable 'ispell-program-name "aspell")
- (customize-set-variable 'ispell-extra-args '("--sug-mode=ultra")))
-
+ (customize-set-variable 'ispell-extra-args '("--sug-mode=ultra"))
+)
 
 ;; Activate pos-tip
 (use-package pos-tip :defer t)
