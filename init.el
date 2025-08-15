@@ -1,6 +1,5 @@
-;;; early-init.el --- early bird  -*- no-byte-compile: t -*-
-;;; package -- Summary
-;;; Commentary:
+;; -*- lexical-binding: t -*-
+;;; init.el --- early bird  -*- no-byte-compile: t -*-
 
 ;; Set custom set vars in a different file instead of at the end of the init file.
 ;; Show no errors or messages when loading

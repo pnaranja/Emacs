@@ -1,5 +1,5 @@
-;;; early-init.el --- early bird  -*- no-byte-compile: t -*-
 ;; -*- lexical-binding: t -*-
+;;; early-init.el --- early bird  -*- no-byte-compile: t -*-
 
 ;; Increase garbage collection threshold to 500 MB to ease startup
 (setq gc-cons-threshold (* 500 1024 1024))
