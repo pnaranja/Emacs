@@ -501,7 +501,8 @@
  (add-hook 'typescript-mode-hook #'lsp)
  (add-hook 'rustic-mode-hook #'lsp)
  (add-hook 'nim-mode-hook #'lsp)
- (add-hook 'graphql-mode-hook #'lsp))
+ (add-hook 'graphql-mode-hook #'lsp)
+)
 
 (use-package lsp-ivy :ensure t :requires lsp-mode)
 
@@ -945,6 +946,30 @@
   :custom
   ; See the Configuration section below
   (aidermacs-default-model "gemini"))
+
+
+
+;; Assuming usage with dart-mode
+(use-package dart-mode
+  :ensure t
+  ;; Optional
+  :hook (dart-mode . flutter-test-mode))
+
+(use-package flutter
+  :ensure t
+  :after dart-mode
+  :bind (:map dart-mode-map
+              ("C-M-x" . #'flutter-run-or-hot-reload)
+              ("C-M-r" . #'flutter-hot-restart)
+	)
+  :custom
+  (flutter-sdk-path "/opt/homebrew/share/flutter"))
+
+(use-package lsp-dart
+  :ensure t
+  :init
+  ;; Add lsp-dart to your lsp-mode hook
+  (add-hook 'dart-mode-hook #'lsp))
 
 ;; ***********************
 ;; Miscellaneous Settings
