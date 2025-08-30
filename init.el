@@ -120,7 +120,9 @@
  ;; The Nerd Font you want to use in GUI
  ;; "Symbols Nerd Font Mono" is the default and is recommended
  ;; but you can use any other Nerd Font if you want
- (nerd-icons-font-family "Symbols Nerd Font Mono"))
+ ;; (nerd-icons-font-family "Symbols Nerd Font Mono")
+ (nerd-icons-font-family "Inconsolata Nerd Font")
+)
 
 (use-package
  projectile
@@ -380,6 +382,22 @@
  :config
  ;; Set key for comment-or-uncomment-region
  (global-set-key (kbd "M-/") #'comment-or-uncomment-region))
+
+(use-package rainbow-delimiters
+  :ensure t
+  :demand t
+  :custom (rainbow-delimiters-max-face-count 4)
+  :hook ((prog-mode yaml-mode xml-mode mhtml-mode)
+         . rainbow-delimiters-mode))
+
+;;; Show Paren when inside of them
+(define-advice show-paren-function (:around (fn) fix)
+  "Highlight enclosing parens."
+  (cond ((looking-at-p "\\s(") (funcall fn))
+        (t (save-excursion
+             (ignore-errors (backward-up-list))
+             (funcall fn))))
+)
 
 (use-package
  org-journal
