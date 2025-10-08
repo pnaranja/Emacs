@@ -43,11 +43,11 @@
  (rear-context-string . "+Test+Reports]]\n")
  (position . 1265))
 ("org-capture-last-stored"
- (filename . "~/journal/org-roam/20250828095724-disney_interviews.org")
- (front-context-string)
- (rear-context-string . "sney Interviews\n")
- (position . 95)
- (last-modified 26800 35452 518749 0))
+ (filename . "~/journal/org-roam/20251003104141-bill_inteviews.org")
+ (front-context-string . "\n* Interview Hak")
+ (rear-context-string . " BILL Inteviews\n")
+ (position . 92)
+ (last-modified 26848 2803 906219 0))
 ("verb_examples.org"
  (filename . "~/REST_files/verb_examples.org")
  (front-context-string . "* Quick Start fo")

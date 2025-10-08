@@ -238,6 +238,22 @@
   (gptel-commit-stream t)
 )
 
+
+(use-package eca
+  :ensure t ; Automatically install the package if it's not present
+  :defer t  ; Defer loading until the first time it is called
+  :bind
+  ;; Define keybindings to start the chat or add context
+  (("C-c e c" . eca-chat)
+   ("C-c e a" . eca-chat-add-context-at-point))
+
+  :config
+  ;; Configuration block: commands to run after the package is loaded.
+  ;; You can customize variables here, e.g.:
+  (setq eca-custom-command nil) ; Set to nil to let ECA download the server binary automatically
+)
+
+
 ;; Company Packages
 (use-package company
   :ensure t
