@@ -143,9 +143,6 @@
  (setq projectile-completion-system 'ivy)
  (setq projectile-enable-caching nil))
 
-;; Make Sure This Key Is Not Committed For Security Reasons
-(setenv "GEMINI_API_KEY" "AIzaSyDRalgdiWT8gXwKqVPCPibjsqsAC_9xrh8")
-(setq gptel-api-key (getenv "GEMINI_API_KEY"))
 
 ;; (use-package minuet
 ;;    :ensure t
