@@ -43,11 +43,11 @@
  (rear-context-string . "+Test+Reports]]\n")
  (position . 1265))
 ("org-capture-last-stored"
- (filename . "~/journal/org-roam/20251003104141-bill_inteviews.org")
- (front-context-string . "\n* Interview Hak")
- (rear-context-string . " BILL Inteviews\n")
- (position . 92)
- (last-modified 26848 2803 906219 0))
+ (filename . "~/journal/org-roam/20251027185736-podcast_episode_10.org")
+ (front-context-string . "\n[[Catholic]]\n[[")
+ (rear-context-string . "cast Episode 10\n")
+ (position . 96)
+ (last-modified 26880 8996 236876 0))
 ("verb_examples.org"
  (filename . "~/REST_files/verb_examples.org")
  (front-context-string . "* Quick Start fo")

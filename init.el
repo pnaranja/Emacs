@@ -69,6 +69,18 @@
   ;; OSX: Use mdfind for locate
   (setq locate-command "mdfind"))
 
+;; Emacs 30+ has built in modus themes
+(use-package emacs
+  :init
+  (require-theme 'modus-themes)
+  :config
+  ;; Customize theme options before loading
+  (setq modus-themes-italic-constructs t
+        modus-themes-bold-constructs nil)
+  ;; Load the desired theme
+  (modus-themes-load-theme 'modus-vivendi-tritanopia)
+)
+
 
 ;; super-save - https://github.com/bbatsov/super-save
 (use-package
@@ -144,105 +156,15 @@
  (setq projectile-enable-caching nil))
 
 
-;; (use-package minuet
-;;    :ensure t
-;;    :demand
-;;    :bind
-;;    (("M-y" . #'minuet-complete-with-minibuffer) ;; use minibuffer for completion
-;;     ("M-i" . #'minuet-show-suggestion) ;; use overlay for completion
-
-;;     :map minuet-active-mode-map
-;;     ;; These keymaps activate only when a minuet suggestion is displayed in the current buffer
-;;     ("M-p" . #'minuet-previous-suggestion) ;; invoke completion or cycle to next completion
-;;     ("M-n" . #'minuet-next-suggestion) ;; invoke completion or cycle to previous completion
-;;     ("M-A" . #'minuet-accept-suggestion) ;; accept whole completion
-;;     ;; Accept the first line of completion, or N lines with a numeric-prefix:
-;;     ;; e.g. C-u 2 M-a will accepts 2 lines of completion.
-;;     ("M-a" . #'minuet-accept-suggestion-line)
-;;     ("M-e" . #'minuet-dismiss-suggestion))
-
-;;    :init
-;;    ;; if you want to enable auto suggestion.
-;;    ;; Note that you can manually invoke completions without enable minuet-auto-suggestion-mode
-;;    (add-hook 'prog-mode-hook #'minuet-auto-suggestion-mode)
-
-;;    :config
-;;    (plist-put minuet-openai-compatible-options :api-key "GEMINI_API_KEY")
-;;    (setq minuet-provider 'gemini)
-
-;;    (minuet-set-optional-options minuet-gemini-options
-;; 				 :generationConfig
-;; 				 '(:maxOutputTokens 256
-;; 				   :topP 0.9))
-;;    (minuet-set-optional-options minuet-gemini-options
-;; 				 :safetySettings
-;; 				 [(:category "HARM_CATEGORY_DANGEROUS_CONTENT"
-;; 				   :threshold "BLOCK_NONE")
-;; 				  (:category "HARM_CATEGORY_HATE_SPEECH"
-;; 				   :threshold "BLOCK_NONE")
-;; 				  (:category "HARM_CATEGORY_HARASSMENT"
-;; 				   :threshold "BLOCK_NONE")
-;; 				  (:category "HARM_CATEGORY_SEXUALLY_EXPLICIT"
-;; 				   :threshold "BLOCK_NONE")])
-;; )
-
-(use-package gptel
-  :ensure t
-  :demand
-  :config
-  (setq
-   gptel-model 'gemini-2.5-flash
-   gptel-backend (gptel-make-gemini "Gemini"
-                 :key gptel-api-key
-                 :stream t))
-
-  ;; (defun gptel-complete (prefix)
-  ;; "Get completion from GPTel for PREFIX."
-  ;; (message "gptel-complete called with prefix: %s" prefix)
-  ;; (let ((response (gptel-request prefix)))
-  ;;   (when response
-  ;;     (cdr (assoc 'completion response)))))
-
-  ;; (defun gptel-request (input)
-  ;; "Send a request to GPTel with INPUT."
-  ;; (message "gptel-request has been called with input: %s" input)
-  ;; (let ((url-request-method "POST")
-  ;;       (url-request-data (json-encode `(("input" . ,input))))
-  ;;       (url (concat "https://api.google.com/gemini/v1/completions?key=" gptel-api-key)))
-  ;;   (with-current-buffer (url-retrieve-synchronously url)
-  ;;     (goto-char url-http-end-of-headers)
-  ;;     (buffer-substring-no-properties (point) (point-max)))))
-
-  ;; (defun company-gptel (command &optional arg &rest ignored)
-  ;; "Company backend for GPTel using Google Gemini."
-  ;; (message "gptel-company-backend has been called with command: %s" command)
-  ;; (interactive (list 'interactive))
-  ;; (cl-case command
-  ;;   (interactive (company-begin-backend 'gptel-company-backend))
-  ;;   (prefix (and (eq major-mode 'prog-mode)
-  ;;                (company-grab-symbol)))
-  ;;   (candidates
-  ;;    (let ((completion (gptel-complete arg)))
-  ;;      (if completion
-  ;;          (list completion)
-  ;;        nil)))))
-)
-
-(use-package gptel-commit
-  :ensure t
-  :after (gptel magit)
-  :custom
-  (gptel-commit-stream t)
-)
-
-
 (use-package eca
   :ensure t ; Automatically install the package if it's not present
   :defer t  ; Defer loading until the first time it is called
   :bind
   ;; Define keybindings to start the chat or add context
-  (("C-c e c" . eca-chat)
-   ("C-c e a" . eca-chat-add-context-at-point))
+  (
+   ("C-c e c" . eca-chat)
+   ("C-c e a" . eca-chat-add-context-at-point)
+  )
 
   :config
   ;; Configuration block: commands to run after the package is loaded.
@@ -870,13 +792,6 @@
   (set-face-attribute 'fixed-pitch nil :family mono-spaced-font :height 1.0)
   (set-face-attribute 'variable-pitch nil :family proportionately-spaced-font :height 1.0))
 
-
-(use-package modus-themes
-  :ensure t
-  :config
-  (load-theme 'modus-vivendi-tritanopia :no-confirm-loading))
-
-
 (use-package
  magit
  :ensure t
@@ -967,18 +882,6 @@
         scroll-margin 0) 
   :config
   (ultra-scroll-mode 1))
-
-(use-package aidermacs
-  :ensure t
-  :demand
-  :bind (("C-c a" . aidermacs-transient-menu))
-  :config
-  (setq aidermacs-backend 'vterm)
-  :custom
-  ; See the Configuration section below
-  (aidermacs-default-model "gemini"))
-
-
 
 ;; Assuming usage with dart-mode
 (use-package dart-mode
