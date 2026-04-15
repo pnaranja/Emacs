@@ -510,10 +510,6 @@
  (global-set-key (kbd "M-z") 'avy-zap-up-to-char-dwim))
 
 
-(use-package deadgrep
-  :ensure t
-  :config (global-set-key (kbd "C-c s") #'deadgrep))  ; Note: C-c s also used by consult-ripgrep
-
 (use-package org
   :defer t
   :mode ("\\.org\\'" . org-mode)
