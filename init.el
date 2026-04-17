@@ -171,6 +171,7 @@
   (corfu-auto-delay 0.1)
   (corfu-cycle t)
   (corfu-quit-no-match 'separator)
+  (corfu-preselect 'prompt)
   :bind (:map corfu-map
          ("TAB" . corfu-next)
          ([tab] . corfu-next)
@@ -190,6 +191,14 @@
   :after corfu
   :config
   (add-to-list 'corfu-margin-formatters #'nerd-icons-corfu-formatter))
+
+;; === Most-used candidates at the top (history sorting) ===
+(with-eval-after-load 'corfu
+  (corfu-history-mode 1)
+  ;; Persist across sessions
+  (savehist-mode 1)
+  (add-to-list 'savehist-additional-variables 'corfu-history))
+
 
 ;; LSP (updated for Corfu)
 (use-package lsp-mode
