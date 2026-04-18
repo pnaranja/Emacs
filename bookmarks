@@ -43,11 +43,11 @@
  (rear-context-string . "+Test+Reports]]\n")
  (position . 1265))
 ("org-capture-last-stored"
- (filename . "~/journal/org-roam/20260414110656-podcast_episode_22.org")
- (front-context-string . "\n[[Catholic]]\n[[")
- (rear-context-string . "cast Episode 22\n")
- (position . 96)
- (last-modified 27102 33564 140205 0))
+ (filename . "~/journal/org-roam/20260417100140-zoox_contract_interviews.org")
+ (front-context-string . "\n\nhttps://www.li")
+ (rear-context-string . "tract_Interviews")
+ (position . 101)
+ (last-modified 27106 26516 360235 0))
 ("verb_examples.org"
  (filename . "~/REST_files/verb_examples.org")
  (front-context-string . "* Quick Start fo")

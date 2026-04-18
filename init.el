@@ -775,6 +775,50 @@
       (replace-match ""))))
 (global-set-key (kbd "C-c m") 'minify-buffer-region)
 
+(defun kill-file-and-directory-buffers ()
+  "Kill all buffers that are visiting files or directories."
+  (interactive)
+  (mapc
+   'kill-buffer
+   (delq
+    (current-buffer)
+    (seq-filter
+     (lambda (x)
+       (or (buffer-file-name x)
+           (eq 'emacs-lisp-mode (buffer-local-value 'major-mode x))
+           (eq 'dired-mode (buffer-local-value 'major-mode x))
+           (eq 'magit-status-mode (buffer-local-value 'major-mode x))
+           (eq 'magit-diff-mode (buffer-local-value 'major-mode x))
+           (eq 'magit-process-mode (buffer-local-value 'major-mode x))
+           (eq 'magit-log-mode (buffer-local-value 'major-mode x))
+           (eq 'js-mode (buffer-local-value 'major-mode x))
+           (eq 'js-ts-mode (buffer-local-value 'major-mode x))
+           (eq
+            'xref--xref-buffer-mode
+            (buffer-local-value 'major-mode x))
+           (eq 'calendar-mode (buffer-local-value 'major-mode x))
+           (eq 'lsp-help-mode (buffer-local-value 'major-mode x))))
+     (buffer-list))))
+)
+
+(defun copy-end-of-line ()
+  "Copy to end of line into kill ring"
+  (interactive)
+  (push-mark nil nil 1)
+  (end-of-visual-line)
+  (copy-region-as-kill nil nil (buffer-substring (mark) (point)))
+  (pop-to-mark-command)
+)
+
+(defun mark-whole-line ()
+  (interactive)
+  (beginning-of-visual-line)
+  (set-mark-command nil)
+  (end-of-visual-line)
+)
+
+
+
 ;; Other custom functions and keys from your original
 (global-set-key (kbd "M-s") 'copy-sexp-on-point)
 (global-set-key (kbd "M-k") 'copy-end-of-line)
