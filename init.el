@@ -105,11 +105,22 @@
   :ensure t
   :defer t
   :bind (("C-c e c" . eca-chat)
-         ("C-c e a" . eca-chat-add-context-at-point))
+         ("C-c e a" . eca-chat-add-context-to-user-prompt))
+  :init
+  (setq load-prefer-newer t) ;; Use source .el if .elc is broken
   :config
   (setq eca-custom-command nil
-        eca-completion-enable t)
-  (global-eca-completion-mode 1))
+        eca-completion-enable t
+	eca-completion-mode 1)
+  :custom
+  (display-buffer-alist
+   '(("\\*eca-chat\\*"  ; Regex matching the ECA buffer name
+      (display-buffer-reuse-window display-buffer-at-bottom)
+      (window-height . 0.3)
+      (side . bottom) ;; Remove this line if you want it to be a "regular" window
+      (window-parameters . ((no-delete-other-windows . nil))))))
+)
+
 
 ;; === Modern Completion Stack ===
 (use-package vertico
@@ -133,9 +144,11 @@
 
 (use-package embark
   :ensure t
-  :bind (("C-." . embark-act)
-         ("C-;" . embark-dwim)
-         ("C-h B" . embark-bindings)))
+  :bind (("C-;" . embark-act)
+         ("M-;" . embark-dwim)
+         ("C-h B" . embark-bindings)
+	 ("M-q" . embark-export))
+)
 
 (use-package embark-consult
   :ensure t
@@ -153,6 +166,7 @@
   (consult-preview-key "M-.")
   :config
   (setq consult-project-function #'projectile-project-root))
+
 
 (use-package nerd-icons-completion
   :ensure t

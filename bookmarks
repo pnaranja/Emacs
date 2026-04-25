@@ -43,11 +43,11 @@
  (rear-context-string . "+Test+Reports]]\n")
  (position . 1265))
 ("org-capture-last-stored"
- (filename . "~/journal/org-roam/20260417100140-zoox_contract_interviews.org")
- (front-context-string . "\n\nhttps://www.li")
- (rear-context-string . "tract_Interviews")
- (position . 101)
- (last-modified 27106 26516 360235 0))
+ (filename . "~/journal/org-roam/20260424133458-walmart_contract_interviews.org")
+ (front-context-string)
+ (rear-context-string . "ract Interviews\n")
+ (position . 105)
+ (last-modified 27115 54260 23843 0))
 ("verb_examples.org"
  (filename . "~/REST_files/verb_examples.org")
  (front-context-string . "* Quick Start fo")
