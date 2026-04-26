@@ -150,10 +150,6 @@
 	 ("M-q" . embark-export))
 )
 
-(use-package embark-consult
-  :ensure t
-  :after (embark consult))
-
 (use-package consult
   :ensure t
   :bind (("C-s"     . consult-line)
@@ -167,6 +163,22 @@
   :config
   (setq consult-project-function #'projectile-project-root))
 
+(use-package embark-consult
+  :ensure t
+  :after (embark consult)
+  :hook
+  (embark-collect-mode . consult-preview-at-point-mode)
+)
+
+        
+
+(use-package visual-replace
+  :ensure t
+  :bind 
+   ("C-c r r" . visual-replace)
+  :config
+  (visual-replace-global-mode 1)
+)
 
 (use-package nerd-icons-completion
   :ensure t
@@ -664,8 +676,7 @@
  :config (mini-frame-mode 1)
  (custom-set-variables
   '(mini-frame-show-parameters
-    '((top . 10) (width . 0.7) (left . 0.5)))))
-
+    '((top . 10) (width . 0.5) (left . 0.0)))))
 
 ;; Shows key bindings for incomplete commands
 (use-package
@@ -839,8 +850,27 @@
 (global-set-key (kbd "M-g v") 'mark-whole-line)
 (global-set-key (kbd "C-c y") 'copy-to-register)
 (global-set-key (kbd "C-c p") 'insert-register)  ; note: conflicts with projectile, adjust if needed
-(global-set-key (kbd "C-c r") 'replace_underscores_with_spaces)
 (global-set-key (kbd "C-x M-d") 'kill-file-and-directory-buffers)
+
+(defun replace_underscores_with_spaces ()
+  "Replace those 'underscores' from gmail to spaces"
+  (interactive)
+  (while (search-forward " " nil t)
+    (replace-match " " nil t)))
+
+(global-set-key (kbd "C-c r u") 'replace_underscores_with_spaces)
+
+;; Get filename (not including absolute page)
+(defun get-buffer-filename ()
+  "Get the filename of the current buffer not including the absolute path and copy it to clipboard/kill-ring."
+  (interactive)
+  (if (buffer-file-name)
+      (progn
+        (message "Buffer file name: %s"
+                 (file-name-nondirectory (buffer-file-name)))
+        (kill-new (file-name-nondirectory (buffer-file-name))))
+    (message "This buffer does not have a file name.")))
+
 (global-set-key (kbd "s-f") 'get-buffer-filename)
 
 ;; LSP booster advice (kept from original)
