@@ -1,3 +1,10 @@
+;; Temporary fix for Vertico/Corfu "void-function set-local" error
+;; Once Vertico and Corfu are updated, see if we still need this fix
+(unless (fboundp 'set-local)
+  (defun set-local (var val)
+    "Set the-buffer-local variable VAR to VAL."
+    (set (make-local-variable var) val)))
+
 ;; -*- lexical-binding: t -*-
 ;;; init.el --- early bird -*- no-byte-compile: t -*-
 
