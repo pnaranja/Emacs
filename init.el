@@ -576,10 +576,8 @@
 ;; https://zzamboni.org/post/how-to-insert-screenshots-in-org-documents-on-macos/
 (use-package
  org-download
- :after org
  :defer t
  :ensure t
- :defer t
  :custom
  (org-download-method 'directory)
  (org-download-image-dir "images")
@@ -587,10 +585,15 @@
  (org-download-timestamp "%Y%m%d-%H%M%S_")
  (org-image-actual-width 300)
  (org-download-screenshot-method "/usr/local/bin/pngpaste %s")
- :config (require 'org-download)
+ :config 
+ (require 'org-download)
 
  ;; Pasting text should still word wrap
- (setq term-suppress-hard-newline t))
+ (setq term-suppress-hard-newline t)
+
+ :bind
+ ("C-M-y" . org-download-clipboard)
+)
 
 
 ;; Verb - For sending HTTP Requests
