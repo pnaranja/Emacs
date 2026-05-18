@@ -43,11 +43,11 @@
  (rear-context-string . "+Test+Reports]]\n")
  (position . 1265))
 ("org-capture-last-stored"
- (filename . "~/journal/org-roam/20260507224821-hallow_interview_for_support_position.org")
- (front-context-string . "\n[[id:F2B4484E-3")
- (rear-context-string . "upport Position\n")
- (position . 115)
- (last-modified 27133 31034 480166 0))
+ (filename . "~/journal/org-roam/20260515141429-bible_study_2026_05_26.org")
+ (front-context-string . "\n[[id:9215285A-6")
+ (rear-context-string . "dy - 2026-05-26\n")
+ (position . 102)
+ (last-modified 27143 36055 34526 0))
 ("verb_examples.org"
  (filename . "~/REST_files/verb_examples.org")
  (front-context-string . "* Quick Start fo")

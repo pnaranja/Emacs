@@ -672,11 +672,17 @@
   :init (setq scroll-conservatively 101 scroll-margin 0)
   :config (ultra-scroll-mode 1))
 
+;; Added fix for visual-replace crash
 ;; Move mini-buffer to top mini frame
 (use-package
  mini-frame
  :ensure t
- :config (mini-frame-mode 1)
+ :init
+ (setq mini-frame-resize nil)
+ :config 
+ (add-to-list 'mini-frame-ignore-commands 'visual-replace)
+ (add-to-list 'mini-frame-ignore-commands 'visual-replace-read)
+ (mini-frame-mode 1)
  (custom-set-variables
   '(mini-frame-show-parameters
     '((top . 10) (width . 0.5) (left . 0.0)))))
